@@ -33,11 +33,22 @@ android {
     }
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
     applicationVariants.all { variant ->
         variant.sourceSets.java.each {
             it.srcDirs += "build/generated/ksp/${variant.name}/kotlin"
         }
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
     }
 }
 
@@ -53,7 +64,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
-    implementation "com.google.android.gms:play-services-auth:20.1.0"
+    implementation "com.google.android.gms:play-services-auth:20.2.0"
+    implementation 'com.google.apis:google-api-services-drive:v3-rev20211107-1.32.1'
+    implementation 'com.google.http-client:google-http-client-gson:1.39.2'
+    implementation 'com.google.api-client:google-api-client-android:1.26.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2"
 
     implementation "io.insert-koin:koin-core:$koin_version"
     implementation "io.insert-koin:koin-android:$koin_version"
