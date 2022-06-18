@@ -2,25 +2,24 @@ package com.github.lucascalheiros.booklibrarymanager.ui.login
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.github.lucascalheiros.booklibrarymanager.R
 import com.github.lucascalheiros.booklibrarymanager.databinding.FragmentLoginBinding
-import com.github.lucascalheiros.booklibrarymanager.useCase.GoogleSignInUseCase
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment() {
 
-    private val googleSignInUseCase: GoogleSignInUseCase by inject()
     private lateinit var binding: FragmentLoginBinding
+    private val loginViewModel: LoginViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,8 +27,21 @@ class LoginFragment : Fragment() {
     ): View {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
-        binding.loginBtn.setOnClickListener {
-            onClickGoogleSignIn()
+        binding.viewModel = loginViewModel
+        binding.lifecycleOwner = this
+
+        loginViewModel.loginRequestState.observe(viewLifecycleOwner) {
+            when (it) {
+                is LoginRequestState.Success -> {
+                    handleLoginSuccess()
+                }
+                is LoginRequestState.AskUser -> {
+                    startForGoogleSignInResult.launch(it.client.signInIntent)
+                }
+                is LoginRequestState.Failure -> {
+                    handleLoginFailure()
+                }
+            }
         }
 
         return binding.root
@@ -42,29 +54,22 @@ class LoginFragment : Fragment() {
                     val account = GoogleSignIn.getSignedInAccountFromIntent(
                         result.data
                     ).getResult(ApiException::class.java)
-                    logAccount(account)
-                    val action = LoginFragmentDirections.actionLoginFragmentToHomeFragment()
-                    findNavController().navigate(action)
+                    loginViewModel.onLoginSuccess(account)
                 } catch (exception: ApiException) {
-                    exception.printStackTrace()
+                    loginViewModel.onLoginFailure(exception)
                 }
+            } else {
+                loginViewModel.onLoginFailure()
             }
         }
 
-    private fun onClickGoogleSignIn() {
-        val signInIntent = googleSignInUseCase.googleSignInClient.signInIntent
-        startForGoogleSignInResult.launch(signInIntent)
+    private fun handleLoginSuccess() {
+        val action = LoginFragmentDirections.actionLoginFragmentToHomeFragment()
+        findNavController().navigate(action)
     }
 
-    private fun logAccount(account: GoogleSignInAccount) {
-        Log.d(
-            "[LOGIN]", "Login successful with account\n" +
-                    "ID: ${account.id}\n" +
-                    "Name: ${account.displayName}\n" +
-                    "ServerAuth: ${account.serverAuthCode}\n" +
-                    "ID Token: ${account.idToken}\n" +
-                    "Email: ${account.email}\n" +
-                    "PhotoUri: ${account.photoUrl}\n"
-        )
+    private fun handleLoginFailure() {
+        Toast.makeText(requireContext(), R.string.unable_to_login_with_google_generic, 2000).show()
     }
+
 }

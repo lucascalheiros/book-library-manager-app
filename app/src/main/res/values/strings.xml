@@ -6,5 +6,9 @@
     <string name="booklib_manager">Booklib Manager</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="unable_to_login_with_google_generic">Unable to login</string>
+    <string name="an_app_to_facilitate_your_read_tracking_and_book_tagging">An app to facilitate your read tracking, and book tagging</string>
+    <string name="welcome_to_book_library_manager">Welcome to Book Library Manager</string>
 
 </resources>
