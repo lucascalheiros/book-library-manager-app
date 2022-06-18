@@ -43,7 +43,7 @@ class LoginFragment : Fragment() {
                         result.data
                     ).getResult(ApiException::class.java)
                     logAccount(account)
-                    val action = LoginFragmentDirections.actionLoginFragmentToPdfReaderFragment()
+                    val action = LoginFragmentDirections.actionLoginFragmentToHomeFragment()
                     findNavController().navigate(action)
                 } catch (exception: ApiException) {
                     exception.printStackTrace()
