@@ -4,6 +4,7 @@
     package="com.github.lucascalheiros.booklibrarymanager">
 
     <application
+        android:name=".BookLibraryManagerApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
