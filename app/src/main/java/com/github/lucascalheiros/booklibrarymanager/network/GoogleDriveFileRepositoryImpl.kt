@@ -1,5 +1,4 @@
-package com.github.lucascalheiros.booklibrarymanager.useCase
-
+package com.github.lucascalheiros.booklibrarymanager.network
 
 import android.content.Context
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -23,13 +22,12 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-
 @Single
-class GoogleDriveUseCase constructor(
+class GoogleDriveFileRepositoryImpl(
     private val context: Context
-) {
+) : FileRepository {
 
-    fun driveService(): Drive {
+    private fun driveService(): Drive {
         val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(
             context, Collections.singleton(DriveScopes.DRIVE_FILE)
         )
@@ -46,21 +44,21 @@ class GoogleDriveUseCase constructor(
         get() = GoogleSignIn.getLastSignedInAccount(context)
 
 
-    suspend fun saveFile(
+    override suspend fun saveFile(
         name: String,
-        path: String,
+        file: java.io.File,
         mimeType: String,
-        fileId: String? = null
-    ): File {
+        fileId: String?
+    ): String {
         val metadata = File().setName(name)
 
-        val filePath = java.io.File(path)
-        val mediaContent = FileContent(mimeType, filePath)
+        val mediaContent = FileContent(mimeType, file)
 
-        return saveFile(metadata, mediaContent)
+        return saveFile(metadata, mediaContent, fileId).id
     }
 
-    suspend fun saveFile(metadata: File, mediaContent: FileContent, fileId: String? = null): File =
+
+    private suspend fun saveFile(metadata: File, mediaContent: FileContent, fileId: String?): File =
         withContext(Dispatchers.IO) {
             suspendCoroutine { continuation ->
                 thread {
@@ -72,7 +70,6 @@ class GoogleDriveUseCase constructor(
                         } else {
                             driveService().files().update(fileId, metadata, mediaContent).execute()
                         }
-
                         continuation.resume(driveFile)
                     } catch (t: Throwable) {
                         continuation.resumeWithException(t)
@@ -81,7 +78,7 @@ class GoogleDriveUseCase constructor(
             }
         }
 
-    suspend fun getFile(fileId: String, fileName: String): java.io.File =
+    override suspend fun getFile(fileId: String, fileName: String): java.io.File =
         withContext(Dispatchers.IO) {
             suspendCoroutine { continuation ->
                 thread {
@@ -103,7 +100,7 @@ class GoogleDriveUseCase constructor(
             }
         }
 
-    suspend fun listFiles(): FileList = withContext(Dispatchers.IO) {
+    override suspend fun listFilesMetadata(): FileList = withContext(Dispatchers.IO) {
         suspendCoroutine { continuation ->
             thread {
                 try {
@@ -115,5 +112,4 @@ class GoogleDriveUseCase constructor(
             }
         }
     }
-
 }
