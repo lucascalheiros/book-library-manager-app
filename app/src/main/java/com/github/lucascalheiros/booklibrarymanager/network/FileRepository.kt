@@ -1,18 +1,19 @@
 package com.github.lucascalheiros.booklibrarymanager.network
 
 
-import com.google.api.services.drive.model.FileList
+import com.github.lucascalheiros.booklibrarymanager.model.FileMetadata
 import java.io.File
 
 interface FileRepository {
 
     suspend fun saveFile(
-        name: String, file: File, mimeType: String,
+        name: String,
+        file: File,
+        mimeType: String,
         fileId: String? = null
     ): String
 
     suspend fun getFile(fileId: String, fileName: String): File
 
-    // TODO wrap to generic
-    suspend fun listFilesMetadata(): FileList
+    suspend fun listFilesMetadata(): List<FileMetadata>
 }

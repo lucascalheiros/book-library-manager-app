@@ -1,6 +1,7 @@
 package com.github.lucascalheiros.booklibrarymanager.network
 
 import android.content.Context
+import com.github.lucascalheiros.booklibrarymanager.model.FileMetadata
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -10,7 +11,6 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
-import com.google.api.services.drive.model.FileList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single
@@ -63,12 +63,20 @@ class GoogleDriveFileRepositoryImpl(
             suspendCoroutine { continuation ->
                 thread {
                     try {
+                        val defaultFolder = Collections.singletonList("Booklib Manager");
                         val driveFile = if (fileId == null) {
-                            driveService().files().create(metadata, mediaContent)
+                            driveService().files().create(
+                                metadata.setParents(defaultFolder),
+                                mediaContent
+                            )
                                 .setFields("id")
                                 .execute()
                         } else {
-                            driveService().files().update(fileId, metadata, mediaContent).execute()
+                            driveService().files().update(
+                                fileId,
+                                metadata.setParents(defaultFolder),
+                                mediaContent
+                            ).execute()
                         }
                         continuation.resume(driveFile)
                     } catch (t: Throwable) {
@@ -100,12 +108,13 @@ class GoogleDriveFileRepositoryImpl(
             }
         }
 
-    override suspend fun listFilesMetadata(): FileList = withContext(Dispatchers.IO) {
+    override suspend fun listFilesMetadata(): List<FileMetadata> = withContext(Dispatchers.IO) {
         suspendCoroutine { continuation ->
             thread {
                 try {
-                    val result = driveService().files().list().execute()
-                    continuation.resume(result)
+                    val googleDriveFileList = driveService().files().list().execute().files
+                    val metadataList = googleDriveFileList.map { FileMetadata.fromGoogleDrive(it) }
+                    continuation.resume(metadataList)
                 } catch (t: Throwable) {
                     continuation.resumeWithException(t)
                 }
