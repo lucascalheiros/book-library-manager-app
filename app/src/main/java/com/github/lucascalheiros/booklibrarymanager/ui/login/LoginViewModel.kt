@@ -1,15 +1,15 @@
 package com.github.lucascalheiros.booklibrarymanager.ui.login
 
+import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.lucascalheiros.booklibrarymanager.useCase.GoogleSignInUseCase
+import com.github.lucascalheiros.booklibrarymanager.useCase.SignInRequestState
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -23,13 +23,12 @@ class LoginViewModel(
     fun onLoginClick() {
         viewModelScope.launch {
             if (mLoginRequestState.value !is LoginRequestState.Loading) {
-                val client = googleSignInUseCase.googleSignInClient
                 mLoginRequestState.value = LoginRequestState.Loading
-                try {
-                    val account = client.silentSignIn().await()
-                    onLoginSuccess(account)
-                } catch (e: Throwable) {
-                    mLoginRequestState.value = LoginRequestState.AskUser(client)
+                googleSignInUseCase.signIn().let {
+                    when (it) {
+                        is SignInRequestState.Signed -> onLoginSuccess(it.account)
+                        is SignInRequestState.Unsigned -> requestUserLogin(it.signAccountIntent)
+                    }
                 }
             }
         }
@@ -44,6 +43,9 @@ class LoginViewModel(
         mLoginRequestState.value = LoginRequestState.Success(account)
     }
 
+    private fun requestUserLogin(signAccountIntent: Intent) {
+        mLoginRequestState.value = LoginRequestState.AskUser(signAccountIntent)
+    }
 
     private fun logAccount(account: GoogleSignInAccount) {
         Log.d(
@@ -59,9 +61,9 @@ class LoginViewModel(
 }
 
 sealed class LoginRequestState {
-    data class Success(val account: GoogleSignInAccount): LoginRequestState()
-    data class Failure(val error: Throwable? = null): LoginRequestState()
-    data class AskUser(val client: GoogleSignInClient): LoginRequestState()
-    object Loading: LoginRequestState()
-    object Idle: LoginRequestState()
+    data class Success(val account: GoogleSignInAccount) : LoginRequestState()
+    data class Failure(val error: Throwable? = null) : LoginRequestState()
+    data class AskUser(val signInIntent: Intent) : LoginRequestState()
+    object Loading : LoginRequestState()
+    object Idle : LoginRequestState()
 }

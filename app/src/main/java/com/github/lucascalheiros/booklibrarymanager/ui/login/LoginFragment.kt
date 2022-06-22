@@ -36,7 +36,7 @@ class LoginFragment : Fragment() {
                     handleLoginSuccess()
                 }
                 is LoginRequestState.AskUser -> {
-                    startForGoogleSignInResult.launch(it.client.signInIntent)
+                    startForGoogleSignInResult.launch(it.signInIntent)
                 }
                 is LoginRequestState.Failure -> {
                     handleLoginFailure()
@@ -69,7 +69,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun handleLoginFailure() {
-        Toast.makeText(requireContext(), R.string.unable_to_login_with_google_generic, 2000).show()
+        Toast.makeText(requireContext(), R.string.unable_to_login_with_google_generic, Toast.LENGTH_LONG).show()
     }
 
 }
