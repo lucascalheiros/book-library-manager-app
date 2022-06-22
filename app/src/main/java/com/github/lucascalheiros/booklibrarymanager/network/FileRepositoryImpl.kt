@@ -23,7 +23,7 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @Single
-class GoogleDriveFileRepositoryImpl(
+class FileRepositoryImpl(
     private val context: Context
 ) : FileRepository {
 
@@ -43,7 +43,6 @@ class GoogleDriveFileRepositoryImpl(
     private val lastSignedInAccount: GoogleSignInAccount?
         get() = GoogleSignIn.getLastSignedInAccount(context)
 
-
     override suspend fun saveFile(
         name: String,
         file: java.io.File,
@@ -56,7 +55,6 @@ class GoogleDriveFileRepositoryImpl(
 
         return saveFile(metadata, mediaContent, fileId).id
     }
-
 
     private suspend fun saveFile(metadata: File, mediaContent: FileContent, fileId: String?): File =
         withContext(Dispatchers.IO) {
@@ -84,14 +82,10 @@ class GoogleDriveFileRepositoryImpl(
                 thread {
                     try {
                         val outFile = java.io.File(context.cacheDir, fileName)
-
                         val outStream: OutputStream = FileOutputStream(outFile)
-
                         driveService().files()[fileId]
                             .executeMediaAndDownloadTo(outStream)
-
                         outStream.close()
-
                         continuation.resume(outFile)
                     } catch (t: Throwable) {
                         continuation.resumeWithException(t)
