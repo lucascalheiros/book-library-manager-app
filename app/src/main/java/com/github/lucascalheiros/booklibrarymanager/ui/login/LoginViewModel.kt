@@ -27,7 +27,7 @@ class LoginViewModel(
                 googleSignInUseCase.signIn().let {
                     when (it) {
                         is SignInRequestState.Signed -> onLoginSuccess(it.account)
-                        is SignInRequestState.Unsigned -> LoginRequestState.AskUser(it.signAccountIntent)
+                        is SignInRequestState.Unsigned -> requestUserLogin(it.signAccountIntent)
                     }
                 }
             }
@@ -43,6 +43,9 @@ class LoginViewModel(
         mLoginRequestState.value = LoginRequestState.Success(account)
     }
 
+    private fun requestUserLogin(signAccountIntent: Intent) {
+        mLoginRequestState.value = LoginRequestState.AskUser(signAccountIntent)
+    }
 
     private fun logAccount(account: GoogleSignInAccount) {
         Log.d(

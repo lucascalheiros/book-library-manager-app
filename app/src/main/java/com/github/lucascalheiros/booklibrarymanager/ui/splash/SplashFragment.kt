@@ -23,7 +23,7 @@ class SplashFragment : Fragment() {
 
         MainScope().launch {
             delay(500)
-            if (googleSigInUseCase.isUserSignedIn()) {
+            if (googleSigInUseCase.isUserSignedIn) {
                 SplashFragmentDirections.actionSplashFragmentToHomeFragment().let {
                     findNavController().navigate(it)
                 }
