@@ -2,12 +2,13 @@ package com.github.lucascalheiros.booklibrarymanager.useCase
 
 
 import android.content.Context
-import com.github.lucascalheiros.booklibrarymanager.utils.GOOGLE_OAUTH_SERVER_CLIENT_ID
+import android.content.Intent
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.Scope
+import kotlinx.coroutines.tasks.await
 import org.koin.core.annotation.Single
 
 @Single
@@ -20,18 +21,30 @@ class GoogleSignInUseCase constructor(
             .build()
     }
 
-    val googleSignInClient by lazy { GoogleSignIn.getClient(context, googleSignInOptions) }
+    private val googleSignInClient by lazy { GoogleSignIn.getClient(context, googleSignInOptions) }
 
-    val lastSignedInAccount: GoogleSignInAccount?
+    val signedInAccount: GoogleSignInAccount?
         get() = GoogleSignIn.getLastSignedInAccount(context)
 
+    val isUserSignedIn: Boolean
+       get() = signedInAccount != null
 
-    fun isUserSignedIn(): Boolean {
-        return lastSignedInAccount != null
+    suspend fun signIn(): SignInRequestState {
+        return try {
+            val account = googleSignInClient.silentSignIn().await()
+            SignInRequestState.Signed(account)
+        } catch (t: Throwable) {
+            SignInRequestState.Unsigned(googleSignInClient.signInIntent)
+        }
     }
 
     fun signOut() {
         googleSignInClient.signOut()
     }
 
+}
+
+sealed class SignInRequestState {
+    data class Signed(val account: GoogleSignInAccount): SignInRequestState()
+    data class Unsigned(val signAccountIntent: Intent): SignInRequestState()
 }
