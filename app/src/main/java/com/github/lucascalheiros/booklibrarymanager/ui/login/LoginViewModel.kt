@@ -17,18 +17,23 @@ class LoginViewModel(
     private val googleSignInUseCase: GoogleSignInUseCase
 ) : ViewModel() {
 
-    private val mLoginRequestState = MutableLiveData<LoginRequestState>(LoginRequestState.Idle)
+    private val mLoginRequestState = MutableLiveData<LoginRequestState>()
     val loginRequestState: LiveData<LoginRequestState> = mLoginRequestState
 
+    // TODO check why viewModelScope is not being blocked by InstantTaskExecutorRule in junit tests
     fun onLoginClick() {
         viewModelScope.launch {
-            if (mLoginRequestState.value !is LoginRequestState.Loading) {
-                mLoginRequestState.value = LoginRequestState.Loading
-                googleSignInUseCase.signIn().let {
-                    when (it) {
-                        is SignInRequestState.Signed -> onLoginSuccess(it.account)
-                        is SignInRequestState.Unsigned -> requestUserLogin(it.signAccountIntent)
-                    }
+            doLogin()
+        }
+    }
+
+    suspend fun doLogin() {
+        if (mLoginRequestState.value !is LoginRequestState.Loading) {
+            mLoginRequestState.value = LoginRequestState.Loading
+            googleSignInUseCase.signIn().let {
+                when (it) {
+                    is SignInRequestState.Signed -> onLoginSuccess(it.account)
+                    is SignInRequestState.Unsigned -> requestUserLogin(it.signAccountIntent)
                 }
             }
         }
@@ -65,5 +70,4 @@ sealed class LoginRequestState {
     data class Failure(val error: Throwable? = null) : LoginRequestState()
     data class AskUser(val signInIntent: Intent) : LoginRequestState()
     object Loading : LoginRequestState()
-    object Idle : LoginRequestState()
 }
