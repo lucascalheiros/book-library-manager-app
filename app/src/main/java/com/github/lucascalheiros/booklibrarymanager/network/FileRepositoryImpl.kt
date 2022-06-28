@@ -2,6 +2,7 @@ package com.github.lucascalheiros.booklibrarymanager.network
 
 import android.content.Context
 import com.github.lucascalheiros.booklibrarymanager.model.FileMetadata
+import com.github.lucascalheiros.booklibrarymanager.model.converter.FileMetadataConverter
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -107,7 +108,7 @@ class FileRepositoryImpl(
             thread {
                 try {
                     val googleDriveFileList = driveService().files().list().execute().files
-                    val metadataList = googleDriveFileList.map { FileMetadata.fromGoogleDrive(it) }
+                    val metadataList = googleDriveFileList.map { FileMetadataConverter.from(it) }
                     continuation.resume(metadataList)
                 } catch (t: Throwable) {
                     continuation.resumeWithException(t)
