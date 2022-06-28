@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.github.lucascalheiros.booklibrarymanager.adapters.PdfPageAdapter
+import com.github.lucascalheiros.booklibrarymanager.ui.pdfReader.adapters.PdfPageAdapter
 import com.github.lucascalheiros.booklibrarymanager.databinding.FragmentPdfReaderBinding
 import com.github.lucascalheiros.booklibrarymanager.utils.loadParcelFileDescriptorFromAsset
 

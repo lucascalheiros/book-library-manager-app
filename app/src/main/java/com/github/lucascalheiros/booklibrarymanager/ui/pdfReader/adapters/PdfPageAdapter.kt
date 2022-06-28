@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.booklibrarymanager.adapters
+package com.github.lucascalheiros.booklibrarymanager.ui.pdfReader.adapters
 
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
