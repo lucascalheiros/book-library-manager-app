@@ -20,6 +20,10 @@ class HomeFragment : Fragment() {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+        binding.viewModel = homeViewModel
+
+        binding.lifecycleOwner = viewLifecycleOwner
+
         return binding.root
     }
 }
