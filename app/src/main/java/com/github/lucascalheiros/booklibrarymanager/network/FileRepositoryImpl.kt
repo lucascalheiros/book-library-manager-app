@@ -23,7 +23,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-@Single
+//@Single
 class FileRepositoryImpl(
     private val context: Context
 ) : FileRepository {
@@ -85,12 +85,13 @@ class FileRepositoryImpl(
             }
         }
 
-    override suspend fun getFile(fileId: String, fileName: String): java.io.File =
+    override suspend fun getFile(fileId: String): java.io.File =
         withContext(Dispatchers.IO) {
             suspendCoroutine { continuation ->
                 thread {
                     try {
-                        val outFile = java.io.File(context.cacheDir, fileName)
+                        val tempFileName = System.currentTimeMillis().toString()
+                        val outFile = java.io.File(context.cacheDir, tempFileName)
                         val outStream: OutputStream = FileOutputStream(outFile)
                         driveService().files()[fileId]
                             .executeMediaAndDownloadTo(outStream)

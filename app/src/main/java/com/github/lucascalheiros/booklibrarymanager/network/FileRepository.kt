@@ -13,7 +13,7 @@ interface FileRepository {
         fileId: String? = null
     ): String
 
-    suspend fun getFile(fileId: String, fileName: String): File
+    suspend fun getFile(fileId: String): File
 
     suspend fun listFilesMetadata(): List<FileMetadata>
 }
