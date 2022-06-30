@@ -4,12 +4,24 @@ import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import com.github.lucascalheiros.booklibrarymanager.databinding.ItemPdfPageBinding
+import com.github.lucascalheiros.booklibrarymanager.ui.pdfReader.handlers.ReadingPageTrackerListener
 import com.github.lucascalheiros.booklibrarymanager.utils.toBitmap
 
-class PdfPageAdapter(private val pdfRenderer: PdfRenderer) :
+class PdfPageAdapter(pdfRenderer: PdfRenderer) :
     RecyclerView.Adapter<PdfPageAdapter.PdfPageViewHolder>() {
+
+    var pdfRenderer: PdfRenderer = pdfRenderer
+        set(value) {
+            if (value != field) {
+                field = value
+                notifyDataSetChanged()
+            }
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PdfPageViewHolder {
         val binding = ItemPdfPageBinding.inflate(LayoutInflater.from(parent.context))
@@ -34,4 +46,33 @@ class PdfPageAdapter(private val pdfRenderer: PdfRenderer) :
         }
     }
 
+    companion object {
+
+        @JvmStatic
+        @BindingAdapter(
+            value = ["pdfPageAdapterRenderer", "pdfPageAdapterReadingPercentageListener"],
+            requireAll = false
+        )
+        fun bind(rv: RecyclerView, renderer: PdfRenderer?, listener: ReadingPageTrackerListener?) {
+            if (renderer == null) {
+                return
+            }
+            rv.adapter?.let {
+                if (it !is PdfPageAdapter) {
+                    rv.adapter = PdfPageAdapter(renderer)
+                }
+            } ?: run {
+                rv.adapter = PdfPageAdapter(renderer)
+            }
+            rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    if(newState == SCROLL_STATE_IDLE) {
+                        val lastPosition =
+                            (rv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                        listener?.onPageReadChange(lastPosition)
+                    }
+                }
+            })
+        }
+    }
 }

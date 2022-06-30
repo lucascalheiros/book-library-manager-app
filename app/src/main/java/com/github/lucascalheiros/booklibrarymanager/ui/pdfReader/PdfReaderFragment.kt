@@ -6,32 +6,40 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.github.lucascalheiros.booklibrarymanager.ui.pdfReader.adapters.PdfPageAdapter
+import androidx.navigation.fragment.navArgs
 import com.github.lucascalheiros.booklibrarymanager.databinding.FragmentPdfReaderBinding
 import com.github.lucascalheiros.booklibrarymanager.utils.loadParcelFileDescriptorFromAsset
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PdfReaderFragment : Fragment() {
 
-    private lateinit var renderer: PdfRenderer
     private lateinit var binding: FragmentPdfReaderBinding
+    private val pdfReaderViewModel: PdfReaderViewModel by viewModel()
+
+    private val args: PdfReaderFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         binding = FragmentPdfReaderBinding.inflate(inflater, container, false)
 
-        renderer =
+        binding.viewModel = pdfReaderViewModel
+
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        val renderer =
             PdfRenderer(loadParcelFileDescriptorFromAsset(requireContext(), TEST_PDF_ASSET))
 
-        binding.pageList.adapter = PdfPageAdapter(renderer)
+        pdfReaderViewModel.initializeRenderer(renderer)
 
         return binding.root
     }
 
     override fun onDestroy() {
-        renderer.close()
+        pdfReaderViewModel.closeRenderer()
         super.onDestroy()
     }
 

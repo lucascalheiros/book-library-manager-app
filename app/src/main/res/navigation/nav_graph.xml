@@ -9,7 +9,11 @@
         android:id="@+id/PdfReaderFragment"
         android:name="com.github.lucascalheiros.booklibrarymanager.ui.pdfReader.PdfReaderFragment"
         android:label="@string/pdf_reader_fragment"
-        tools:layout="@layout/fragment_pdf_reader" />
+        tools:layout="@layout/fragment_pdf_reader" >
+        <argument
+            android:name="fileId"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/LoginFragment"
