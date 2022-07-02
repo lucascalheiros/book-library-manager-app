@@ -9,12 +9,12 @@
             type="com.github.lucascalheiros.booklibrarymanager.ui.pdfReader.PdfReaderViewModel" />
     </data>
 
-    <com.github.lucascalheiros.booklibrarymanager.ui.customView.ZoomLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.pdfReader.PdfReaderFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.github.lucascalheiros.booklibrarymanager.ui.customView.ZoomRecyclerView
             android:id="@+id/pageList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,5 +22,5 @@
             pdfPageAdapterReadingPercentageListener="@{viewModel.mPageTracker}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    </com.github.lucascalheiros.booklibrarymanager.ui.customView.ZoomLayout>
+    </FrameLayout>
 </layout>

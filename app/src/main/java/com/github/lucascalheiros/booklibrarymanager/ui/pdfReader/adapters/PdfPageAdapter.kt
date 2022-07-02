@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import com.github.lucascalheiros.booklibrarymanager.databinding.ItemPdfPageBinding
+import com.github.lucascalheiros.booklibrarymanager.ui.customView.ZoomRecyclerView
 import com.github.lucascalheiros.booklibrarymanager.ui.pdfReader.handlers.ReadingPageTrackerListener
 import com.github.lucascalheiros.booklibrarymanager.utils.toBitmap
 
@@ -53,7 +54,7 @@ class PdfPageAdapter(pdfRenderer: PdfRenderer) :
             value = ["pdfPageAdapterRenderer", "pdfPageAdapterReadingPercentageListener"],
             requireAll = false
         )
-        fun bind(rv: RecyclerView, renderer: PdfRenderer?, listener: ReadingPageTrackerListener?) {
+        fun bind(rv: ZoomRecyclerView, renderer: PdfRenderer?, listener: ReadingPageTrackerListener?) {
             if (renderer == null) {
                 return
             }

@@ -44,6 +44,6 @@ class PdfReaderFragment : Fragment() {
     }
 
     companion object {
-        const val TEST_PDF_ASSET = ""
+        const val TEST_PDF_ASSET = "clean_arch.pdf"
     }
 }
