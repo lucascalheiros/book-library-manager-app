@@ -7,7 +7,6 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
-import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 
 
@@ -24,6 +23,9 @@ class ZoomRecyclerView @JvmOverloads constructor(
     var scale = BASE_SCALE
     var mPivotX = 0f
     var mPivotY = 0f
+
+    var mAnchorX = 0f
+    var mAnchorY = 0f
 
     private val scaleDetector =
         ScaleGestureDetector(context, object : SimpleOnScaleGestureListener() {
@@ -59,6 +61,26 @@ class ZoomRecyclerView @JvmOverloads constructor(
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         scaleDetector.onTouchEvent(event)
         doubleTapDetector.onTouchEvent(event)
+
+        event?.setLocation(scrollX + event.x, (scrollY + event.y) / scale)
+
+        when (event?.action) {
+            MotionEvent.ACTION_DOWN -> {
+                mAnchorX = event.x
+                mAnchorY = event.y
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val diffX = mAnchorX - event.x
+                val diffY = mAnchorY - event.y
+                mPivotX = (mPivotX + diffX).coerceIn(0f..width.toFloat())
+                mAnchorX = event.x
+                mAnchorY = event.y
+
+                if (!canScrollVertically(1) || !canScrollVertically(-1)) {
+                    mPivotY = (mPivotY + diffY).coerceIn(0f..height.toFloat())
+                }
+            }
+        }
         return super.dispatchTouchEvent(event)
     }
 
