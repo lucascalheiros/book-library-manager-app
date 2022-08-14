@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.github.lucascalheiros.booklibrarymanager.ui.home.model.FileListItem" />
+            type="com.github.lucascalheiros.booklibrarymanager.model.FileListItem" />
 
         <variable
             name="listener"

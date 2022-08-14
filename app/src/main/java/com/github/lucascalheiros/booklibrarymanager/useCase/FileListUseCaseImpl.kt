@@ -1,8 +1,8 @@
 package com.github.lucascalheiros.booklibrarymanager.useCase
 
-import com.github.lucascalheiros.booklibrarymanager.network.FileRepository
-import com.github.lucascalheiros.booklibrarymanager.ui.home.model.FileListItem
-import com.github.lucascalheiros.booklibrarymanager.ui.home.model.converter.FileListItemConverter
+import com.github.lucascalheiros.booklibrarymanager.model.FileListItem
+import com.github.lucascalheiros.booklibrarymanager.model.converter.FileListItemConverter
+import com.github.lucascalheiros.booklibrarymanager.data.network.FileRepository
 import org.koin.core.annotation.Single
 import java.io.File
 

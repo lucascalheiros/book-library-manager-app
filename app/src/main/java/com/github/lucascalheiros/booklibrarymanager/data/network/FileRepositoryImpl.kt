@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.booklibrarymanager.network
+package com.github.lucascalheiros.booklibrarymanager.data.network
 
 import android.content.Context
 import com.github.lucascalheiros.booklibrarymanager.model.FileMetadata
@@ -14,7 +14,6 @@ import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Single
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.util.*
@@ -62,7 +61,7 @@ class FileRepositoryImpl(
             suspendCoroutine { continuation ->
                 thread {
                     try {
-                        val defaultFolder = Collections.singletonList("Booklib Manager");
+                        val defaultFolder = Collections.singletonList("Booklib Manager")
                         val driveFile = if (fileId == null) {
                             driveService().files().create(
                                 metadata.setParents(defaultFolder),

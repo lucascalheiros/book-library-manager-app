@@ -3,8 +3,8 @@ package com.github.lucascalheiros.booklibrarymanager.ui.home
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.lucascalheiros.booklibrarymanager.model.FileListItem
 import com.github.lucascalheiros.booklibrarymanager.ui.home.handlers.FileListItemListener
-import com.github.lucascalheiros.booklibrarymanager.ui.home.model.FileListItem
 import com.github.lucascalheiros.booklibrarymanager.useCase.FileListUseCase
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel

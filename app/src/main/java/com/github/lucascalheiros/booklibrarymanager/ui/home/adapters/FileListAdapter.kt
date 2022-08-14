@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.lucascalheiros.booklibrarymanager.databinding.ItemFileListBinding
-import com.github.lucascalheiros.booklibrarymanager.ui.home.model.FileListItem
+import com.github.lucascalheiros.booklibrarymanager.model.FileListItem
 import com.github.lucascalheiros.booklibrarymanager.ui.home.handlers.FileListItemListener
 
 class FileListAdapter: ListAdapter<FileListItem, FileListAdapter.FileListItemViewHolder>(Diff) {

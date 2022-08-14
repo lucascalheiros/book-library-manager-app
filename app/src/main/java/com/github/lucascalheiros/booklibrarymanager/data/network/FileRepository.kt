@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.booklibrarymanager.network
+package com.github.lucascalheiros.booklibrarymanager.data.network
 
 
 import com.github.lucascalheiros.booklibrarymanager.model.FileMetadata
