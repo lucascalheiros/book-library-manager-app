@@ -5,14 +5,13 @@ import com.github.lucascalheiros.booklibrarymanager.model.FileMetadata
 import com.github.lucascalheiros.booklibrarymanager.utils.loadFileFromAsset
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Single
 import java.time.LocalDateTime
 import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-@Single
+//@Single
 class MockFileRepository(
     private val context: Context
 ) : FileRepository {
@@ -49,7 +48,7 @@ class MockFileRepository(
             }
         }
 
-    override suspend fun listFilesMetadata(): List<FileMetadata> = withContext(Dispatchers.IO) {
+    override suspend fun listFilesMetadata(query: String?): List<FileMetadata> = withContext(Dispatchers.IO) {
         suspendCoroutine { continuation ->
             thread {
                 try {

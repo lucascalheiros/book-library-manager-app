@@ -13,7 +13,9 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.util.*
@@ -22,7 +24,8 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-//@Single
+
+@Single
 class FileRepositoryImpl(
     private val context: Context
 ) : FileRepository {
@@ -43,6 +46,37 @@ class FileRepositoryImpl(
     private val lastSignedInAccount: GoogleSignInAccount?
         get() = GoogleSignIn.getLastSignedInAccount(context)
 
+    private suspend fun createFolder(folderName: String): String =
+        withContext(Dispatchers.IO) {
+            suspendCoroutine { continuation ->
+                thread {
+                    try {
+                        val query = "mimeType = 'application/vnd.google-apps.folder' and name = '${folderName}'"
+                        val driveFile: File = runBlocking { listFiles(query) }.let {
+                            if (it.isEmpty()) {
+                                val fileMetadata = File()
+                                fileMetadata.name = folderName
+                                fileMetadata.mimeType = "application/vnd.google-apps.folder"
+                                driveService().files().create(fileMetadata)
+                                    .setFields("id")
+                                    .execute()
+                            } else {
+                                it.first()
+                            }
+                        }
+
+                        continuation.resume(driveFile.id)
+                    } catch (t: Throwable) {
+                        continuation.resumeWithException(t)
+                    }
+                }
+            }
+        }
+
+    private suspend fun createDefaultAppFolder(): String {
+        return createFolder(defaultAppFolderName)
+    }
+
     override suspend fun saveFile(
         name: String,
         file: java.io.File,
@@ -61,7 +95,8 @@ class FileRepositoryImpl(
             suspendCoroutine { continuation ->
                 thread {
                     try {
-                        val defaultFolder = Collections.singletonList("Booklib Manager")
+                        val rootFolderId = runBlocking { createDefaultAppFolder() }
+                        val defaultFolder = Collections.singletonList(rootFolderId)
                         val driveFile = if (fileId == null) {
                             driveService().files().create(
                                 metadata.setParents(defaultFolder),
@@ -103,17 +138,25 @@ class FileRepositoryImpl(
             }
         }
 
-    override suspend fun listFilesMetadata(): List<FileMetadata> = withContext(Dispatchers.IO) {
+    private suspend fun listFiles(query: String?): List<File> = withContext(Dispatchers.IO) {
         suspendCoroutine { continuation ->
             thread {
                 try {
-                    val googleDriveFileList = driveService().files().list().execute().files
-                    val metadataList = googleDriveFileList.map { FileMetadataConverter.from(it) }
-                    continuation.resume(metadataList)
+                    val googleDriveFileList = driveService().files().list().setQ(query)
+                        .execute().files
+                    continuation.resume(googleDriveFileList)
                 } catch (t: Throwable) {
                     continuation.resumeWithException(t)
                 }
             }
         }
+    }
+
+    override suspend fun listFilesMetadata(query: String?): List<FileMetadata> {
+        return listFiles(query).map { FileMetadataConverter.from(it) }
+    }
+
+    companion object {
+        private const val defaultAppFolderName = "Booklib Manager"
     }
 }

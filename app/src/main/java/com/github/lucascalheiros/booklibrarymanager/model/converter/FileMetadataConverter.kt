@@ -17,15 +17,21 @@ object FileMetadataConverter {
             originalFilename = file.originalFilename,
             size = file.size,
             trashed = file.trashed,
-            createdTime = Instant.ofEpochMilli(file.createdTime.value)
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime(),
-            modifiedTime = Instant.ofEpochMilli(file.modifiedTime.value)
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime(),
-            trashedTime = Instant.ofEpochMilli(file.trashedTime.value)
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime()
+            createdTime = file.createdTime?.value?.let {
+                Instant.ofEpochMilli(it)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime()
+            },
+            modifiedTime = file.modifiedTime?.value?.let {
+                Instant.ofEpochMilli(it)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime()
+            },
+            trashedTime = file.trashedTime?.value?.let {
+                Instant.ofEpochMilli(it)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime()
+            }
         )
     }
 

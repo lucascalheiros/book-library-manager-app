@@ -15,5 +15,5 @@ interface FileRepository {
 
     suspend fun getFile(fileId: String): File
 
-    suspend fun listFilesMetadata(): List<FileMetadata>
+    suspend fun listFilesMetadata(query: String? = null): List<FileMetadata>
 }

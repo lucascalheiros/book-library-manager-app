@@ -12,10 +12,14 @@ class FileListUseCaseImpl(
 ): FileListUseCase {
 
     override suspend fun listFiles(): List<FileListItem> {
-        return fileRepository.listFilesMetadata().map { FileListItemConverter.from(it) }
+        return fileRepository.listFilesMetadata(pdfQuery).map { FileListItemConverter.from(it) }
     }
 
     override suspend fun getFile(fileId: String): File {
         return fileRepository.getFile(fileId)
+    }
+
+    companion object {
+        private const val pdfQuery = "mimeType = 'application/pdf'"
     }
 }
