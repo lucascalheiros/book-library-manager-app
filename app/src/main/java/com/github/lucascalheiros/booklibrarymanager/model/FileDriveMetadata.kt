@@ -2,7 +2,7 @@ package com.github.lucascalheiros.booklibrarymanager.model
 
 import java.time.LocalDateTime
 
-data class FileMetadata(
+data class FileDriveMetadata(
     var appProperties: Map<String?, String?>? = null,
     var createdTime: LocalDateTime? = null,
     var description: String? = null,

@@ -7,17 +7,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.lucascalheiros.booklibrarymanager.databinding.ItemFileListBinding
-import com.github.lucascalheiros.booklibrarymanager.model.FileListItem
+import com.github.lucascalheiros.booklibrarymanager.model.BookLibFile
 import com.github.lucascalheiros.booklibrarymanager.ui.home.handlers.FileListItemListener
 
-class FileListAdapter: ListAdapter<FileListItem, FileListAdapter.FileListItemViewHolder>(Diff) {
+class FileListAdapter: ListAdapter<BookLibFile, FileListAdapter.FileListItemViewHolder>(Diff) {
 
-    object Diff: DiffUtil.ItemCallback<FileListItem>() {
-        override fun areItemsTheSame(oldItem: FileListItem, newItem: FileListItem): Boolean {
+    object Diff: DiffUtil.ItemCallback<BookLibFile>() {
+        override fun areItemsTheSame(oldItem: BookLibFile, newItem: BookLibFile): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: FileListItem, newItem: FileListItem): Boolean {
+        override fun areContentsTheSame(oldItem: BookLibFile, newItem: BookLibFile): Boolean {
             return oldItem == newItem
         }
     }
@@ -40,11 +40,11 @@ class FileListAdapter: ListAdapter<FileListItem, FileListAdapter.FileListItemVie
     }
 
     class FileListItemViewHolder(private val binding: ItemFileListBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: FileListItem, listener: FileListItemListener?) {
+        fun bind(item: BookLibFile, listener: FileListItemListener?) {
             binding.model = item
             binding.listener = listener ?: object : FileListItemListener {
-                override fun download(item: FileListItem) = Unit
-                override fun read(item: FileListItem) = Unit
+                override fun download(item: BookLibFile) = Unit
+                override fun read(item: BookLibFile) = Unit
             }
         }
     }
@@ -52,7 +52,7 @@ class FileListAdapter: ListAdapter<FileListItem, FileListAdapter.FileListItemVie
     companion object {
         @JvmStatic
         @BindingAdapter(value = ["fileListAdapterItems", "fileListAdapterListener"], requireAll = false)
-        fun bind(rv: RecyclerView, items: List<FileListItem>?, listener: FileListItemListener?) {
+        fun bind(rv: RecyclerView, items: List<BookLibFile>?, listener: FileListItemListener?) {
             rv.adapter?.let {
                 if (it !is FileListAdapter) {
                     rv.adapter = FileListAdapter()

@@ -1,23 +1,23 @@
 package com.github.lucascalheiros.booklibrarymanager.model.converter
 
-import com.github.lucascalheiros.booklibrarymanager.model.FileListItem
-import com.github.lucascalheiros.booklibrarymanager.model.FileMetadata
+import com.github.lucascalheiros.booklibrarymanager.model.BookLibFile
+import com.github.lucascalheiros.booklibrarymanager.model.FileDriveMetadata
 
 object FileListItemConverter {
     private const val TAGS = "TAGS"
     private const val READ_PROGRESS = "READ_PROGRESS"
     private const val TOTAL_PAGES = "TOTAL_PAGES"
 
-    fun from(fileMetadata: FileMetadata): FileListItem {
+    fun from(fileDriveMetadata: FileDriveMetadata): BookLibFile {
 
-        return FileListItem(
-            name = fileMetadata.name,
-            tags = fileMetadata.appProperties?.get(TAGS)?.split(",").orEmpty(),
-            modifiedTime = fileMetadata.modifiedTime,
-            createdTime = fileMetadata.createdTime,
-            id = fileMetadata.id,
-            readProgress = fileMetadata.appProperties?.get(READ_PROGRESS)?.toIntOrNull() ?: 0,
-            totalPages = fileMetadata.appProperties?.get(TOTAL_PAGES)?.toIntOrNull() ?: 1
+        return BookLibFile(
+            name = fileDriveMetadata.name,
+            tags = fileDriveMetadata.appProperties?.get(TAGS)?.split(",").orEmpty(),
+            modifiedTime = fileDriveMetadata.modifiedTime,
+            createdTime = fileDriveMetadata.createdTime,
+            id = fileDriveMetadata.id,
+            readProgress = fileDriveMetadata.appProperties?.get(READ_PROGRESS)?.toIntOrNull() ?: 0,
+            totalPages = fileDriveMetadata.appProperties?.get(TOTAL_PAGES)?.toIntOrNull() ?: 1
         )
     }
 

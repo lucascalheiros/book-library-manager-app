@@ -1,7 +1,7 @@
 package com.github.lucascalheiros.booklibrarymanager.data.network
 
 
-import com.github.lucascalheiros.booklibrarymanager.model.FileMetadata
+import com.github.lucascalheiros.booklibrarymanager.model.FileDriveMetadata
 import java.io.File
 
 interface FileRepository {
@@ -19,9 +19,9 @@ interface FileRepository {
         tags: List<String>? = null,
         readProgress: Int? = null,
         totalPages: Int? = null
-    ): FileMetadata
+    ): FileDriveMetadata
 
     suspend fun getFile(fileId: String): File
 
-    suspend fun listFilesMetadata(query: String? = null): List<FileMetadata>
+    suspend fun listFilesMetadata(query: String? = null): List<FileDriveMetadata>
 }

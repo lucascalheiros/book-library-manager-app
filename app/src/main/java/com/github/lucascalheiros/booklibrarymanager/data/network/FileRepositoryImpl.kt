@@ -1,7 +1,7 @@
 package com.github.lucascalheiros.booklibrarymanager.data.network
 
 import android.content.Context
-import com.github.lucascalheiros.booklibrarymanager.model.FileMetadata
+import com.github.lucascalheiros.booklibrarymanager.model.FileDriveMetadata
 import com.github.lucascalheiros.booklibrarymanager.model.converter.FileMetadataConverter
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -97,7 +97,7 @@ class FileRepositoryImpl(
         tags: List<String>?,
         readProgress: Int?,
         totalPages: Int?
-    ): FileMetadata = withContext(Dispatchers.IO) {
+    ): FileDriveMetadata = withContext(Dispatchers.IO) {
             suspendCoroutine { continuation ->
                 thread {
                     try {
@@ -195,7 +195,7 @@ class FileRepositoryImpl(
         }
     }
 
-    override suspend fun listFilesMetadata(query: String?): List<FileMetadata> {
+    override suspend fun listFilesMetadata(query: String?): List<FileDriveMetadata> {
         return listFiles(query).map { FileMetadataConverter.from(it) }
     }
 

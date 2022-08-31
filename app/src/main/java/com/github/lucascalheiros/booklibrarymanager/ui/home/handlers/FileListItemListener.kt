@@ -1,8 +1,8 @@
 package com.github.lucascalheiros.booklibrarymanager.ui.home.handlers
 
-import com.github.lucascalheiros.booklibrarymanager.model.FileListItem
+import com.github.lucascalheiros.booklibrarymanager.model.BookLibFile
 
 interface FileListItemListener {
-    fun download(item: FileListItem)
-    fun read(item: FileListItem)
+    fun download(item: BookLibFile)
+    fun read(item: BookLibFile)
 }

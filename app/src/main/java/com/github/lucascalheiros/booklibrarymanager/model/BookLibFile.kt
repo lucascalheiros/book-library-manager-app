@@ -2,7 +2,7 @@ package com.github.lucascalheiros.booklibrarymanager.model
 
 import java.time.LocalDateTime
 
-data class FileListItem(
+data class BookLibFile(
     val name: String,
     val tags: List<String>,
     val modifiedTime: LocalDateTime?,
