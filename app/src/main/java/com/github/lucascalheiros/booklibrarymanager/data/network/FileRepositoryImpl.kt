@@ -51,14 +51,15 @@ class FileRepositoryImpl(
             suspendCoroutine { continuation ->
                 thread {
                     try {
-                        val query = "mimeType = 'application/vnd.google-apps.folder' and name = '${folderName}'"
+                        val query =
+                            "mimeType = 'application/vnd.google-apps.folder' and name = '${folderName}'"
                         val driveFile: File = runBlocking { listFiles(query) }.let {
                             if (it.isEmpty()) {
                                 val fileMetadata = File()
                                 fileMetadata.name = folderName
                                 fileMetadata.mimeType = "application/vnd.google-apps.folder"
                                 driveService().files().create(fileMetadata)
-                                    .setFields("id")
+                                    .setFields("*")
                                     .execute()
                             } else {
                                 it.first()
@@ -90,6 +91,46 @@ class FileRepositoryImpl(
         return saveFile(metadata, mediaContent, fileId).id
     }
 
+    override suspend fun updateFileInfo(
+        fileId: String,
+        name: String?,
+        tags: List<String>?,
+        readProgress: Int?,
+        totalPages: Int?
+    ): FileMetadata = withContext(Dispatchers.IO) {
+            suspendCoroutine { continuation ->
+                thread {
+                    try {
+                        val file: File = driveService().files().get(fileId).execute()
+
+                        val newFile = File()
+                        newFile.appProperties = file.appProperties
+                        newFile.name = file.name
+                        newFile.createdTime = file.createdTime
+
+                        newFile.apply {
+                            appProperties = appProperties ?: mutableMapOf()
+                            tags?.let { appProperties[TAGS] = it.joinToString(",") }
+                            readProgress?.let { appProperties[READ_PROGRESS] = "$it" }
+                            totalPages?.let { appProperties[TOTAL_PAGES] = "$it" }
+                            name?.let { this.name = it}
+                        }
+
+                        val driveFile = driveService().files().update(
+                            fileId,
+                            newFile
+                        )
+                            .setFields("*")
+                            .execute()
+                        continuation.resume(FileMetadataConverter.from(driveFile))
+                    } catch (t: Throwable) {
+                        continuation.resumeWithException(t)
+                    }
+                }
+            }
+        }
+
+
     private suspend fun saveFile(metadata: File, mediaContent: FileContent, fileId: String?): File =
         withContext(Dispatchers.IO) {
             suspendCoroutine { continuation ->
@@ -102,14 +143,16 @@ class FileRepositoryImpl(
                                 metadata.setParents(defaultFolder),
                                 mediaContent
                             )
-                                .setFields("id")
+                                .setFields("*")
                                 .execute()
                         } else {
                             driveService().files().update(
                                 fileId,
                                 metadata.setParents(defaultFolder),
                                 mediaContent
-                            ).execute()
+                            )
+                                .setFields("*")
+                                .execute()
                         }
                         continuation.resume(driveFile)
                     } catch (t: Throwable) {
@@ -142,7 +185,7 @@ class FileRepositoryImpl(
         suspendCoroutine { continuation ->
             thread {
                 try {
-                    val googleDriveFileList = driveService().files().list().setQ(query)
+                    val googleDriveFileList = driveService().files().list().setQ(query).setFields("*")
                         .execute().files
                     continuation.resume(googleDriveFileList)
                 } catch (t: Throwable) {
@@ -158,5 +201,8 @@ class FileRepositoryImpl(
 
     companion object {
         private const val defaultAppFolderName = "Booklib Manager"
+        private const val TAGS = "TAGS"
+        private const val READ_PROGRESS = "READ_PROGRESS"
+        private const val TOTAL_PAGES = "TOTAL_PAGES"
     }
 }

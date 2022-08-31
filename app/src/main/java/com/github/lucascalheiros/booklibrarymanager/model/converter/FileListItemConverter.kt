@@ -5,7 +5,8 @@ import com.github.lucascalheiros.booklibrarymanager.model.FileMetadata
 
 object FileListItemConverter {
     private const val TAGS = "TAGS"
-    private const val READ_PERCENT = "READ_PERCENT"
+    private const val READ_PROGRESS = "READ_PROGRESS"
+    private const val TOTAL_PAGES = "TOTAL_PAGES"
 
     fun from(fileMetadata: FileMetadata): FileListItem {
 
@@ -15,7 +16,8 @@ object FileListItemConverter {
             modifiedTime = fileMetadata.modifiedTime,
             createdTime = fileMetadata.createdTime,
             id = fileMetadata.id,
-            readPercent = fileMetadata.appProperties?.get(READ_PERCENT)?.toFloatOrNull() ?: 0f
+            readProgress = fileMetadata.appProperties?.get(READ_PROGRESS)?.toIntOrNull() ?: 0,
+            totalPages = fileMetadata.appProperties?.get(TOTAL_PAGES)?.toIntOrNull() ?: 1
         )
     }
 

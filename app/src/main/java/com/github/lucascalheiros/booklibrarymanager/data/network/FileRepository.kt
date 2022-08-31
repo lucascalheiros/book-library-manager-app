@@ -13,6 +13,14 @@ interface FileRepository {
         fileId: String? = null
     ): String
 
+    suspend fun updateFileInfo(
+        fileId: String,
+        name: String? = null,
+        tags: List<String>? = null,
+        readProgress: Int? = null,
+        totalPages: Int? = null
+    ): FileMetadata
+
     suspend fun getFile(fileId: String): File
 
     suspend fun listFilesMetadata(query: String? = null): List<FileMetadata>

@@ -2,6 +2,9 @@ package com.github.lucascalheiros.booklibrarymanager.useCase
 
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
+import com.github.lucascalheiros.booklibrarymanager.data.network.FileRepository
+import com.github.lucascalheiros.booklibrarymanager.model.FileListItem
+import com.github.lucascalheiros.booklibrarymanager.model.converter.FileListItemConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single
@@ -12,7 +15,8 @@ import kotlin.coroutines.suspendCoroutine
 
 @Single
 class ReadPdfUseCaseImpl(
-    private val fileListUseCase: FileListUseCase
+    private val fileListUseCase: FileListUseCase,
+    private val fileRepository: FileRepository
 ) : ReadPdfUseCase {
 
     override suspend fun pdfRendererFromFileId(fileId: String): PdfRenderer =
@@ -30,4 +34,12 @@ class ReadPdfUseCaseImpl(
                 }
             }
         }
+
+    override suspend fun registerReadProgress(
+        fileId: String,
+        readProgress: Int,
+        totalPages: Int
+    ): FileListItem {
+        return FileListItemConverter.from(fileRepository.updateFileInfo(fileId, readProgress = readProgress, totalPages = totalPages))
+    }
 }

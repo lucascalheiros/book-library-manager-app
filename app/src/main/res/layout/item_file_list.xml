@@ -67,7 +67,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text='@{StringUtils.formatFloatToPercent(model.readPercent)}'
+                android:text="@{StringUtils.formatFloatToPercent(model.readPercent)}"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageButton"
