@@ -4,7 +4,6 @@ import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import com.github.lucascalheiros.booklibrarymanager.data.network.FileRepository
 import com.github.lucascalheiros.booklibrarymanager.model.BookLibFile
-import com.github.lucascalheiros.booklibrarymanager.model.converter.FileListItemConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single
@@ -40,6 +39,6 @@ class ReadPdfUseCaseImpl(
         readProgress: Int,
         totalPages: Int
     ): BookLibFile {
-        return FileListItemConverter.from(fileRepository.updateFileInfo(fileId, readProgress = readProgress, totalPages = totalPages))
+        return fileRepository.updateFileInfo(fileId, readProgress = readProgress, totalPages = totalPages)
     }
 }
