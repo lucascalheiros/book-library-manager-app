@@ -1,8 +1,11 @@
 package com.github.lucascalheiros.booklibrarymanager.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.time.LocalDateTime
 
-data class FileDriveMetadata(
+@Entity
+data class DriveFileMetadata(
     override val id: String? = null,
     override val name: String = "",
     override val createdTime: LocalDateTime? = null,
@@ -13,7 +16,8 @@ data class FileDriveMetadata(
     val originalFilename: String? = null,
     val size: Int? = null,
     val trashed: Boolean? = null,
-    val trashedTime: LocalDateTime? = null
+    val trashedTime: LocalDateTime? = null,
+    @PrimaryKey val localId: Int? = null
 ) : BookLibFile {
     override val readPercent: Float
         get() = readProgress.toFloat() / totalPages.toFloat()

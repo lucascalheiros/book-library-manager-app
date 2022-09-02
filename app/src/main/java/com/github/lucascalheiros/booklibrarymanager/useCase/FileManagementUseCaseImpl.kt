@@ -13,12 +13,15 @@ class FileManagementUseCaseImpl(
     private val fileRepository: FileRepository
 ) : FileManagementUseCase {
 
-
     override suspend fun uploadFile(uri: Uri): String {
         val contentResolver = context.contentResolver
         val input = contentResolver.openInputStream(uri)!!
         val name = getFileName(context, uri)!!
         val file = loadFileFromInputStream(context, input, name)
         return fileRepository.saveFile(name, file, "application/pdf")
+    }
+
+    override suspend fun deleteFile(id: String) {
+        fileRepository.deleteFile(id)
     }
 }

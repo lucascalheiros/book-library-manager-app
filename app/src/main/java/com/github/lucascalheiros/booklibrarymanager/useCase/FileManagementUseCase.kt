@@ -5,4 +5,6 @@ import android.net.Uri
 interface FileManagementUseCase {
 
     suspend fun uploadFile(uri: Uri): String
+
+    suspend fun deleteFile(id: String)
 }

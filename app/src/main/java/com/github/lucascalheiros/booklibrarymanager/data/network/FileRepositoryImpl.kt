@@ -1,8 +1,8 @@
 package com.github.lucascalheiros.booklibrarymanager.data.network
 
 import android.content.Context
-import com.github.lucascalheiros.booklibrarymanager.model.FileDriveMetadata
-import com.github.lucascalheiros.booklibrarymanager.model.converter.FileMetadataConverter
+import com.github.lucascalheiros.booklibrarymanager.model.DriveFileMetadata
+import com.github.lucascalheiros.booklibrarymanager.utils.toDriveFileMetadata
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -97,7 +97,7 @@ class FileRepositoryImpl(
         tags: List<String>?,
         readProgress: Int?,
         totalPages: Int?
-    ): FileDriveMetadata = withContext(Dispatchers.IO) {
+    ): DriveFileMetadata = withContext(Dispatchers.IO) {
             suspendCoroutine { continuation ->
                 thread {
                     try {
@@ -122,7 +122,7 @@ class FileRepositoryImpl(
                         )
                             .setFields("*")
                             .execute()
-                        continuation.resume(FileMetadataConverter.from(driveFile))
+                        continuation.resume(driveFile.toDriveFileMetadata())
                     } catch (t: Throwable) {
                         continuation.resumeWithException(t)
                     }
@@ -195,8 +195,21 @@ class FileRepositoryImpl(
         }
     }
 
-    override suspend fun listFilesMetadata(query: String?): List<FileDriveMetadata> {
-        return listFiles(query).map { FileMetadataConverter.from(it) }
+    override suspend fun listFilesMetadata(query: String?): List<DriveFileMetadata> {
+        return listFiles(query).map { it.toDriveFileMetadata() }
+    }
+
+    override suspend fun deleteFile(fileId: String): Unit = withContext(Dispatchers.IO) {
+        suspendCoroutine { continuation ->
+            thread {
+                try {
+                    driveService().files().delete(fileId).execute()
+                    continuation.resume(Unit)
+                } catch (t: Throwable) {
+                    continuation.resumeWithException(t)
+                }
+            }
+        }
     }
 
     companion object {
