@@ -7,5 +7,6 @@ interface FileListUseCase {
 
     suspend fun listFiles(): List<BookLibFile>
 
-    suspend fun getFile(fileId: String): File
+    suspend fun downloadMedia(fileId: String): File
+
 }

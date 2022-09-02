@@ -29,7 +29,7 @@ class HomeViewModel(
                 item.id?.let {
                     fileHandlerRequestState.value = FileHandlerRequestState.Loading
                     fileHandlerRequestState.value =
-                        FileHandlerRequestState.DownloadFile(fileListUseCase.getFile(it))
+                        FileHandlerRequestState.DownloadFile(fileListUseCase.downloadMedia(it))
                 }
             }
         }

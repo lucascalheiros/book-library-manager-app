@@ -13,7 +13,6 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single
 import java.io.FileOutputStream
@@ -46,123 +45,70 @@ class FileRepositoryImpl(
     private val lastSignedInAccount: GoogleSignInAccount?
         get() = GoogleSignIn.getLastSignedInAccount(context)
 
-    private suspend fun createFolder(folderName: String): String =
-        withContext(Dispatchers.IO) {
-            suspendCoroutine { continuation ->
-                thread {
-                    try {
-                        val query =
-                            "mimeType = 'application/vnd.google-apps.folder' and name = '${folderName}'"
-                        val driveFile: File = runBlocking { listFiles(query) }.let {
-                            if (it.isEmpty()) {
-                                val fileMetadata = File()
-                                fileMetadata.name = folderName
-                                fileMetadata.mimeType = "application/vnd.google-apps.folder"
-                                driveService().files().create(fileMetadata)
-                                    .setFields("*")
-                                    .execute()
-                            } else {
-                                it.first()
-                            }
+    private suspend fun doCreateFile(
+        fileMetadata: File,
+        mediaContent: FileContent?
+    ): String = withContext(Dispatchers.IO) {
+        suspendCoroutine { continuation ->
+            thread {
+                try {
+                    val driveFile = driveService().files().let { files ->
+                        mediaContent?.let {
+                            files.create(
+                                fileMetadata,
+                                it
+                            )
+                        } ?: run {
+                            files.create(
+                                fileMetadata
+                            )
                         }
-
-                        continuation.resume(driveFile.id)
-                    } catch (t: Throwable) {
-                        continuation.resumeWithException(t)
                     }
+                        .setFields("*")
+                        .execute()
+                    continuation.resume(driveFile.id)
+                } catch (t: Throwable) {
+                    continuation.resumeWithException(t)
                 }
             }
         }
-
-    private suspend fun createDefaultAppFolder(): String {
-        return createFolder(defaultAppFolderName)
     }
 
-    override suspend fun saveFile(
-        name: String,
-        file: java.io.File,
-        mimeType: String,
-        fileId: String?
-    ): String {
-        val metadata = File().setName(name)
+    override suspend fun createFile(fileMetadata: File): String {
+        return doCreateFile(
+            fileMetadata,
+            null
+        )
+    }
 
-        val mediaContent = FileContent(mimeType, file)
-
-        return saveFile(metadata, mediaContent, fileId).id
+    override suspend fun createFile(fileMetadata: File, mediaContent: FileContent): String {
+        return doCreateFile(
+            fileMetadata,
+            mediaContent
+        )
     }
 
     override suspend fun updateFileInfo(
-        fileId: String,
-        name: String?,
-        tags: List<String>?,
-        readProgress: Int?,
-        totalPages: Int?
-    ): DriveFileMetadata = withContext(Dispatchers.IO) {
-            suspendCoroutine { continuation ->
-                thread {
-                    try {
-                        val file: File = driveService().files().get(fileId).execute()
-
-                        val newFile = File()
-                        newFile.appProperties = file.appProperties
-                        newFile.name = file.name
-                        newFile.createdTime = file.createdTime
-
-                        newFile.apply {
-                            appProperties = appProperties ?: mutableMapOf()
-                            tags?.let { appProperties[TAGS] = it.joinToString(",") }
-                            readProgress?.let { appProperties[READ_PROGRESS] = "$it" }
-                            totalPages?.let { appProperties[TOTAL_PAGES] = "$it" }
-                            name?.let { this.name = it}
-                        }
-
-                        val driveFile = driveService().files().update(
-                            fileId,
-                            newFile
-                        )
-                            .setFields("*")
-                            .execute()
-                        continuation.resume(driveFile.toDriveFileMetadata())
-                    } catch (t: Throwable) {
-                        continuation.resumeWithException(t)
-                    }
+        fileMetadata: File
+    ): File = withContext(Dispatchers.IO) {
+        suspendCoroutine { continuation ->
+            thread {
+                try {
+                    val driveFile = driveService().files().update(
+                        fileMetadata.id,
+                        fileMetadata
+                    )
+                        .setFields("*")
+                        .execute()
+                    continuation.resume(driveFile)
+                } catch (t: Throwable) {
+                    continuation.resumeWithException(t)
                 }
             }
         }
+    }
 
-
-    private suspend fun saveFile(metadata: File, mediaContent: FileContent, fileId: String?): File =
-        withContext(Dispatchers.IO) {
-            suspendCoroutine { continuation ->
-                thread {
-                    try {
-                        val rootFolderId = runBlocking { createDefaultAppFolder() }
-                        val defaultFolder = Collections.singletonList(rootFolderId)
-                        val driveFile = if (fileId == null) {
-                            driveService().files().create(
-                                metadata.setParents(defaultFolder),
-                                mediaContent
-                            )
-                                .setFields("*")
-                                .execute()
-                        } else {
-                            driveService().files().update(
-                                fileId,
-                                metadata.setParents(defaultFolder),
-                                mediaContent
-                            )
-                                .setFields("*")
-                                .execute()
-                        }
-                        continuation.resume(driveFile)
-                    } catch (t: Throwable) {
-                        continuation.resumeWithException(t)
-                    }
-                }
-            }
-        }
-
-    override suspend fun getFile(fileId: String): java.io.File =
+    override suspend fun downloadMedia(fileId: String): java.io.File =
         withContext(Dispatchers.IO) {
             suspendCoroutine { continuation ->
                 thread {
@@ -181,22 +127,33 @@ class FileRepositoryImpl(
             }
         }
 
-    private suspend fun listFiles(query: String?): List<File> = withContext(Dispatchers.IO) {
+    override suspend fun getFile(fileId: String): File =
+        withContext(Dispatchers.IO) {
+            suspendCoroutine { continuation ->
+                thread {
+                    try {
+                        val driveFile = driveService().files()[fileId].setFields("*").execute()
+                        continuation.resume(driveFile)
+                    } catch (t: Throwable) {
+                        continuation.resumeWithException(t)
+                    }
+                }
+            }
+        }
+
+    override suspend fun listFiles(query: String?): List<File> = withContext(Dispatchers.IO) {
         suspendCoroutine { continuation ->
             thread {
                 try {
-                    val googleDriveFileList = driveService().files().list().setQ(query).setFields("*")
-                        .execute().files
+                    val googleDriveFileList =
+                        driveService().files().list().setQ(query).setFields("*")
+                            .execute().files
                     continuation.resume(googleDriveFileList)
                 } catch (t: Throwable) {
                     continuation.resumeWithException(t)
                 }
             }
         }
-    }
-
-    override suspend fun listFilesMetadata(query: String?): List<DriveFileMetadata> {
-        return listFiles(query).map { it.toDriveFileMetadata() }
     }
 
     override suspend fun deleteFile(fileId: String): Unit = withContext(Dispatchers.IO) {
@@ -212,10 +169,4 @@ class FileRepositoryImpl(
         }
     }
 
-    companion object {
-        private const val defaultAppFolderName = "Booklib Manager"
-        private const val TAGS = "TAGS"
-        private const val READ_PROGRESS = "READ_PROGRESS"
-        private const val TOTAL_PAGES = "TOTAL_PAGES"
-    }
 }

@@ -8,4 +8,5 @@ interface ReadPdfUseCase {
     suspend fun pdfRendererFromFileId(fileId: String): PdfRenderer
 
     suspend fun registerReadProgress(fileId: String, readProgress: Int, totalPages: Int): BookLibFile
+
 }

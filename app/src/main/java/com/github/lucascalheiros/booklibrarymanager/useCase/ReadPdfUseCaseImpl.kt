@@ -15,12 +15,12 @@ import kotlin.coroutines.suspendCoroutine
 @Single
 class ReadPdfUseCaseImpl(
     private val fileListUseCase: FileListUseCase,
-    private val fileRepository: FileRepository
+    private val fileManagementUseCase: FileManagementUseCase
 ) : ReadPdfUseCase {
 
     override suspend fun pdfRendererFromFileId(fileId: String): PdfRenderer =
         withContext(Dispatchers.IO) {
-            val file = fileListUseCase.getFile(fileId)
+            val file = fileListUseCase.downloadMedia(fileId)
             suspendCoroutine { continuation ->
                 thread {
                     try {
@@ -39,6 +39,7 @@ class ReadPdfUseCaseImpl(
         readProgress: Int,
         totalPages: Int
     ): BookLibFile {
-        return fileRepository.updateFileInfo(fileId, readProgress = readProgress, totalPages = totalPages)
+        return fileManagementUseCase.updateFileInfo(fileId, readProgress = readProgress, totalPages = totalPages)
     }
+
 }
