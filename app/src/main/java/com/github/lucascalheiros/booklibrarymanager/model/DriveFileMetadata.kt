@@ -2,6 +2,7 @@ package com.github.lucascalheiros.booklibrarymanager.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
 import java.time.LocalDateTime
 
 @Entity

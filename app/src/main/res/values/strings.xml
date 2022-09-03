@@ -13,5 +13,6 @@
     <string name="cd_download">download</string>
     <string name="cd_read">read</string>
     <string name="cd_upload">upload</string>
+    <string name="filter">Filter</string>
 
 </resources>

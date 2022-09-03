@@ -1,6 +1,6 @@
 package com.github.lucascalheiros.booklibrarymanager.useCase
 
-import com.github.lucascalheiros.booklibrarymanager.model.BookLibFile
+import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
 import java.io.File
 
 interface FileListUseCase {

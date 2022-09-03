@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.booklibrarymanager.model
+package com.github.lucascalheiros.booklibrarymanager.model.interfaces
 
 import java.time.LocalDateTime
 
@@ -12,4 +12,6 @@ interface BookLibFile {
     val totalPages: Int
     val readPercent: Float
         get() = readProgress.toFloat() / totalPages.toFloat()
+
+    override fun equals(other: Any?): Boolean
 }

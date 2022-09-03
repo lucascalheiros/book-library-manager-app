@@ -1,6 +1,6 @@
 package com.github.lucascalheiros.booklibrarymanager.useCase
 
-import com.github.lucascalheiros.booklibrarymanager.model.BookLibFile
+import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
 import com.github.lucascalheiros.booklibrarymanager.data.network.FileRepository
 import com.github.lucascalheiros.booklibrarymanager.utils.toDriveFileMetadata
 import org.koin.core.annotation.Single

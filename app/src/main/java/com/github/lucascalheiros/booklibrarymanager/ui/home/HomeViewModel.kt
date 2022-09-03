@@ -4,8 +4,8 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.lucascalheiros.booklibrarymanager.model.BookLibFile
-import com.github.lucascalheiros.booklibrarymanager.ui.home.handlers.FileListItemListener
+import com.github.lucascalheiros.booklibrarymanager.model.handlers.BookLibFileItemListener
+import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
 import com.github.lucascalheiros.booklibrarymanager.useCase.FileListUseCase
 import com.github.lucascalheiros.booklibrarymanager.useCase.FileManagementUseCase
 import kotlinx.coroutines.launch
@@ -18,12 +18,18 @@ class HomeViewModel(
     private val fileManagementUseCase: FileManagementUseCase
 ) : ViewModel() {
 
+    val tags = MutableLiveData<List<String>>(listOf("test1", "test2", "test3", "lorem ipsun test", "another test"))
+    val selectedTags = MutableLiveData<List<String>>(listOf("test1"))
+
+    val showFilterOptions = MutableLiveData<Boolean>(false)
+
     val fileItems = MutableLiveData<List<BookLibFile>>()
 
     val fileHandlerRequestState =
         MutableLiveData<FileHandlerRequestState>(FileHandlerRequestState.Idle)
 
-    val fileItemListener = MutableLiveData<FileListItemListener>(object : FileListItemListener {
+    val fileItemListener = MutableLiveData<BookLibFileItemListener>(object :
+        BookLibFileItemListener {
         override fun download(item: BookLibFile) {
             viewModelScope.launch {
                 item.id?.let {

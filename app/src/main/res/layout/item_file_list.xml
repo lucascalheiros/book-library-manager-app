@@ -7,11 +7,11 @@
 
         <variable
             name="model"
-            type="com.github.lucascalheiros.booklibrarymanager.model.BookLibFile" />
+            type="com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile" />
 
         <variable
             name="listener"
-            type="com.github.lucascalheiros.booklibrarymanager.ui.home.handlers.FileListItemListener" />
+            type="com.github.lucascalheiros.booklibrarymanager.model.handlers.BookLibFileItemListener" />
 
         <import type="com.github.lucascalheiros.booklibrarymanager.utils.StringUtils" />
     </data>
@@ -104,7 +104,6 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
-
 
     </LinearLayout>
 
