@@ -22,6 +22,21 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val homeViewModel: HomeViewModel by viewModel()
 
+    private val filePickerResultRegister =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data?.let { homeViewModel.uploadFile(it) } ?: Log.d(
+                    TAG,
+                    "::filePickerResultRegister No file received"
+                )
+            } else {
+                Log.d(
+                    TAG,
+                    "::filePickerResultRegister File selection failed, result code: ${result.resultCode}"
+                )
+            }
+        }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,22 +51,13 @@ class HomeFragment : Fragment() {
         observeViewModel()
 
         binding.uploadButton.setOnClickListener {
-            openDirectory()
+            openFilePicker()
         }
 
         return binding.root
     }
 
-    private val filePickerResultRegister =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.data?.let { homeViewModel.uploadFile(it) }
-            } else {
-                Log.d("File selection failed, result code:", result.resultCode.toString())
-            }
-        }
-
-    private fun openDirectory() {
+    private fun openFilePicker() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "application/pdf"
@@ -102,5 +108,9 @@ class HomeFragment : Fragment() {
                 homeViewModel.handleOpenEditFileMetadataDialogRequestState()
             }
         }
+    }
+
+    companion object {
+        private val TAG = HomeViewModel::class.java.canonicalName
     }
 }

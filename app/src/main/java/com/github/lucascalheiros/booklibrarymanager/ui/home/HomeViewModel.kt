@@ -19,9 +19,11 @@ class HomeViewModel(
 ) : ViewModel() {
 
     private val mLoadFilesRequestState = MutableLiveData<LoadFilesRequestState>()
+
     private val mFileItems = MediatorLiveData<List<BookLibFile>>()
 
     private val mFilteredAndSortedFileItems = MediatorLiveData<List<BookLibFile>>()
+
     val filteredAndSortedFileItems: LiveData<List<BookLibFile>> = mFilteredAndSortedFileItems
 
     val isLoadingFiles: LiveData<Boolean> = map(mLoadFilesRequestState) {
