@@ -17,6 +17,7 @@ class GoogleSignInUseCase constructor(
 ) {
     private val googleSignInOptions by lazy {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
             .requestScopes(Scope(Scopes.DRIVE_FILE))
             .build()
     }
