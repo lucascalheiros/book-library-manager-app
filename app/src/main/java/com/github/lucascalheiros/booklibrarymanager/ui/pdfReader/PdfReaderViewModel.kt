@@ -5,19 +5,29 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.github.lucascalheiros.booklibrarymanager.ui.pdfReader.handlers.ReadingPageTrackerListener
+import com.github.lucascalheiros.booklibrarymanager.useCase.ReadPdfUseCase
+import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
-class PdfReaderViewModel : ViewModel() {
+class PdfReaderViewModel(
+    private val readPdfUseCase: ReadPdfUseCase
+) : ViewModel() {
     val mPageTracker = MutableLiveData<ReadingPageTrackerListener>()
 
     private val mRenderer = MutableLiveData<PdfRenderer>()
     val renderer: LiveData<PdfRenderer> = mRenderer
 
-    fun initializeRenderer(renderer: PdfRenderer) {
-        mRenderer.value ?: run {
-            mRenderer.value = renderer
+    lateinit var fileId: String
+
+    fun initializeRenderer(fileId: String) {
+        this.fileId = fileId
+        viewModelScope.launch {
+            mRenderer.value ?: run {
+                mRenderer.value = readPdfUseCase.pdfRendererFromFileId(fileId)
+            }
         }
     }
 
@@ -29,7 +39,11 @@ class PdfReaderViewModel : ViewModel() {
     init {
         mPageTracker.value = object : ReadingPageTrackerListener {
             override fun onPageReadChange(page: Int) {
-                Log.d("testing, page tracker", page.toString())
+                viewModelScope.launch {
+                    Log.d("testing, page tracker", page.toString())
+                    readPdfUseCase.registerReadProgress(fileId, page, mRenderer.value?.pageCount ?: 1)
+                }
+
             }
         }
     }

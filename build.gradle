@@ -8,6 +8,7 @@ buildscript {
         kotlin_version = "1.6.20"
         koin_annotations_version = "1.0.1"
         ksp_version = "1.6.21-1.0.5"
+        room_version = "2.4.3"
     }
 
     repositories {

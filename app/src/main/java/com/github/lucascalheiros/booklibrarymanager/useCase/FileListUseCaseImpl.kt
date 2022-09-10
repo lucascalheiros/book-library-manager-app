@@ -1,8 +1,8 @@
 package com.github.lucascalheiros.booklibrarymanager.useCase
 
-import com.github.lucascalheiros.booklibrarymanager.network.FileRepository
-import com.github.lucascalheiros.booklibrarymanager.ui.home.model.FileListItem
-import com.github.lucascalheiros.booklibrarymanager.ui.home.model.converter.FileListItemConverter
+import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
+import com.github.lucascalheiros.booklibrarymanager.data.network.FileRepository
+import com.github.lucascalheiros.booklibrarymanager.utils.toDriveFileMetadata
 import org.koin.core.annotation.Single
 import java.io.File
 
@@ -11,11 +11,16 @@ class FileListUseCaseImpl(
     private val fileRepository: FileRepository
 ): FileListUseCase {
 
-    override suspend fun listFiles(): List<FileListItem> {
-        return fileRepository.listFilesMetadata().map { FileListItemConverter.from(it) }
+    override suspend fun listFiles(): List<BookLibFile> {
+        return fileRepository.listFiles(pdfQuery).map { it.toDriveFileMetadata()}
     }
 
-    override suspend fun getFile(fileId: String): File {
-        return fileRepository.getFile(fileId)
+    override suspend fun downloadMedia(fileId: String): File {
+        return fileRepository.downloadMedia(fileId)
     }
+
+    companion object {
+        private const val pdfQuery = "mimeType = 'application/pdf'"
+    }
+
 }

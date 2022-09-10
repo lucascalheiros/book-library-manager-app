@@ -1,6 +1,5 @@
 package com.github.lucascalheiros.booklibrarymanager.ui.pdfReader
 
-import android.graphics.pdf.PdfRenderer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.github.lucascalheiros.booklibrarymanager.databinding.FragmentPdfReaderBinding
-import com.github.lucascalheiros.booklibrarymanager.utils.loadParcelFileDescriptorFromAsset
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -30,10 +28,7 @@ class PdfReaderFragment : Fragment() {
 
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val renderer =
-            PdfRenderer(loadParcelFileDescriptorFromAsset(requireContext(), TEST_PDF_ASSET))
-
-        pdfReaderViewModel.initializeRenderer(renderer)
+        pdfReaderViewModel.initializeRenderer(args.fileId)
 
         return binding.root
     }
@@ -41,9 +36,5 @@ class PdfReaderFragment : Fragment() {
     override fun onDestroy() {
         pdfReaderViewModel.closeRenderer()
         super.onDestroy()
-    }
-
-    companion object {
-        const val TEST_PDF_ASSET = "clean_arch.pdf"
     }
 }

@@ -7,11 +7,11 @@
 
         <variable
             name="model"
-            type="com.github.lucascalheiros.booklibrarymanager.ui.home.model.FileListItem" />
+            type="com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile" />
 
         <variable
             name="listener"
-            type="com.github.lucascalheiros.booklibrarymanager.ui.home.handlers.FileListItemListener" />
+            type="com.github.lucascalheiros.booklibrarymanager.ui.home.handlers.BookLibFileItemListener" />
 
         <import type="com.github.lucascalheiros.booklibrarymanager.utils.StringUtils" />
     </data>
@@ -67,7 +67,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text='@{StringUtils.formatFloatToPercent(model.readPercent)}'
+                android:text="@{StringUtils.formatFloatToPercent(model.readPercent)}"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageButton"
@@ -85,6 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
+                    android:contentDescription="@string/cd_download"
                     android:onClick="@{v -> listener.download(model)}"
                     app:srcCompat="@drawable/ic_download" />
 
@@ -92,6 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
+                    android:contentDescription="@string/cd_read"
                     android:onClick="@{v -> listener.read(model)}"
                     app:srcCompat="@drawable/ic_read_book" />
             </LinearLayout>
@@ -102,7 +104,6 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
-
 
     </LinearLayout>
 

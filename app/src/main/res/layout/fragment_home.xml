@@ -10,17 +10,82 @@
             type="com.github.lucascalheiros.booklibrarymanager.ui.home.HomeViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        layoutConstraintChangesAnimation="@{true}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
-            fileListAdapterItems="@{viewModel.fileItems}"
-            fileListAdapterListener="@{viewModel.fileItemListener}"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_file_list" />
-    </FrameLayout>
+            android:animateLayoutChanges="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                chipsListAdapterOptions="@{viewModel.tags}"
+                chipsListAdapterSelectedOptions="@={viewModel.selectedTags}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:visibility="@{viewModel.showFilterOptions}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageButton3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_tag_chips" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/imageButton3"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="20dp"
+                android:checkable="true"
+                android:checked="@={viewModel.showFilterOptions}"
+                android:text="@string/filter"
+                app:icon="@drawable/ic_filter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:onRefreshListener="@{() -> viewModel.loadFiles()}"
+            app:refreshing="@{viewModel.isLoadingFiles}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+            <androidx.recyclerview.widget.RecyclerView
+                fileListAdapterItems="@{viewModel.filteredAndSortedFileItems}"
+                fileListAdapterListener="@{viewModel.fileItemListener}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_file_list" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/uploadButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:contentDescription="@string/cd_upload"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_file_upload" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
