@@ -1,8 +1,6 @@
 package com.github.lucascalheiros.booklibrarymanager.data.network
 
 import android.content.Context
-import com.github.lucascalheiros.booklibrarymanager.model.DriveFileMetadata
-import com.github.lucascalheiros.booklibrarymanager.utils.toDriveFileMetadata
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -18,13 +16,10 @@ import org.koin.core.annotation.Single
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.util.*
-import kotlin.concurrent.thread
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 
 @Single
+@Suppress("BlockingMethodInNonBlockingContext")
 class FileRepositoryImpl(
     private val context: Context
 ) : FileRepository {
@@ -49,29 +44,20 @@ class FileRepositoryImpl(
         fileMetadata: File,
         mediaContent: FileContent?
     ): String = withContext(Dispatchers.IO) {
-        suspendCoroutine { continuation ->
-            thread {
-                try {
-                    val driveFile = driveService().files().let { files ->
-                        mediaContent?.let {
-                            files.create(
-                                fileMetadata,
-                                it
-                            )
-                        } ?: run {
-                            files.create(
-                                fileMetadata
-                            )
-                        }
-                    }
-                        .setFields("*")
-                        .execute()
-                    continuation.resume(driveFile.id)
-                } catch (t: Exception) {
-                    continuation.resumeWithException(t)
-                }
+        driveService().files().let { files ->
+            mediaContent?.let {
+                files.create(
+                    fileMetadata,
+                    it
+                )
+            } ?: run {
+                files.create(
+                    fileMetadata
+                )
             }
         }
+            .setFields("*")
+            .execute().id
     }
 
     override suspend fun createFile(fileMetadata: File): String {
@@ -92,82 +78,35 @@ class FileRepositoryImpl(
         fileId: String,
         fileMetadata: File
     ): File = withContext(Dispatchers.IO) {
-        suspendCoroutine { continuation ->
-            thread {
-                try {
-                    val driveFile = driveService().files().update(
-                        fileId,
-                        fileMetadata
-                    )
-                        .setFields("*")
-                        .execute()
-                    continuation.resume(driveFile)
-                } catch (t: Exception) {
-                    continuation.resumeWithException(t)
-                }
-            }
-        }
+        driveService().files().update(
+            fileId,
+            fileMetadata
+        )
+            .setFields("*")
+            .execute()
     }
 
-    override suspend fun downloadMedia(fileId: String): java.io.File =
-        withContext(Dispatchers.IO) {
-            suspendCoroutine { continuation ->
-                thread {
-                    try {
-                        val tempFileName = System.currentTimeMillis().toString()
-                        val outFile = java.io.File(context.cacheDir, tempFileName)
-                        val outStream: OutputStream = FileOutputStream(outFile)
-                        driveService().files()[fileId]
-                            .executeMediaAndDownloadTo(outStream)
-                        outStream.close()
-                        continuation.resume(outFile)
-                    } catch (t: Exception) {
-                        continuation.resumeWithException(t)
-                    }
-                }
-            }
-        }
+    override suspend fun downloadMedia(fileId: String): java.io.File = withContext(Dispatchers.IO) {
+        val tempFileName = System.currentTimeMillis().toString()
+        val outFile = java.io.File(context.cacheDir, tempFileName)
+        val outStream: OutputStream = FileOutputStream(outFile)
+        driveService().files()[fileId]
+            .executeMediaAndDownloadTo(outStream)
+        outStream.close()
+        outFile
+    }
 
-    override suspend fun getFile(fileId: String): File =
-        withContext(Dispatchers.IO) {
-            suspendCoroutine { continuation ->
-                thread {
-                    try {
-                        val driveFile = driveService().files()[fileId].setFields("*").execute()
-                        continuation.resume(driveFile)
-                    } catch (t: Exception) {
-                        continuation.resumeWithException(t)
-                    }
-                }
-            }
-        }
+    override suspend fun getFile(fileId: String): File = withContext(Dispatchers.IO) {
+        driveService().files()[fileId].setFields("*").execute()
+    }
 
     override suspend fun listFiles(query: String?): List<File> = withContext(Dispatchers.IO) {
-        suspendCoroutine { continuation ->
-            thread {
-                try {
-                    val googleDriveFileList =
-                        driveService().files().list().setQ(query).setFields("*")
-                            .execute().files
-                    continuation.resume(googleDriveFileList)
-                } catch (t: Exception) {
-                    continuation.resumeWithException(t)
-                }
-            }
-        }
+        driveService().files().list().setQ(query).setFields("*")
+            .execute().files
     }
 
     override suspend fun deleteFile(fileId: String): Unit = withContext(Dispatchers.IO) {
-        suspendCoroutine { continuation ->
-            thread {
-                try {
-                    driveService().files().delete(fileId).execute()
-                    continuation.resume(Unit)
-                } catch (t: Exception) {
-                    continuation.resumeWithException(t)
-                }
-            }
-        }
+        driveService().files().delete(fileId).execute()
     }
 
 }

@@ -6,10 +6,6 @@ import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single
-import kotlin.concurrent.thread
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 @Single
 class ReadPdfUseCaseImpl(
@@ -17,20 +13,12 @@ class ReadPdfUseCaseImpl(
     private val fileManagementUseCase: FileManagementUseCase
 ) : ReadPdfUseCase {
 
-    override suspend fun pdfRendererFromFileId(fileId: String): PdfRenderer =
-        withContext(Dispatchers.IO) {
+    @Suppress("BlockingMethodInNonBlockingContext")
+    override suspend fun pdfRendererFromFileId(fileId: String) = withContext(Dispatchers.IO) {
             val file = fileListUseCase.downloadMedia(fileId)
-            suspendCoroutine { continuation ->
-                thread {
-                    try {
-                        val fileDescriptor =
-                            ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-                        continuation.resume(PdfRenderer(fileDescriptor))
-                    } catch (t: Exception) {
-                        continuation.resumeWithException(t)
-                    }
-                }
-            }
+            val fileDescriptor =
+                ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+            PdfRenderer(fileDescriptor)
         }
 
     override suspend fun registerReadProgress(
@@ -38,7 +26,11 @@ class ReadPdfUseCaseImpl(
         readProgress: Int,
         totalPages: Int
     ): BookLibFile {
-        return fileManagementUseCase.updateFileInfo(fileId, readProgress = readProgress, totalPages = totalPages)
+        return fileManagementUseCase.updateFileInfo(
+            fileId,
+            readProgress = readProgress,
+            totalPages = totalPages
+        )
     }
 
 }

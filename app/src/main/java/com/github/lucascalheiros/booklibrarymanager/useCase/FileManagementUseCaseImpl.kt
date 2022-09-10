@@ -9,13 +9,10 @@ import com.github.lucascalheiros.booklibrarymanager.utils.loadFileFromInputStrea
 import com.github.lucascalheiros.booklibrarymanager.utils.toDriveFileMetadata
 import com.google.api.client.http.FileContent
 import com.google.api.services.drive.model.File
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single
-import java.io.InputStream
 import java.util.*
-import kotlin.concurrent.thread
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 @Single
 class FileManagementUseCaseImpl(
@@ -25,9 +22,10 @@ class FileManagementUseCaseImpl(
 
     private var rootFolderId: String? = null
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun uploadFile(uri: Uri): String {
         val contentResolver = context.contentResolver
-        val input = contentResolver.openInputStream(uri)!!
+        val input = withContext(Dispatchers.IO) { contentResolver.openInputStream(uri) }!!
         val name = getFileName(context, uri)!!
         val file = loadFileFromInputStream(context, input, name)
         val metadata = File().setName(name).setParents(Collections.singletonList(getRootFolderId()))
