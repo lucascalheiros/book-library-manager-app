@@ -67,7 +67,7 @@ class FileRepositoryImpl(
                         .setFields("*")
                         .execute()
                     continuation.resume(driveFile.id)
-                } catch (t: Throwable) {
+                } catch (t: Exception) {
                     continuation.resumeWithException(t)
                 }
             }
@@ -89,19 +89,20 @@ class FileRepositoryImpl(
     }
 
     override suspend fun updateFileInfo(
+        fileId: String,
         fileMetadata: File
     ): File = withContext(Dispatchers.IO) {
         suspendCoroutine { continuation ->
             thread {
                 try {
                     val driveFile = driveService().files().update(
-                        fileMetadata.id,
+                        fileId,
                         fileMetadata
                     )
                         .setFields("*")
                         .execute()
                     continuation.resume(driveFile)
-                } catch (t: Throwable) {
+                } catch (t: Exception) {
                     continuation.resumeWithException(t)
                 }
             }
@@ -120,7 +121,7 @@ class FileRepositoryImpl(
                             .executeMediaAndDownloadTo(outStream)
                         outStream.close()
                         continuation.resume(outFile)
-                    } catch (t: Throwable) {
+                    } catch (t: Exception) {
                         continuation.resumeWithException(t)
                     }
                 }
@@ -134,7 +135,7 @@ class FileRepositoryImpl(
                     try {
                         val driveFile = driveService().files()[fileId].setFields("*").execute()
                         continuation.resume(driveFile)
-                    } catch (t: Throwable) {
+                    } catch (t: Exception) {
                         continuation.resumeWithException(t)
                     }
                 }
@@ -149,7 +150,7 @@ class FileRepositoryImpl(
                         driveService().files().list().setQ(query).setFields("*")
                             .execute().files
                     continuation.resume(googleDriveFileList)
-                } catch (t: Throwable) {
+                } catch (t: Exception) {
                     continuation.resumeWithException(t)
                 }
             }
@@ -162,7 +163,7 @@ class FileRepositoryImpl(
                 try {
                     driveService().files().delete(fileId).execute()
                     continuation.resume(Unit)
-                } catch (t: Throwable) {
+                } catch (t: Exception) {
                     continuation.resumeWithException(t)
                 }
             }

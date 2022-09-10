@@ -13,6 +13,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.github.lucascalheiros.booklibrarymanager.databinding.FragmentHomeBinding
+import com.github.lucascalheiros.booklibrarymanager.ui.dialogs.editFileMetadata.EditFileMetadataDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -92,6 +93,13 @@ class HomeFragment : Fragment() {
                     handleDownloadFile(state)
                 }
                 else -> {}
+            }
+        }
+        homeViewModel.openEditFileMetadataDialog.observe(viewLifecycleOwner) { info ->
+            info?.let {
+                EditFileMetadataDialogFragment.newInstance(it)
+                    .show(childFragmentManager, EditFileMetadataDialogFragment.TAG)
+                homeViewModel.handleOpenEditFileMetadataDialogRequestState()
             }
         }
     }

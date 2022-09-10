@@ -39,7 +39,7 @@ class LoginViewModel(
         }
     }
 
-    fun onLoginFailure(error: Throwable? = null) {
+    fun onLoginFailure(error: Exception? = null) {
         mLoginRequestState.value = LoginRequestState.Failure(error)
     }
 
@@ -67,7 +67,7 @@ class LoginViewModel(
 
 sealed class LoginRequestState {
     data class Success(val account: GoogleSignInAccount) : LoginRequestState()
-    data class Failure(val error: Throwable? = null) : LoginRequestState()
+    data class Failure(val error: Exception? = null) : LoginRequestState()
     data class AskUser(val signInIntent: Intent) : LoginRequestState()
     object Loading : LoginRequestState()
 }

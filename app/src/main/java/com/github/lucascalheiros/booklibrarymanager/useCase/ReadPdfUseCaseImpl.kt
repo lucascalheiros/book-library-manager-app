@@ -26,7 +26,7 @@ class ReadPdfUseCaseImpl(
                         val fileDescriptor =
                             ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
                         continuation.resume(PdfRenderer(fileDescriptor))
-                    } catch (t: Throwable) {
+                    } catch (t: Exception) {
                         continuation.resumeWithException(t)
                     }
                 }

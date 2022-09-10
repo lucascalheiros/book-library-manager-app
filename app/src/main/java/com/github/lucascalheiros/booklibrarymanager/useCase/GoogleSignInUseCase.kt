@@ -33,7 +33,7 @@ class GoogleSignInUseCase constructor(
         return try {
             val account = googleSignInClient.silentSignIn().await()
             SignInRequestState.Signed(account)
-        } catch (t: Throwable) {
+        } catch (t: Exception) {
             SignInRequestState.Unsigned(googleSignInClient.signInIntent)
         }
     }

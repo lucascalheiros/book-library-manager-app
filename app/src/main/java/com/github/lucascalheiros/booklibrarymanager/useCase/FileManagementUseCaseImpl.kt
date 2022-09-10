@@ -10,7 +10,12 @@ import com.github.lucascalheiros.booklibrarymanager.utils.toDriveFileMetadata
 import com.google.api.client.http.FileContent
 import com.google.api.services.drive.model.File
 import org.koin.core.annotation.Single
+import java.io.InputStream
 import java.util.*
+import kotlin.concurrent.thread
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 @Single
 class FileManagementUseCaseImpl(
@@ -60,7 +65,6 @@ class FileManagementUseCaseImpl(
         val newFile = File()
         newFile.appProperties = file.appProperties
         newFile.name = file.name
-        newFile.createdTime = file.createdTime
 
         newFile.apply {
             appProperties = appProperties ?: mutableMapOf()
@@ -70,7 +74,7 @@ class FileManagementUseCaseImpl(
             name?.let { this.name = it }
         }
 
-        return fileRepository.updateFileInfo(newFile).toDriveFileMetadata()
+        return fileRepository.updateFileInfo(fileId, newFile).toDriveFileMetadata()
     }
 
     companion object {

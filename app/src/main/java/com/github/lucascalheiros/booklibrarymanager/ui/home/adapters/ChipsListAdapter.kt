@@ -1,6 +1,8 @@
 package com.github.lucascalheiros.booklibrarymanager.ui.home.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
@@ -48,10 +50,15 @@ class ChipsListAdapter :
 
     inner class ItemTagChipsViewHolder(private val binding: ItemTagChipsBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("ClickableViewAccessibility")
         fun bind(item: SelectableItem<String>) {
             binding.item = item
-            binding.chip.setOnCheckedChangeListener { _, _ ->
-                onChange?.invoke()
+            binding.chip.setOnTouchListener { v, event ->
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    item.isSelected.set(!item.isSelected.get())
+                    onChange?.invoke()
+                }
+                true
             }
         }
     }
@@ -69,14 +76,14 @@ class ChipsListAdapter :
             requireAll = false
         )
         fun RecyclerView.bindChipsListAdapter(
-            options: List<String>,
+            options: List<String>?,
             selectedOptions: List<String>?,
-            customLayoutManager: Boolean = false,
+            customLayoutManager: Boolean?,
             attrChanged: InverseBindingListener? = null
         ) {
             adapter.let { rvAdapter ->
                 if (rvAdapter !is ChipsListAdapter) {
-                    if (!customLayoutManager) {
+                    if (customLayoutManager != true) {
                         val layoutManager = FlexboxLayoutManager(context)
                         layoutManager.flexDirection = FlexDirection.ROW
                         layoutManager.justifyContent = JustifyContent.CENTER
@@ -87,14 +94,13 @@ class ChipsListAdapter :
                     }
                 } else rvAdapter
             }.let { adapter ->
-                adapter.currentList.filter { it.isSelected.get() }.let { selectedItems ->
-                    options.map { option ->
-                        selectedItems.find { it.name == option } ?: SelectableItemImpl(
-                            option,
-                            option,
-                            ObservableBoolean(selectedOptions?.contains(option) == true)
-                        )
-                    }
+                val optionNameMap: Map<String, List<SelectableItem<String>>> = adapter.currentList.groupBy { it.name }
+                options.orEmpty().map { option ->
+                    optionNameMap[option]?.firstOrNull() ?: SelectableItemImpl(
+                        option,
+                        option,
+                        ObservableBoolean(selectedOptions?.contains(option) == true)
+                    )
                 }.let {
                     adapter.onChange = { attrChanged?.onChange() }
                     adapter.submitList(it)

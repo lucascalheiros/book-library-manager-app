@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.booklibrarymanager.model.handlers
+package com.github.lucascalheiros.booklibrarymanager.ui.home.handlers
 
 import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
 

@@ -14,5 +14,10 @@
     <string name="cd_read">read</string>
     <string name="cd_upload">upload</string>
     <string name="filter">Filter</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="new_label">New Label</string>
+    <string name="add_label">Add Label</string>
+    <string name="name">Name</string>
 
 </resources>

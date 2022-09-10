@@ -11,9 +11,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        layoutConstraintChangesAnimation="@{true}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        layoutConstraintChangesAnimation="@{true}"
         tools:context=".ui.home.HomeFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +28,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 chipsListAdapterOptions="@{viewModel.tags}"
-                chipsListAdapterSelectedOptions="@{viewModel.selectedTags}"
+                chipsListAdapterSelectedOptions="@={viewModel.selectedTags}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
@@ -56,16 +56,25 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            fileListAdapterItems="@{viewModel.fileItems}"
-            fileListAdapterListener="@{viewModel.fileItemListener}"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-            tools:itemCount="3"
-            tools:listitem="@layout/item_file_list" />
+            android:layout_height="0dp"
+            app:onRefreshListener="@{() -> viewModel.loadFiles()}"
+            app:refreshing="@{viewModel.isLoadingFiles}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+            <androidx.recyclerview.widget.RecyclerView
+                fileListAdapterItems="@{viewModel.filteredAndSortedFileItems}"
+                fileListAdapterListener="@{viewModel.fileItemListener}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_file_list" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/uploadButton"

@@ -11,7 +11,7 @@
 
         <variable
             name="listener"
-            type="com.github.lucascalheiros.booklibrarymanager.model.handlers.BookLibFileItemListener" />
+            type="com.github.lucascalheiros.booklibrarymanager.ui.home.handlers.BookLibFileItemListener" />
 
         <import type="com.github.lucascalheiros.booklibrarymanager.utils.StringUtils" />
     </data>

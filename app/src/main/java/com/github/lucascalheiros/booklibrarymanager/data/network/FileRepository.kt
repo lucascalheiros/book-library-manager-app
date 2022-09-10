@@ -16,6 +16,7 @@ interface FileRepository {
     ): String
 
     suspend fun updateFileInfo(
+        fileId: String,
         fileMetadata: com.google.api.services.drive.model.File
     ): com.google.api.services.drive.model.File
 
