@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun handleReadFile(value: FileHandlerRequestState.ReadFile) {
-        HomeFragmentDirections.actionHomeFragmentToPdfReaderFragment(value.fileId).let {
+        HomeFragmentDirections.actionHomeFragmentToPdfReaderFragment(value.fileId, value.page).let {
             findNavController().navigate(it)
         }
         homeViewModel.handleFileHandlerRequestState()

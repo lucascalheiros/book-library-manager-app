@@ -92,7 +92,7 @@ class HomeViewModel(
             file.id?.let {
                 fileHandlerRequestState.value = FileHandlerRequestState.Loading
                 fileHandlerRequestState.value =
-                    FileHandlerRequestState.ReadFile(it)
+                    FileHandlerRequestState.ReadFile(it, file.readProgress)
             }
         }
     }
@@ -158,7 +158,7 @@ sealed class LoadFilesRequestState {
 }
 
 sealed class FileHandlerRequestState {
-    data class ReadFile(val fileId: String) : FileHandlerRequestState()
+    data class ReadFile(val fileId: String, val page: Int) : FileHandlerRequestState()
     data class DownloadFile(val file: File) : FileHandlerRequestState()
     object Loading : FileHandlerRequestState()
     object Idle : FileHandlerRequestState()

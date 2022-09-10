@@ -50,30 +50,44 @@ class PdfPageAdapter(pdfRenderer: PdfRenderer) :
     companion object {
 
         @JvmStatic
+        @BindingAdapter("setInitialPdfPage")
+        fun bind(
+            rv: ZoomRecyclerView,
+            pdfPage: Int
+        ) {
+            if (pdfPage >= 0) {
+                rv.scrollToPosition(pdfPage)
+            }
+        }
+
+        @JvmStatic
         @BindingAdapter(
             value = ["pdfPageAdapterRenderer", "pdfPageAdapterReadingPercentageListener"],
             requireAll = false
         )
-        fun bind(rv: ZoomRecyclerView, renderer: PdfRenderer?, listener: ReadingPageTrackerListener?) {
+        fun bind(
+            rv: ZoomRecyclerView,
+            renderer: PdfRenderer?,
+            listener: ReadingPageTrackerListener?
+        ) {
             if (renderer == null) {
                 return
             }
-            rv.adapter?.let {
-                if (it !is PdfPageAdapter) {
-                    rv.adapter = PdfPageAdapter(renderer)
+            if (rv.adapter !is PdfPageAdapter) {
+                PdfPageAdapter(renderer).also {
+                    rv.adapter = it
                 }
-            } ?: run {
-                rv.adapter = PdfPageAdapter(renderer)
             }
-            rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    if(newState == SCROLL_STATE_IDLE) {
-                        val lastPosition =
-                            (rv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() + 1
-                        listener?.onPageReadChange(lastPosition)
+            rv.addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        if (newState == SCROLL_STATE_IDLE) {
+                            val lastPosition =
+                                (rv.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() + 1
+                            listener?.onPageReadChange(lastPosition)
+                        }
                     }
-                }
-            })
+                })
         }
     }
 }

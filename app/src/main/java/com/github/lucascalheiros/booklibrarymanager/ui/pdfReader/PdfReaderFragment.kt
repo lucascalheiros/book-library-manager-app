@@ -28,13 +28,16 @@ class PdfReaderFragment : Fragment() {
 
         binding.lifecycleOwner = viewLifecycleOwner
 
-        pdfReaderViewModel.initializeRenderer(args.fileId)
+        pdfReaderViewModel.initializeRenderer(args.fileId, args.initialPage)
 
         return binding.root
     }
 
     override fun onDestroy() {
-        pdfReaderViewModel.closeRenderer()
+        val isChangingConfigurations = activity?.isChangingConfigurations == true
+        if (!isChangingConfigurations) {
+            pdfReaderViewModel.closeRenderer()
+        }
         super.onDestroy()
     }
 }

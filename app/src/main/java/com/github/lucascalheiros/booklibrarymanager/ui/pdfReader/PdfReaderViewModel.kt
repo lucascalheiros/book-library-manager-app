@@ -20,13 +20,18 @@ class PdfReaderViewModel(
     private val mRenderer = MutableLiveData<PdfRenderer>()
     val renderer: LiveData<PdfRenderer> = mRenderer
 
+    val initialPdfPagePosition = MutableLiveData<Int>()
+
     lateinit var fileId: String
 
-    fun initializeRenderer(fileId: String) {
+    fun initializeRenderer(fileId: String, initialPage: Int) {
         this.fileId = fileId
         viewModelScope.launch {
-            mRenderer.value ?: run {
+            if (mRenderer.value == null) {
                 mRenderer.value = readPdfUseCase.pdfRendererFromFileId(fileId)
+            }
+            if (initialPdfPagePosition.value != -1) {
+                initialPdfPagePosition.value = initialPage - 1
             }
         }
     }
@@ -39,11 +44,10 @@ class PdfReaderViewModel(
     init {
         mPageTracker.value = object : ReadingPageTrackerListener {
             override fun onPageReadChange(page: Int) {
+                initialPdfPagePosition.value = -1
                 viewModelScope.launch {
-                    Log.d("testing, page tracker", page.toString())
                     readPdfUseCase.registerReadProgress(fileId, page, mRenderer.value?.pageCount ?: 1)
                 }
-
             }
         }
     }
