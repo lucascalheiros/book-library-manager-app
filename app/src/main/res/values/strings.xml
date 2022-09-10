@@ -19,5 +19,8 @@
     <string name="new_label">New Label</string>
     <string name="add_label">Add Label</string>
     <string name="name">Name</string>
-
+    <string name="more_options">More Options</string>
+    <string name="download">Download</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
 </resources>

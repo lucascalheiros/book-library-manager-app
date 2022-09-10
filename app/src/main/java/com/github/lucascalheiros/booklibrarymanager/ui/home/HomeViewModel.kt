@@ -49,6 +49,14 @@ class HomeViewModel(
         override fun read(item: BookLibFile) {
             readFile(item)
         }
+
+        override fun edit(item: BookLibFile) {
+            editFile(item)
+        }
+
+        override fun delete(item: BookLibFile) {
+            deleteFile(item)
+        }
     })
 
     private val mOpenEditFileMetadataDialog = MutableLiveData<EditFileMetadataDialogInfo>()
@@ -79,10 +87,13 @@ class HomeViewModel(
         }
     }
 
-    fun editFileMetadata(file: BookLibFile) {
+    fun readFile(file: BookLibFile) {
         viewModelScope.launch {
-            mOpenEditFileMetadataDialog.value =
-                EditFileMetadataDialogInfo(file, tags.value ?: listOf())
+            file.id?.let {
+                fileHandlerRequestState.value = FileHandlerRequestState.Loading
+                fileHandlerRequestState.value =
+                    FileHandlerRequestState.ReadFile(it)
+            }
         }
     }
 
@@ -96,13 +107,16 @@ class HomeViewModel(
         }
     }
 
-    fun readFile(file: BookLibFile) {
+    fun editFile(file: BookLibFile) {
         viewModelScope.launch {
-            file.id?.let {
-                fileHandlerRequestState.value = FileHandlerRequestState.Loading
-                fileHandlerRequestState.value =
-                    FileHandlerRequestState.ReadFile(it)
-            }
+            mOpenEditFileMetadataDialog.value =
+                EditFileMetadataDialogInfo(file, tags.value ?: listOf())
+        }
+    }
+
+    fun deleteFile(file: BookLibFile) {
+        viewModelScope.launch {
+            file.id?.let { fileManagementUseCase.deleteFile(it) }
         }
     }
 
