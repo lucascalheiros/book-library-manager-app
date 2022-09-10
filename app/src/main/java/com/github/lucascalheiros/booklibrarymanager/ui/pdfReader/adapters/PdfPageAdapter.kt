@@ -69,7 +69,7 @@ class PdfPageAdapter(pdfRenderer: PdfRenderer) :
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     if(newState == SCROLL_STATE_IDLE) {
                         val lastPosition =
-                            (rv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                            (rv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() + 1
                         listener?.onPageReadChange(lastPosition)
                     }
                 }
