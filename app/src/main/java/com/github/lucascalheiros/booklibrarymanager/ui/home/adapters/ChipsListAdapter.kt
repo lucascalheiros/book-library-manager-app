@@ -53,7 +53,7 @@ class ChipsListAdapter :
         @SuppressLint("ClickableViewAccessibility")
         fun bind(item: SelectableItem<String>) {
             binding.item = item
-            binding.chip.setOnTouchListener { v, event ->
+            binding.chip.setOnTouchListener { _, event ->
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     item.isSelected.set(!item.isSelected.get())
                     onChange?.invoke()
@@ -62,64 +62,59 @@ class ChipsListAdapter :
             }
         }
     }
+}
 
-    companion object {
-
-        @JvmStatic
-        @BindingAdapter(
-            value = [
-                "chipsListAdapterOptions",
-                "chipsListAdapterSelectedOptions",
-                "chipsListAdapterUseCustomLayoutManager",
-                "chipsListAdapterSelectedOptionsAttrChanged"
-            ],
-            requireAll = false
-        )
-        fun RecyclerView.bindChipsListAdapter(
-            options: List<String>?,
-            selectedOptions: List<String>?,
-            customLayoutManager: Boolean?,
-            attrChanged: InverseBindingListener? = null
-        ) {
-            adapter.let { rvAdapter ->
-                if (rvAdapter !is ChipsListAdapter) {
-                    if (customLayoutManager != true) {
-                        val layoutManager = FlexboxLayoutManager(context)
-                        layoutManager.flexDirection = FlexDirection.ROW
-                        layoutManager.justifyContent = JustifyContent.CENTER
-                        this.layoutManager = layoutManager
-                    }
-                    ChipsListAdapter().also {
-                        adapter = it
-                    }
-                } else rvAdapter
-            }.let { adapter ->
-                val optionNameMap: Map<String, List<SelectableItem<String>>> = adapter.currentList.groupBy { it.name }
-                options.orEmpty().map { option ->
-                    optionNameMap[option]?.firstOrNull() ?: SelectableItemImpl(
-                        option,
-                        option,
-                        ObservableBoolean(selectedOptions?.contains(option) == true)
-                    )
-                }.let {
-                    adapter.onChange = { attrChanged?.onChange() }
-                    adapter.submitList(it)
-                }
+@BindingAdapter(
+    value = [
+        "chipsListAdapterOptions",
+        "chipsListAdapterSelectedOptions",
+        "chipsListAdapterUseCustomLayoutManager",
+        "chipsListAdapterSelectedOptionsAttrChanged"
+    ],
+    requireAll = false
+)
+fun RecyclerView.bindChipsListAdapter(
+    options: List<String>?,
+    selectedOptions: List<String>?,
+    customLayoutManager: Boolean?,
+    attrChanged: InverseBindingListener? = null
+) {
+    adapter.let { rvAdapter ->
+        if (rvAdapter !is ChipsListAdapter) {
+            if (customLayoutManager != true) {
+                val layoutManager = FlexboxLayoutManager(context)
+                layoutManager.flexDirection = FlexDirection.ROW
+                layoutManager.justifyContent = JustifyContent.CENTER
+                this.layoutManager = layoutManager
             }
-        }
-
-        @JvmStatic
-        @InverseBindingAdapter(
-            attribute = "chipsListAdapterSelectedOptions",
-            event = "chipsListAdapterSelectedOptionsAttrChanged"
-        )
-        fun RecyclerView.inverseBindChipsListAdapterSelectedOptions(): List<String> {
-            return adapter.let { adapter ->
-                if (adapter is ChipsListAdapter) {
-                    adapter.currentList.filter { it.isSelected.get() }.map { it.value }
-                } else listOf()
+            ChipsListAdapter().also {
+                adapter = it
             }
+        } else rvAdapter
+    }.let { adapter ->
+        val optionNameMap: Map<String, List<SelectableItem<String>>> = adapter.currentList.groupBy { it.name }
+        options.orEmpty().map { option ->
+            optionNameMap[option]?.firstOrNull() ?: SelectableItemImpl(
+                option,
+                option,
+                ObservableBoolean(selectedOptions?.contains(option) == true)
+            )
+        }.let {
+            adapter.onChange = { attrChanged?.onChange() }
+            adapter.submitList(it)
         }
-
     }
 }
+
+@InverseBindingAdapter(
+    attribute = "chipsListAdapterSelectedOptions",
+    event = "chipsListAdapterSelectedOptionsAttrChanged"
+)
+fun RecyclerView.inverseBindChipsListAdapterSelectedOptions(): List<String> {
+    return adapter.let { adapter ->
+        if (adapter is ChipsListAdapter) {
+            adapter.currentList.filter { it.isSelected.get() }.map { it.value }
+        } else listOf()
+    }
+}
+
