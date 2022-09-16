@@ -6,9 +6,9 @@ import com.github.lucascalheiros.booklibrarymanager.rules.MainCoroutineRule
 import com.github.lucascalheiros.booklibrarymanager.useCase.GoogleSignInUseCase
 import com.github.lucascalheiros.booklibrarymanager.useCase.SignInRequestState
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
