@@ -18,29 +18,7 @@ class HomeViewModel(
     private val fileManagementUseCase: FileManagementUseCase
 ) : ViewModel() {
 
-    private val mLoadFilesRequestState = MutableLiveData<LoadFilesRequestState>()
-
-    private val mFileItems = MediatorLiveData<List<BookLibFile>>()
-
-    private val mFilteredAndSortedFileItems = MediatorLiveData<List<BookLibFile>>()
-
-    val filteredAndSortedFileItems: LiveData<List<BookLibFile>> = mFilteredAndSortedFileItems
-
-    val isLoadingFiles: LiveData<Boolean> = map(mLoadFilesRequestState) {
-        it is LoadFilesRequestState.Loading
-    }.distinctUntilChanged()
-
-    val tags = mFileItems.map { files ->
-        files.flatMap { it.tags }.distinct().sorted()
-    }
-    val selectedTags = MutableLiveData(listOf<String>())
-
-    val showFilterOptions = MutableLiveData(false)
-
-    val fileHandlerRequestState =
-        MutableLiveData<FileHandlerRequestState>(FileHandlerRequestState.Idle)
-
-    val fileItemListener = MutableLiveData<BookLibFileItemListener>(object :
+    private val mFileItemListener = object :
         BookLibFileItemListener {
         override fun download(item: BookLibFile) {
             downloadFile(item)
@@ -57,7 +35,32 @@ class HomeViewModel(
         override fun delete(item: BookLibFile) {
             deleteFile(item)
         }
-    })
+    }
+
+    private val mLoadFilesRequestState = MutableLiveData<LoadFilesRequestState>()
+
+    private val mFileItems = MediatorLiveData<List<BookLibFile>>()
+
+    val selectedTags = MutableLiveData(listOf<String>())
+
+    val showFilterOptions = MutableLiveData(false)
+
+    val isLoadingFiles: LiveData<Boolean> = map(mLoadFilesRequestState) {
+        it is LoadFilesRequestState.Loading
+    }.distinctUntilChanged()
+
+    val tags: LiveData<List<String>> = mFileItems.map { files ->
+        files.flatMap { it.tags }.distinct().sorted()
+    }
+
+    val fileItemListener: LiveData<BookLibFileItemListener> = MutableLiveData(mFileItemListener)
+
+    private val mFilteredAndSortedFileItems = MediatorLiveData<List<BookLibFile>>()
+    val filteredAndSortedFileItems: LiveData<List<BookLibFile>> = mFilteredAndSortedFileItems
+
+    private val mFileHandlerRequestState =
+        MutableLiveData<FileHandlerRequestState>(FileHandlerRequestState.Idle)
+    val fileHandlerRequestState: LiveData<FileHandlerRequestState> = mFileHandlerRequestState
 
     private val mOpenEditFileMetadataDialog = MutableLiveData<EditFileMetadataDialogInfo>()
     val openEditFileMetadataDialog: LiveData<EditFileMetadataDialogInfo> =
@@ -88,8 +91,8 @@ class HomeViewModel(
     fun readFile(file: BookLibFile) {
         viewModelScope.launch {
             file.id?.let {
-                fileHandlerRequestState.value = FileHandlerRequestState.Loading
-                fileHandlerRequestState.value =
+                mFileHandlerRequestState.value = FileHandlerRequestState.Loading
+                mFileHandlerRequestState.value =
                     FileHandlerRequestState.ReadFile(it, file.readProgress)
             }
         }
@@ -98,8 +101,8 @@ class HomeViewModel(
     fun downloadFile(file: BookLibFile) {
         viewModelScope.launch {
             file.id?.let {
-                fileHandlerRequestState.value = FileHandlerRequestState.Loading
-                fileHandlerRequestState.value =
+                mFileHandlerRequestState.value = FileHandlerRequestState.Loading
+                mFileHandlerRequestState.value =
                     FileHandlerRequestState.DownloadFile(fileListUseCase.downloadMedia(it))
             }
         }
@@ -140,7 +143,7 @@ class HomeViewModel(
     }
 
     fun handleFileHandlerRequestState() {
-        fileHandlerRequestState.value = FileHandlerRequestState.Idle
+        mFileHandlerRequestState.value = FileHandlerRequestState.Idle
     }
 
     fun handleOpenEditFileMetadataDialogRequestState() {
