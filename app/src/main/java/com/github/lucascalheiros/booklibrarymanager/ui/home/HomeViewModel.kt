@@ -50,7 +50,7 @@ class HomeViewModel(
     }.distinctUntilChanged()
 
     val tags: LiveData<List<String>> = mFileItems.map { files ->
-        files.flatMap { it.tags }.distinct().sorted()
+        files.flatMap { it.tags }.distinct().sortedBy { it.uppercase() }
     }
 
     val fileItemListener: LiveData<BookLibFileItemListener> = MutableLiveData(mFileItemListener)
@@ -85,13 +85,16 @@ class HomeViewModel(
         val tagsFilter = selectedTags.value.orEmpty()
         mFilteredAndSortedFileItems.value = filesToFilter.filter { file ->
             tagsFilter.isEmpty() || tagsFilter.any { file.tags.contains(it) }
-        }.sortedBy { it.modifiedTime }
+        }.sortedByDescending { it.modifiedTime }
     }
 
     fun readFile(file: BookLibFile) {
         viewModelScope.launch {
             file.id?.let {
-                mFileHandlerRequestState.value = FileHandlerRequestState.Loading
+                if (mFileHandlerRequestState.value is FileHandlerRequestState.Loading) {
+                    return@launch
+                }
+                mFileHandlerRequestState.value = FileHandlerRequestState.Loading(file)
                 mFileHandlerRequestState.value =
                     FileHandlerRequestState.ReadFile(it, file.readProgress)
             }
@@ -100,10 +103,16 @@ class HomeViewModel(
 
     fun downloadFile(file: BookLibFile) {
         viewModelScope.launch {
-            file.id?.let {
-                mFileHandlerRequestState.value = FileHandlerRequestState.Loading
+            try {
+                if (mFileHandlerRequestState.value is FileHandlerRequestState.Loading) {
+                    return@launch
+                }
+                mFileHandlerRequestState.value = FileHandlerRequestState.Loading(file)
                 mFileHandlerRequestState.value =
-                    FileHandlerRequestState.DownloadFile(fileListUseCase.downloadMedia(it))
+                    FileHandlerRequestState.DownloadFile(fileListUseCase.downloadMedia(file.id!!))
+            } catch (e: Exception) {
+                // TODO add feedback
+                mFileHandlerRequestState.value = FileHandlerRequestState.Failure(e)
             }
         }
     }
@@ -117,13 +126,23 @@ class HomeViewModel(
 
     fun deleteFile(file: BookLibFile) {
         viewModelScope.launch {
-            file.id?.let { fileManagementUseCase.deleteFile(it) }
+            try {
+                fileManagementUseCase.deleteFile(file.id!!)
+                loadFiles()
+            } catch (e: Exception) {
+                // TODO add feedback
+            }
         }
     }
 
     fun uploadFile(uri: Uri) {
         viewModelScope.launch {
-            fileManagementUseCase.uploadFile(uri)
+            try {
+                fileManagementUseCase.uploadFile(uri)
+                loadFiles()
+            } catch (e: Exception) {
+                // TODO add feedback
+            }
         }
     }
 
@@ -162,6 +181,7 @@ sealed class LoadFilesRequestState {
 sealed class FileHandlerRequestState {
     data class ReadFile(val fileId: String, val page: Int) : FileHandlerRequestState()
     data class DownloadFile(val file: File) : FileHandlerRequestState()
-    object Loading : FileHandlerRequestState()
+    data class Failure(val error: Exception) : FileHandlerRequestState()
+    data class Loading(val bookLibFile: BookLibFile) : FileHandlerRequestState()
     object Idle : FileHandlerRequestState()
 }
