@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.github.lucascalheiros.booklibrarymanager.databinding.FragmentHomeBinding
 import com.github.lucascalheiros.booklibrarymanager.ui.dialogs.editFileMetadata.EditFileMetadataDialogFragment
+import com.github.lucascalheiros.booklibrarymanager.utils.constants.MimeTypeConstants
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -50,43 +51,11 @@ class HomeFragment : Fragment() {
 
         observeViewModel()
 
-        binding.uploadButton.setOnClickListener {
-            openFilePicker()
-        }
+        setupUiListeners()
+
+        loadData()
 
         return binding.root
-    }
-
-    private fun openFilePicker() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/pdf"
-        }
-        filePickerResultRegister.launch(intent)
-    }
-
-    private fun handleReadFile(value: FileHandlerRequestState.ReadFile) {
-        HomeFragmentDirections.actionHomeFragmentToPdfReaderFragment(value.fileId).let {
-            findNavController().navigate(it)
-        }
-        homeViewModel.handleFileHandlerRequestState()
-    }
-
-    private fun handleDownloadFile(value: FileHandlerRequestState.DownloadFile) {
-        val uri = FileProvider.getUriForFile(
-            requireContext(),
-            requireContext().applicationContext.packageName.toString() + ".provider",
-            value.file
-        )
-        val mime = "application/pdf"
-
-        val intent = Intent().apply {
-            action = Intent.ACTION_VIEW
-            setDataAndType(uri, mime)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
-
-        context?.startActivity(intent)
     }
 
     private fun observeViewModel() {
@@ -110,7 +79,49 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun setupUiListeners() {
+        binding.uploadButton.setOnClickListener {
+            openFilePicker()
+        }
+    }
+
+    private fun loadData() {
+        homeViewModel.loadFiles()
+    }
+
+    private fun openFilePicker() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = MimeTypeConstants.pdf
+        }
+        filePickerResultRegister.launch(intent)
+    }
+
+    private fun handleReadFile(value: FileHandlerRequestState.ReadFile) {
+        HomeFragmentDirections.actionHomeFragmentToPdfReaderFragment(value.fileId, value.page).let {
+            findNavController().navigate(it)
+        }
+        homeViewModel.handleFileHandlerRequestState()
+    }
+
+    private fun handleDownloadFile(value: FileHandlerRequestState.DownloadFile) {
+        val uri = FileProvider.getUriForFile(
+            requireContext(),
+            requireContext().applicationContext.packageName.toString() + ".provider",
+            value.file
+        )
+        val mime = MimeTypeConstants.pdf
+
+        val intent = Intent().apply {
+            action = Intent.ACTION_VIEW
+            setDataAndType(uri, mime)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        context?.startActivity(intent)
+    }
+
     companion object {
-        private val TAG = HomeViewModel::class.java.canonicalName
+        private val TAG = HomeFragment::class.java.canonicalName
     }
 }

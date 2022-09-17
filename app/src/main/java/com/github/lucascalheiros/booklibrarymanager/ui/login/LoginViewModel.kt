@@ -20,14 +20,13 @@ class LoginViewModel(
     private val mLoginRequestState = MutableLiveData<LoginRequestState>()
     val loginRequestState: LiveData<LoginRequestState> = mLoginRequestState
 
-    // TODO check why viewModelScope is not being blocked by InstantTaskExecutorRule in junit tests
     fun onLoginClick() {
         viewModelScope.launch {
             doLogin()
         }
     }
 
-    suspend fun doLogin() {
+    private suspend fun doLogin() {
         if (mLoginRequestState.value !is LoginRequestState.Loading) {
             mLoginRequestState.value = LoginRequestState.Loading
             googleSignInUseCase.signIn().let {

@@ -65,7 +65,7 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:text="@{StringUtils.formatFloatToPercent(model.readPercent)}"
                 android:textAlignment="center"
@@ -73,7 +73,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/imageButton"
                 app:layout_constraintStart_toEndOf="@+id/textView2"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Lorem, ipsum, dolor, lorem, ipsum, dolor" />
+                tools:text="50%" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -85,17 +85,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:contentDescription="@string/cd_download"
-                    android:onClick="@{v -> listener.download(model)}"
-                    app:srcCompat="@drawable/ic_download" />
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
                     android:contentDescription="@string/cd_read"
                     android:onClick="@{v -> listener.read(model)}"
                     app:srcCompat="@drawable/ic_read_book" />
+
+                <ImageButton
+                    android:id="@+id/options"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/more_options"
+                    app:srcCompat="@drawable/ic_more_vertical" />
             </LinearLayout>
 
         </LinearLayout>

@@ -46,34 +46,43 @@ class PdfPageAdapter(pdfRenderer: PdfRenderer) :
             binding.pdfPage.setImageBitmap(bitmap)
         }
     }
+}
 
-    companion object {
+@BindingAdapter("setInitialPdfPage")
+fun bind(
+    rv: ZoomRecyclerView,
+    pdfPage: Int
+) {
+    if (pdfPage >= 0) {
+        rv.scrollToPosition(pdfPage)
+    }
+}
 
-        @JvmStatic
-        @BindingAdapter(
-            value = ["pdfPageAdapterRenderer", "pdfPageAdapterReadingPercentageListener"],
-            requireAll = false
-        )
-        fun bind(rv: ZoomRecyclerView, renderer: PdfRenderer?, listener: ReadingPageTrackerListener?) {
-            if (renderer == null) {
-                return
-            }
-            rv.adapter?.let {
-                if (it !is PdfPageAdapter) {
-                    rv.adapter = PdfPageAdapter(renderer)
-                }
-            } ?: run {
-                rv.adapter = PdfPageAdapter(renderer)
-            }
-            rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    if(newState == SCROLL_STATE_IDLE) {
-                        val lastPosition =
-                            (rv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                        listener?.onPageReadChange(lastPosition)
-                    }
-                }
-            })
+@BindingAdapter(
+    value = ["pdfPageAdapterRenderer", "pdfPageAdapterReadingPercentageListener"],
+    requireAll = false
+)
+fun bind(
+    rv: ZoomRecyclerView,
+    renderer: PdfRenderer?,
+    listener: ReadingPageTrackerListener?
+) {
+    if (renderer == null) {
+        return
+    }
+    if (rv.adapter !is PdfPageAdapter) {
+        PdfPageAdapter(renderer).also {
+            rv.adapter = it
         }
     }
+    rv.addOnScrollListener(
+        object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == SCROLL_STATE_IDLE) {
+                    val lastPosition =
+                        (rv.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() + 1
+                    listener?.onPageReadChange(lastPosition)
+                }
+            }
+        })
 }

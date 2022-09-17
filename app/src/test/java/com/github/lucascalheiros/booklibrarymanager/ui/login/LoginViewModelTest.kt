@@ -6,9 +6,10 @@ import com.github.lucascalheiros.booklibrarymanager.rules.MainCoroutineRule
 import com.github.lucascalheiros.booklibrarymanager.useCase.GoogleSignInUseCase
 import com.github.lucascalheiros.booklibrarymanager.useCase.SignInRequestState
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -29,7 +30,6 @@ class LoginViewModelTest : KoinTest {
     @get:Rule
     val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
 
-    @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
@@ -46,9 +46,11 @@ class LoginViewModelTest : KoinTest {
 
     @Test
     fun whenUserIsSignedLoginRequestShouldSucceed() = runTest {
+
         val account = mock(GoogleSignInAccount::class.java)
         `when`(googleSignInUseCase.signIn()).thenReturn(SignInRequestState.Signed(account))
-        loginViewModel.doLogin()
+        loginViewModel.onLoginClick()
+        advanceUntilIdle()
         assert(loginViewModel.loginRequestState.value is LoginRequestState.Success)
     }
 
@@ -56,7 +58,8 @@ class LoginViewModelTest : KoinTest {
     fun whenUserIsSignedLoginRequestShouldReturnSignedAccount() = runTest {
         val account = mock(GoogleSignInAccount::class.java)
         `when`(googleSignInUseCase.signIn()).thenReturn(SignInRequestState.Signed(account))
-        loginViewModel.doLogin()
+        loginViewModel.onLoginClick()
+        advanceUntilIdle()
         assertEquals((loginViewModel.loginRequestState.value as LoginRequestState.Success).account, account)
     }
 
@@ -64,7 +67,8 @@ class LoginViewModelTest : KoinTest {
     fun whenUserIsNotSignedLoginRequestShouldAskForUserToLogin() = runTest {
         val intent = mock(Intent::class.java)
         `when`(googleSignInUseCase.signIn()).thenReturn(SignInRequestState.Unsigned(intent))
-        loginViewModel.doLogin()
+        loginViewModel.onLoginClick()
+        advanceUntilIdle()
         assert(loginViewModel.loginRequestState.value is LoginRequestState.AskUser)
     }
 
@@ -72,7 +76,8 @@ class LoginViewModelTest : KoinTest {
     fun whenUserIsNotSignedLoginRequestShouldAskForUserToLoginWithIntent() = runTest {
         val intent = mock(Intent::class.java)
         `when`(googleSignInUseCase.signIn()).thenReturn(SignInRequestState.Unsigned(intent))
-        loginViewModel.doLogin()
+        loginViewModel.onLoginClick()
+        advanceUntilIdle()
         assertEquals((loginViewModel.loginRequestState.value as LoginRequestState.AskUser).signInIntent, intent)
     }
 

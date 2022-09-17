@@ -4,9 +4,12 @@ import android.content.Context
 import android.net.Uri
 import com.github.lucascalheiros.booklibrarymanager.data.network.FileRepository
 import com.github.lucascalheiros.booklibrarymanager.model.DriveFileMetadata
-import com.github.lucascalheiros.booklibrarymanager.utils.getFileName
-import com.github.lucascalheiros.booklibrarymanager.utils.loadFileFromInputStream
-import com.github.lucascalheiros.booklibrarymanager.utils.toDriveFileMetadata
+import com.github.lucascalheiros.booklibrarymanager.utils.*
+import com.github.lucascalheiros.booklibrarymanager.utils.constants.AppPropertiesKeys.READ_PROGRESS
+import com.github.lucascalheiros.booklibrarymanager.utils.constants.AppPropertiesKeys.TAGS
+import com.github.lucascalheiros.booklibrarymanager.utils.constants.AppPropertiesKeys.TOTAL_PAGES
+import com.github.lucascalheiros.booklibrarymanager.utils.constants.DRIVE_APP_FOLDER_NAME
+import com.github.lucascalheiros.booklibrarymanager.utils.constants.MimeTypeConstants
 import com.google.api.client.http.FileContent
 import com.google.api.services.drive.model.File
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +32,7 @@ class FileManagementUseCaseImpl(
         val name = getFileName(context, uri)!!
         val file = loadFileFromInputStream(context, input, name)
         val metadata = File().setName(name).setParents(Collections.singletonList(getRootFolderId()))
-        val mediaContent = FileContent(pdfMimeType, file)
+        val mediaContent = FileContent(MimeTypeConstants.pdf, file)
         return fileRepository.createFile(metadata, mediaContent)
     }
 
@@ -40,11 +43,11 @@ class FileManagementUseCaseImpl(
     private suspend fun getRootFolderId(): String {
         return rootFolderId ?: run {
             val query =
-                "mimeType = '$folderMimeType' and name = '$defaultAppFolderName'"
+                "mimeType = '${MimeTypeConstants.driveFolder}' and name = '$DRIVE_APP_FOLDER_NAME'"
             fileRepository.listFiles(query).firstOrNull()?.id ?: run {
                 val fileMetadata = File().apply {
-                    name = defaultAppFolderName
-                    mimeType = folderMimeType
+                    name = DRIVE_APP_FOLDER_NAME
+                    mimeType = MimeTypeConstants.driveFolder
                 }
                 fileRepository.createFile(fileMetadata)
             }
@@ -73,15 +76,6 @@ class FileManagementUseCaseImpl(
         }
 
         return fileRepository.updateFileInfo(fileId, newFile).toDriveFileMetadata()
-    }
-
-    companion object {
-        private const val defaultAppFolderName = "Booklib Manager"
-        private const val TAGS = "TAGS"
-        private const val READ_PROGRESS = "READ_PROGRESS"
-        private const val TOTAL_PAGES = "TOTAL_PAGES"
-        private const val folderMimeType = "application/vnd.google-apps.folder"
-        private const val pdfMimeType = "application/pdf"
     }
 
 }
