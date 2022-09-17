@@ -28,7 +28,7 @@ class HomeViewModel(
 
     val isLoadingFiles: LiveData<Boolean> = map(mLoadFilesRequestState) {
         it is LoadFilesRequestState.Loading
-    }
+    }.distinctUntilChanged()
 
     val tags = mFileItems.map { files ->
         files.flatMap { it.tags }.distinct().sorted()
@@ -75,8 +75,6 @@ class HomeViewModel(
         mFilteredAndSortedFileItems.addSource(selectedTags) {
             mediatorFilterFilesObserver()
         }
-
-        loadFiles()
     }
 
     private fun mediatorFilterFilesObserver() {
@@ -84,7 +82,7 @@ class HomeViewModel(
         val tagsFilter = selectedTags.value.orEmpty()
         mFilteredAndSortedFileItems.value = filesToFilter.filter { file ->
             tagsFilter.isEmpty() || tagsFilter.any { file.tags.contains(it) }
-        }
+        }.sortedBy { it.modifiedTime }
     }
 
     fun readFile(file: BookLibFile) {
@@ -132,6 +130,7 @@ class HomeViewModel(
                 if (mLoadFilesRequestState.value is LoadFilesRequestState.Loading) {
                     return@launch
                 }
+                mLoadFilesRequestState.value = LoadFilesRequestState.Loading
                 mLoadFilesRequestState.value =
                     LoadFilesRequestState.Success(fileListUseCase.listFiles())
             } catch (e: Exception) {
