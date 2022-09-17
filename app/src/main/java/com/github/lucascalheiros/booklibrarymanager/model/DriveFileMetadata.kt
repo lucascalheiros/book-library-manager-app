@@ -3,6 +3,9 @@ package com.github.lucascalheiros.booklibrarymanager.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
+import com.github.lucascalheiros.booklibrarymanager.utils.constants.AppPropertiesKeys.READ_PROGRESS
+import com.github.lucascalheiros.booklibrarymanager.utils.constants.AppPropertiesKeys.TAGS
+import com.github.lucascalheiros.booklibrarymanager.utils.constants.AppPropertiesKeys.TOTAL_PAGES
 import java.time.LocalDateTime
 
 @Entity
@@ -29,10 +32,5 @@ data class DriveFileMetadata(
     override val totalPages: Int
         get() = appProperties?.get(TOTAL_PAGES)?.toIntOrNull() ?: 1
 
-    companion object {
-        private const val TAGS = "TAGS"
-        private const val READ_PROGRESS = "READ_PROGRESS"
-        private const val TOTAL_PAGES = "TOTAL_PAGES"
-    }
 }
 
