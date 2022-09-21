@@ -18,12 +18,13 @@
 
         <TextView
             android:id="@+id/welcome"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="184dp"
             android:gravity="center"
             android:text="@string/welcome_to_book_library_manager"
             android:textSize="25sp"
+            android:layout_marginHorizontal="60dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -39,10 +40,14 @@
 
         <Button
             android:id="@+id/loginBtn"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{v -> viewModel.onLoginClick()}"
-            android:text="@string/login_with_google"
+            android:text="@string/sign_in_with_google"
+            app:icon="@drawable/google_logo"
+            app:iconTint="@android:color/transparent"
+            app:iconTintMode="add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

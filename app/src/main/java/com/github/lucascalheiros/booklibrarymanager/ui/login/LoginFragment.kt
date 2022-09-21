@@ -70,7 +70,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun handleLoginFailure() {
-        Toast.makeText(requireContext(), R.string.unable_to_login_with_google_generic, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), R.string.unable_to_sign_in_with_google_generic, Toast.LENGTH_LONG).show()
     }
 
 }
