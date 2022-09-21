@@ -17,8 +17,8 @@ class PdfReaderViewModel(
 ) : ViewModel() {
     val mPageTracker = MutableLiveData<ReadingPageTrackerListener>()
 
-    private val mRenderer = MutableLiveData<PdfRenderer>()
-    val renderer: LiveData<PdfRenderer> = mRenderer
+    private val mRenderer = MutableLiveData<PdfRenderer?>()
+    val renderer: LiveData<PdfRenderer?> = mRenderer
 
     val initialPdfPagePosition = MutableLiveData<Int>()
 

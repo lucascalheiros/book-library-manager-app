@@ -41,6 +41,7 @@ class LoginFragment : Fragment() {
                 is LoginRequestState.Failure -> {
                     handleLoginFailure()
                 }
+                else -> {}
             }
         }
 

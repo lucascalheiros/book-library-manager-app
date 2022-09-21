@@ -62,8 +62,8 @@ class HomeViewModel(
         MutableLiveData<FileHandlerRequestState>(FileHandlerRequestState.Idle)
     val fileHandlerRequestState: LiveData<FileHandlerRequestState> = mFileHandlerRequestState
 
-    private val mOpenEditFileMetadataDialog = MutableLiveData<EditFileMetadataDialogInfo>()
-    val openEditFileMetadataDialog: LiveData<EditFileMetadataDialogInfo> =
+    private val mOpenEditFileMetadataDialog = MutableLiveData<EditFileMetadataDialogInfo?>()
+    val openEditFileMetadataDialog: LiveData<EditFileMetadataDialogInfo?> =
         mOpenEditFileMetadataDialog
 
     init {
