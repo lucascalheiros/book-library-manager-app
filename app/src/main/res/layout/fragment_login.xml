@@ -14,44 +14,81 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/design_default_color_secondary"
         tools:context=".ui.login.LoginFragment">
 
-        <TextView
-            android:id="@+id/welcome"
+        <com.github.lucascalheiros.booklibrarymanager.ui.customView.MirrorPolygonDrawerView
+            android:id="@+id/polygonDrawerView"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="184dp"
-            android:gravity="center"
-            android:text="@string/welcome_to_book_library_manager"
-            android:textSize="25sp"
-            android:layout_marginHorizontal="60dp"
+            android:layout_height="match_parent"
+            app:points_x="@array/login_polygon_array_x"
+            app:points_y="@array/login_polygon_array_y"
+            app:layout_constraintDimensionRatio="1:2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/an_app_to_facilitate_your_read_tracking_and_book_tagging"
+        <LinearLayout
+            android:id="@+id/llLogoWelcome"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/llLoginInput"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/welcome" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="1">
 
-        <Button
-            android:id="@+id/loginBtn"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{v -> viewModel.onLoginClick()}"
-            android:text="@string/sign_in_with_google"
-            app:icon="@drawable/google_logo"
-            app:iconTint="@android:color/transparent"
-            app:iconTintMode="add"
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                app:srcCompat="@drawable/ic_read_book"
+                android:contentDescription="@string/cd_open_book_logo" />
+
+            <TextView
+                android:id="@+id/welcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="60dp"
+                android:gravity="center"
+                android:text="@string/welcome_to_book_library_manager"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="80dp"
+                android:gravity="center"
+                android:text="@string/an_app_to_facilitate_your_read_tracking_and_book_tagging" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llLoginInput"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/llLogoWelcome"
+            app:layout_constraintVertical_weight="1">
+
+            <Button
+                android:id="@+id/loginBtn"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> viewModel.onLoginClick()}"
+                android:text="@string/sign_in_with_google"
+                app:icon="@drawable/google_logo"
+                app:iconTint="@android:color/transparent"
+                app:iconTintMode="add" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
