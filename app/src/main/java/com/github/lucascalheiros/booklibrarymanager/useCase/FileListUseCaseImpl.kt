@@ -1,23 +1,23 @@
 package com.github.lucascalheiros.booklibrarymanager.useCase
 
-import com.github.lucascalheiros.booklibrarymanager.data.network.FileRepository
+import com.github.lucascalheiros.booklibrarymanager.data.network.DriveFileRepository
 import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
-import com.github.lucascalheiros.booklibrarymanager.utils.toDriveFileMetadata
+import com.github.lucascalheiros.booklibrarymanager.utils.toBookLibFile
 import org.koin.core.annotation.Single
 import java.io.File
 
 @Single
 class FileListUseCaseImpl(
-    private val fileRepository: FileRepository,
+    private val driveFileRepository: DriveFileRepository,
     private val fileCacheUseCase: FileCacheUseCase
 ) : FileListUseCase {
 
     override suspend fun listFiles(): List<BookLibFile> {
-        return fileRepository.listFiles(pdfQuery).map { it.toDriveFileMetadata() }
+        return driveFileRepository.listFiles(pdfQuery).map { it.toBookLibFile() }
     }
 
     override suspend fun downloadMedia(fileId: String): File {
-        return fileCacheUseCase.getFile(fileId) ?: fileRepository.downloadMedia(fileId).also {
+        return fileCacheUseCase.getFile(fileId) ?: driveFileRepository.downloadMedia(fileId).also {
             fileCacheUseCase.writeFile(fileId, it)
         }
     }

@@ -1,7 +1,7 @@
 package com.github.lucascalheiros.booklibrarymanager.useCase
 
 import android.net.Uri
-import com.github.lucascalheiros.booklibrarymanager.model.DriveFileMetadata
+import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
 
 interface FileManagementUseCase {
 
@@ -15,6 +15,6 @@ interface FileManagementUseCase {
         tags: List<String>? = null,
         readProgress: Int? = null,
         totalPages: Int? = null
-    ): DriveFileMetadata
+    ): BookLibFile
 
 }

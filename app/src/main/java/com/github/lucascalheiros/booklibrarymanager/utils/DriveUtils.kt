@@ -1,11 +1,12 @@
 package com.github.lucascalheiros.booklibrarymanager.utils
 
 import com.github.lucascalheiros.booklibrarymanager.model.DriveFileMetadata
+import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
 import com.google.api.services.drive.model.File
 import java.time.Instant
 import java.time.ZoneId
 
-fun File.toDriveFileMetadata(): DriveFileMetadata {
+fun File.toBookLibFile(): BookLibFile {
     return DriveFileMetadata(
         appProperties = appProperties,
         description = description,

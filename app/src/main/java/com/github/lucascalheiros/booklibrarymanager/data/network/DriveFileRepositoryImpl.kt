@@ -20,9 +20,9 @@ import java.util.*
 
 @Single
 @Suppress("BlockingMethodInNonBlockingContext")
-class FileRepositoryImpl(
+class DriveFileRepositoryImpl(
     private val context: Context
-) : FileRepository {
+) : DriveFileRepository {
 
     private fun driveService(): Drive {
         val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(

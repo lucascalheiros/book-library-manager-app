@@ -4,7 +4,7 @@ package com.github.lucascalheiros.booklibrarymanager.data.network
 import com.google.api.client.http.FileContent
 import java.io.File
 
-interface FileRepository {
+interface DriveFileRepository {
 
     suspend fun createFile(
         fileMetadata: com.google.api.services.drive.model.File
