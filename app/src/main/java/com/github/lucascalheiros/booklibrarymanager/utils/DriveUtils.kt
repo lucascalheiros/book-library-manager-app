@@ -31,7 +31,8 @@ fun File.toBookLibFile(): BookLibFile {
             Instant.ofEpochMilli(it)
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime()
-        }
+        },
+        thumbnailLink = thumbnailLink
     )
 }
 

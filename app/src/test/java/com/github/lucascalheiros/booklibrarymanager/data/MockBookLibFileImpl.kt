@@ -12,5 +12,6 @@ data class MockBookLibFileImpl(
     override val createdTime: LocalDateTime? = getRandomLocalDateTime(),
     override val id: String? = getRandomString(),
     override val readProgress: Int = 0,
-    override val totalPages: Int = (1..100).random()
+    override val totalPages: Int = (1..100).random(),
+    override val thumbnailLink: String? = null
 ) : BookLibFile

@@ -21,7 +21,8 @@ data class DriveFileMetadata(
     val size: Int? = null,
     val trashed: Boolean? = null,
     val trashedTime: LocalDateTime? = null,
-    @PrimaryKey val localId: Int? = null
+    @PrimaryKey val localId: Int? = null,
+    override val thumbnailLink: String? = null
 ) : BookLibFile {
     override val readPercent: Float
         get() = readProgress.toFloat() / totalPages.toFloat()
