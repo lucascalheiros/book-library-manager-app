@@ -15,3 +15,5 @@
 local.properties
 /.idea/
 /app/lint-baseline.xml
+/app/booklib.debug.keystore.jks
+/app/signingConfigs.gradle
