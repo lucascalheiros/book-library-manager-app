@@ -60,7 +60,7 @@ class LoginFragment : Fragment() {
                     loginViewModel.onLoginFailure(exception)
                 }
             } else {
-                loginViewModel.onLoginFailure()
+                loginViewModel.onLoginFailure(Exception("GoogleSignIn intent request returned: ${result.resultCode}"))
             }
         }
 
@@ -70,7 +70,11 @@ class LoginFragment : Fragment() {
     }
 
     private fun handleLoginFailure() {
-        Toast.makeText(requireContext(), R.string.unable_to_sign_in_with_google_generic, Toast.LENGTH_LONG).show()
+        Toast.makeText(
+            requireContext(),
+            R.string.unable_to_sign_in_with_google_generic,
+            Toast.LENGTH_LONG
+        ).show()
     }
 
 }

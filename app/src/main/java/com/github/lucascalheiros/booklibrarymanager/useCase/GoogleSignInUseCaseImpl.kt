@@ -2,7 +2,8 @@ package com.github.lucascalheiros.booklibrarymanager.useCase
 
 
 import android.content.Context
-import android.content.Intent
+import com.github.lucascalheiros.booklibrarymanager.utils.constants.LogTags
+import com.github.lucascalheiros.booklibrarymanager.utils.logDebug
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -14,7 +15,7 @@ import org.koin.core.annotation.Single
 @Single
 class GoogleSignInUseCaseImpl constructor(
     private val context: Context
-): GoogleSignInUseCase {
+) : GoogleSignInUseCase {
     private val googleSignInOptions by lazy {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
@@ -28,13 +29,22 @@ class GoogleSignInUseCaseImpl constructor(
         get() = GoogleSignIn.getLastSignedInAccount(context)
 
     override val isUserSignedIn: Boolean
-       get() = signedInAccount != null
+        get() = signedInAccount != null
 
     override suspend fun signIn(): SignInRequestState {
         return try {
             val account = googleSignInClient.silentSignIn().await()
+            logDebug(
+                listOf(LogTags.LOGIN, TAG),
+                "GoogleSignInUseCaseImpl::signIn successful ${account.email}"
+            )
             SignInRequestState.Signed(account)
         } catch (t: Exception) {
+            logDebug(
+                listOf(LogTags.LOGIN, TAG),
+                "GoogleSignInUseCaseImpl::signIn silent sign in request failed, trying to sign in with intent",
+                t
+            )
             SignInRequestState.Unsigned(googleSignInClient.signInIntent)
         }
     }
@@ -43,9 +53,7 @@ class GoogleSignInUseCaseImpl constructor(
         googleSignInClient.signOut().await()
     }
 
-}
-
-sealed class SignInRequestState {
-    data class Signed(val account: GoogleSignInAccount): SignInRequestState()
-    data class Unsigned(val signAccountIntent: Intent): SignInRequestState()
+    companion object {
+        private val TAG = GoogleSignInUseCaseImpl::class.java.canonicalName
+    }
 }

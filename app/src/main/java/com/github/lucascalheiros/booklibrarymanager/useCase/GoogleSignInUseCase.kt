@@ -1,5 +1,6 @@
 package com.github.lucascalheiros.booklibrarymanager.useCase
 
+import android.content.Intent
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 
 interface GoogleSignInUseCase {
@@ -7,4 +8,9 @@ interface GoogleSignInUseCase {
     val isUserSignedIn: Boolean
     suspend fun signIn(): SignInRequestState
     suspend fun signOut()
+}
+
+sealed class SignInRequestState {
+    data class Signed(val account: GoogleSignInAccount) : SignInRequestState()
+    data class Unsigned(val signAccountIntent: Intent) : SignInRequestState()
 }

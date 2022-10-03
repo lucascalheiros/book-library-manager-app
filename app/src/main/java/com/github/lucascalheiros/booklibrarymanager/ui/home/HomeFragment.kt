@@ -3,7 +3,6 @@ package com.github.lucascalheiros.booklibrarymanager.ui.home
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.github.lucascalheiros.booklibrarymanager.databinding.FragmentHomeBinding
 import com.github.lucascalheiros.booklibrarymanager.ui.dialogs.editFileMetadata.EditFileMetadataDialogFragment
+import com.github.lucascalheiros.booklibrarymanager.utils.constants.LogTags
 import com.github.lucascalheiros.booklibrarymanager.utils.constants.MimeTypeConstants
+import com.github.lucascalheiros.booklibrarymanager.utils.logError
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -26,13 +27,13 @@ class HomeFragment : Fragment() {
     private val filePickerResultRegister =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.data?.let { homeViewModel.uploadFile(it) } ?: Log.d(
-                    TAG,
+                result.data?.data?.let { homeViewModel.uploadFile(it) } ?: logError(
+                    listOf(LogTags.FILE_PICKER, TAG),
                     "::filePickerResultRegister No file received"
                 )
             } else {
-                Log.d(
-                    TAG,
+                logError(
+                    listOf(LogTags.FILE_PICKER, TAG),
                     "::filePickerResultRegister File selection failed, result code: ${result.resultCode}"
                 )
             }

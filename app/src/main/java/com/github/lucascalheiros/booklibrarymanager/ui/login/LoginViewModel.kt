@@ -1,13 +1,16 @@
 package com.github.lucascalheiros.booklibrarymanager.ui.login
 
 import android.content.Intent
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.lucascalheiros.booklibrarymanager.useCase.GoogleSignInUseCase
 import com.github.lucascalheiros.booklibrarymanager.useCase.SignInRequestState
+import com.github.lucascalheiros.booklibrarymanager.utils.constants.LogTags
+import com.github.lucascalheiros.booklibrarymanager.utils.infoString
+import com.github.lucascalheiros.booklibrarymanager.utils.logDebug
+import com.github.lucascalheiros.booklibrarymanager.utils.logError
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
@@ -22,28 +25,32 @@ class LoginViewModel(
 
     fun onLoginClick() {
         viewModelScope.launch {
-            doLogin()
-        }
-    }
-
-    private suspend fun doLogin() {
-        if (mLoginRequestState.value !is LoginRequestState.Loading) {
-            mLoginRequestState.value = LoginRequestState.Loading
-            googleSignInUseCase.signIn().let {
-                when (it) {
-                    is SignInRequestState.Signed -> onLoginSuccess(it.account)
-                    is SignInRequestState.Unsigned -> requestUserLogin(it.signAccountIntent)
+            if (mLoginRequestState.value !is LoginRequestState.Loading) {
+                mLoginRequestState.value = LoginRequestState.Loading
+                googleSignInUseCase.signIn().let {
+                    when (it) {
+                        is SignInRequestState.Signed -> onLoginSuccess(it.account)
+                        is SignInRequestState.Unsigned -> requestUserLogin(it.signAccountIntent)
+                    }
                 }
             }
         }
     }
 
     fun onLoginFailure(error: Exception? = null) {
+        logError(
+            listOf(LogTags.LOGIN, TAG),
+            "::onLoginFailure Unable to login",
+            error
+        )
         mLoginRequestState.value = LoginRequestState.Failure(error)
     }
 
     fun onLoginSuccess(account: GoogleSignInAccount) {
-        logAccount(account)
+        logDebug(
+            listOf(LogTags.LOGIN, TAG),
+            "Login successful with account\n" + account.infoString()
+        )
         mLoginRequestState.value = LoginRequestState.Success(account)
     }
 
@@ -51,16 +58,8 @@ class LoginViewModel(
         mLoginRequestState.value = LoginRequestState.AskUser(signAccountIntent)
     }
 
-    private fun logAccount(account: GoogleSignInAccount) {
-        Log.d(
-            "[LOGIN]", "Login successful with account\n" +
-                    "ID: ${account.id}\n" +
-                    "Name: ${account.displayName}\n" +
-                    "ServerAuth: ${account.serverAuthCode}\n" +
-                    "ID Token: ${account.idToken}\n" +
-                    "Email: ${account.email}\n" +
-                    "PhotoUri: ${account.photoUrl}\n"
-        )
+    companion object {
+        private val TAG = LoginViewModel::class.java.canonicalName
     }
 }
 

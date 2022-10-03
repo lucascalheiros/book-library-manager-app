@@ -1,7 +1,8 @@
 package com.github.lucascalheiros.booklibrarymanager.useCase
 
 import android.content.Context
-import android.util.Log
+import com.github.lucascalheiros.booklibrarymanager.utils.constants.LogTags
+import com.github.lucascalheiros.booklibrarymanager.utils.logError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single
@@ -19,7 +20,9 @@ class FileCacheUseCaseImpl(
                 if (it.exists()) it else null
             }
         } catch (e: Exception) {
-            Log.e(TAG, "::getFile", e)
+            logError(
+                listOf(LogTags.FILE_CACHE, TAG), "::getFile", e
+            )
             null
         }
     }
@@ -31,7 +34,9 @@ class FileCacheUseCaseImpl(
             fos.write(file.readBytes())
             fos.close()
         } catch (e: Exception) {
-            Log.e(TAG, "::writeFile", e)
+            logError(
+                listOf(LogTags.FILE_CACHE, TAG), "::writeFile", e
+            )
         }
     }
 

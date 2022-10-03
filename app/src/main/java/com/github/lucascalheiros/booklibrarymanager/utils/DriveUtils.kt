@@ -2,6 +2,7 @@ package com.github.lucascalheiros.booklibrarymanager.utils
 
 import com.github.lucascalheiros.booklibrarymanager.model.DriveFileMetadata
 import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.services.drive.model.File
 import java.time.Instant
 import java.time.ZoneId
@@ -32,4 +33,13 @@ fun File.toBookLibFile(): BookLibFile {
                 .toLocalDateTime()
         }
     )
+}
+
+fun GoogleSignInAccount.infoString(): String {
+    return "ID: ${id}\n" +
+            "Name: ${displayName}\n" +
+            "ServerAuth: ${serverAuthCode}\n" +
+            "ID Token: ${idToken}\n" +
+            "Email: ${email}\n" +
+            "PhotoUri: ${photoUrl}\n"
 }
