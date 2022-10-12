@@ -10,13 +10,14 @@
             type="com.github.lucascalheiros.booklibrarymanager.ui.home.HomeViewModel" />
     </data>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         layoutConstraintChangesAnimation="@{true}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeFragment">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,44 +26,58 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                chipsListAdapterOptions="@{viewModel.tags}"
-                chipsListAdapterSelectedOptions="@={viewModel.selectedTags}"
-                android:layout_width="wrap_content"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilLabel"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:visibility="@{viewModel.showFilterOptions}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:itemCount="3"
-                tools:listitem="@layout/item_tag_chips" />
+                android:layout_alignParentStart="true"
+                android:layout_margin="20dp"
+                android:layout_toStartOf="@+id/btnFilter"
+                android:hint="@string/search"
+                app:shapeAppearanceOverlay="@style/Rounded_ShapeAppearanceOverlay.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={viewModel.searchText}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/imageButton3"
+                android:id="@+id/btnFilter"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_gravity="end"
                 android:layout_margin="20dp"
                 android:checkable="true"
                 android:checked="@={viewModel.showFilterOptions}"
                 android:text="@string/filter"
-                app:icon="@drawable/ic_filter"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:icon="@drawable/ic_filter" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSelectedTags"
+            selectedChipsListAdapterOptions="@={viewModel.selectedTags}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_selectable_tag_chip" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:onRefreshListener="@{() -> viewModel.loadFiles()}"
-            app:refreshing="@{viewModel.isLoadingFiles}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+            app:layout_constraintTop_toBottomOf="@+id/rvSelectedTags"
+            app:onRefreshListener="@{() -> viewModel.loadFiles()}"
+            app:refreshing="@{viewModel.isLoadingFiles}">
+
 
             <androidx.recyclerview.widget.RecyclerView
                 fileListAdapterItems="@{viewModel.filteredAndSortedFileItems}"
@@ -87,5 +102,77 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_file_upload" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black_semi_transparent"
+            android:elevation="6dp"
+            android:onClick="@{v -> viewModel.hideFilterOptions()}"
+            android:visibility="@{viewModel.showFilterOptions}"
+            tools:visibility="gone" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:onClick="@{v -> null}"
+            app:cardElevation="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:visibilityLeftSlideInOut="@{viewModel.showFilterOptions}">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvFilterTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:text="@string/filter_tags"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTagSelection"
+                    chipsListAdapterOptions="@{viewModel.tags}"
+                    chipsListAdapterSelectedOptions="@={viewModel.selectedTags}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFilterTitle"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_selectable_tag_chip" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnReset"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{v -> viewModel.unselectFilterTags()}"
+                    android:layout_margin="12dp"
+                    android:text="@string/reset"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btnDone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{v -> viewModel.hideFilterOptions()}"
+                    android:layout_margin="12dp"
+                    android:text="@string/done"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

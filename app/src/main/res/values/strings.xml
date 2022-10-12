@@ -24,4 +24,9 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="cd_open_book_logo">Open book logo</string>
+    <string name="search">Search</string>
+    <string name="filter_tags">Filter Tags</string>
+    <string name="reset">Reset</string>
+    <string name="done">Done</string>
+
 </resources>

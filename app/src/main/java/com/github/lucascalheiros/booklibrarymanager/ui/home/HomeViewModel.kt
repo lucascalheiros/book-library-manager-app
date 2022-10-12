@@ -41,6 +41,15 @@ class HomeViewModel(
 
     private val mFileItems = MediatorLiveData<List<BookLibFile>>()
 
+    private val mFilteredAndSortedFileItems = MediatorLiveData<List<BookLibFile>>()
+
+    private val mFileHandlerRequestState =
+        MutableLiveData<FileHandlerRequestState>(FileHandlerRequestState.Idle)
+
+    private val mOpenEditFileMetadataDialog = MutableLiveData<EditFileMetadataDialogInfo?>()
+
+    val searchText = MutableLiveData("")
+
     val selectedTags = MutableLiveData(listOf<String>())
 
     val showFilterOptions = MutableLiveData(false)
@@ -55,14 +64,10 @@ class HomeViewModel(
 
     val fileItemListener: LiveData<BookLibFileItemListener> = MutableLiveData(mFileItemListener)
 
-    private val mFilteredAndSortedFileItems = MediatorLiveData<List<BookLibFile>>()
     val filteredAndSortedFileItems: LiveData<List<BookLibFile>> = mFilteredAndSortedFileItems
 
-    private val mFileHandlerRequestState =
-        MutableLiveData<FileHandlerRequestState>(FileHandlerRequestState.Idle)
     val fileHandlerRequestState: LiveData<FileHandlerRequestState> = mFileHandlerRequestState
 
-    private val mOpenEditFileMetadataDialog = MutableLiveData<EditFileMetadataDialogInfo?>()
     val openEditFileMetadataDialog: LiveData<EditFileMetadataDialogInfo?> =
         mOpenEditFileMetadataDialog
 
@@ -78,13 +83,19 @@ class HomeViewModel(
         mFilteredAndSortedFileItems.addSource(selectedTags) {
             mediatorFilterFilesObserver()
         }
+        mFilteredAndSortedFileItems.addSource(searchText) {
+            mediatorFilterFilesObserver()
+        }
     }
 
     private fun mediatorFilterFilesObserver() {
         val filesToFilter = mFileItems.value.orEmpty()
         val tagsFilter = selectedTags.value.orEmpty()
         mFilteredAndSortedFileItems.value = filesToFilter.filter { file ->
-            tagsFilter.isEmpty() || tagsFilter.any { file.tags.contains(it) }
+            (tagsFilter.isEmpty() || tagsFilter.any { file.tags.contains(it) }) && file.name.contains(
+                searchText.value.orEmpty(),
+                true
+            )
         }.sortedByDescending { it.modifiedTime }
     }
 
@@ -167,6 +178,23 @@ class HomeViewModel(
 
     fun handleOpenEditFileMetadataDialogRequestState() {
         mOpenEditFileMetadataDialog.value = null
+    }
+
+
+    fun unselectFilterTags() {
+        selectedTags.value = listOf()
+    }
+
+    fun hideFilterOptions() {
+        showFilterOptions.value = false
+    }
+
+    fun shouldInterceptBackPressed(): Boolean {
+        val shouldInterceptToHideFilter = showFilterOptions.value == true
+        if (shouldInterceptToHideFilter) {
+            hideFilterOptions()
+        }
+        return shouldInterceptToHideFilter
     }
 
 }

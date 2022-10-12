@@ -1,5 +1,7 @@
 package com.github.lucascalheiros.booklibrarymanager.utils
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.LayoutTransition
 import android.view.View
 import android.view.ViewGroup
@@ -55,4 +57,33 @@ fun ImageView.bindUrlImage(url: String?) {
     Glide.with(this).load(url).placeholder(loadingDrawable).fitCenter()
         .transition(DrawableTransitionOptions.withCrossFade()).error(R.drawable.ic_broken_image)
         .into(this)
+}
+
+@BindingAdapter(value = ["visibilityLeftSlideInOut"])
+fun View.setVisibility(
+    visibility: Boolean
+) {
+    if (visibility) {
+        translationX = (resources.displayMetrics.widthPixels.toFloat())
+        setVisibility(View.VISIBLE)
+        animate()
+            .translationX(-1f)
+            .setDuration(500L)
+            .setListener(null)
+    } else {
+        if (translationX.toInt() != -1) {
+            setVisibility(View.GONE)
+        }
+        translationX = (0.toFloat())
+        animate()
+            .translationX(width.toFloat())
+            .setDuration(500L)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    super.onAnimationEnd(animation)
+                    setVisibility(View.GONE)
+                }
+            })
+    }
+
 }

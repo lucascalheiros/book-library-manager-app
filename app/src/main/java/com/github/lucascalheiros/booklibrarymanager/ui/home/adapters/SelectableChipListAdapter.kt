@@ -11,15 +11,15 @@ import androidx.databinding.ObservableBoolean
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.github.lucascalheiros.booklibrarymanager.databinding.ItemTagChipsBinding
+import com.github.lucascalheiros.booklibrarymanager.databinding.ItemSelectableTagChipBinding
 import com.github.lucascalheiros.booklibrarymanager.model.SelectableItemImpl
 import com.github.lucascalheiros.booklibrarymanager.model.interfaces.SelectableItem
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
-class ChipsListAdapter :
-    ListAdapter<SelectableItem<String>, ChipsListAdapter.ItemTagChipsViewHolder>(Diff) {
+class SelectableChipsListAdapter :
+    ListAdapter<SelectableItem<String>, SelectableChipsListAdapter.ItemTagChipsViewHolder>(Diff) {
 
     object Diff : DiffUtil.ItemCallback<SelectableItem<String>>() {
         override fun areItemsTheSame(
@@ -40,7 +40,7 @@ class ChipsListAdapter :
     var onChange: (() -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemTagChipsViewHolder {
-        val binding = ItemTagChipsBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = ItemSelectableTagChipBinding.inflate(LayoutInflater.from(parent.context))
         return ItemTagChipsViewHolder(binding)
     }
 
@@ -48,7 +48,7 @@ class ChipsListAdapter :
         holder.bind(getItem(position))
     }
 
-    inner class ItemTagChipsViewHolder(private val binding: ItemTagChipsBinding) :
+    inner class ItemTagChipsViewHolder(private val binding: ItemSelectableTagChipBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("ClickableViewAccessibility")
         fun bind(item: SelectableItem<String>) {
@@ -80,25 +80,27 @@ fun RecyclerView.bindChipsListAdapter(
     attrChanged: InverseBindingListener? = null
 ) {
     adapter.let { rvAdapter ->
-        if (rvAdapter !is ChipsListAdapter) {
+        if (rvAdapter !is SelectableChipsListAdapter) {
             if (customLayoutManager != true) {
                 val layoutManager = FlexboxLayoutManager(context)
                 layoutManager.flexDirection = FlexDirection.ROW
                 layoutManager.justifyContent = JustifyContent.CENTER
                 this.layoutManager = layoutManager
             }
-            ChipsListAdapter().also {
+            SelectableChipsListAdapter().also {
                 adapter = it
             }
         } else rvAdapter
     }.let { adapter ->
         val optionNameMap: Map<String, List<SelectableItem<String>>> = adapter.currentList.groupBy { it.name }
         options.orEmpty().map { option ->
-            optionNameMap[option]?.firstOrNull() ?: SelectableItemImpl(
+            (optionNameMap[option]?.firstOrNull() ?: SelectableItemImpl(
                 option,
                 option,
-                ObservableBoolean(selectedOptions?.contains(option) == true)
-            )
+                ObservableBoolean(false)
+            )).also {
+                it.isSelected.set(selectedOptions?.contains(option) == true)
+            }
         }.let {
             adapter.onChange = { attrChanged?.onChange() }
             adapter.submitList(it)
@@ -112,7 +114,7 @@ fun RecyclerView.bindChipsListAdapter(
 )
 fun RecyclerView.inverseBindChipsListAdapterSelectedOptions(): List<String> {
     return adapter.let { adapter ->
-        if (adapter is ChipsListAdapter) {
+        if (adapter is SelectableChipsListAdapter) {
             adapter.currentList.filter { it.isSelected.get() }.map { it.value }
         } else listOf()
     }
