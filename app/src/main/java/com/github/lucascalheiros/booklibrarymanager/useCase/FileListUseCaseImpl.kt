@@ -2,7 +2,9 @@ package com.github.lucascalheiros.booklibrarymanager.useCase
 
 import com.github.lucascalheiros.booklibrarymanager.data.network.DriveFileRepository
 import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
-import com.github.lucascalheiros.booklibrarymanager.utils.toBookLibFile
+import com.github.lucascalheiros.booklibrarymanager.utils.constants.MimeTypeConstants
+import com.github.lucascalheiros.booklibrarymanager.utils.driveUtils.DriveQueryBuilder
+import com.github.lucascalheiros.booklibrarymanager.utils.driveUtils.toBookLibFile
 import org.koin.core.annotation.Single
 import java.io.File
 
@@ -13,7 +15,9 @@ class FileListUseCaseImpl(
 ) : FileListUseCase {
 
     override suspend fun listFiles(): List<BookLibFile> {
-        return driveFileRepository.listFiles(pdfQuery).map { it.toBookLibFile() }
+        return driveFileRepository.listFiles(
+            DriveQueryBuilder().mimeTypeEquals(MimeTypeConstants.pdf).build()
+        ).map { it.toBookLibFile() }
     }
 
     override suspend fun downloadMedia(fileId: String): File {
@@ -21,9 +25,4 @@ class FileListUseCaseImpl(
             fileCacheUseCase.writeFile(fileId, it)
         }
     }
-
-    companion object {
-        private const val pdfQuery = "mimeType = 'application/pdf'"
-    }
-
 }

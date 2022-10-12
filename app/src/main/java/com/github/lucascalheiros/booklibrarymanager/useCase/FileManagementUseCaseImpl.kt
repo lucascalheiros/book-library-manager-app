@@ -4,12 +4,15 @@ import android.content.Context
 import android.net.Uri
 import com.github.lucascalheiros.booklibrarymanager.data.network.DriveFileRepository
 import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
-import com.github.lucascalheiros.booklibrarymanager.utils.*
 import com.github.lucascalheiros.booklibrarymanager.utils.constants.AppPropertiesKeys.READ_PROGRESS
 import com.github.lucascalheiros.booklibrarymanager.utils.constants.AppPropertiesKeys.TAGS
 import com.github.lucascalheiros.booklibrarymanager.utils.constants.AppPropertiesKeys.TOTAL_PAGES
 import com.github.lucascalheiros.booklibrarymanager.utils.constants.DRIVE_APP_FOLDER_NAME
 import com.github.lucascalheiros.booklibrarymanager.utils.constants.MimeTypeConstants
+import com.github.lucascalheiros.booklibrarymanager.utils.driveUtils.DriveQueryBuilder
+import com.github.lucascalheiros.booklibrarymanager.utils.driveUtils.toBookLibFile
+import com.github.lucascalheiros.booklibrarymanager.utils.getFileName
+import com.github.lucascalheiros.booklibrarymanager.utils.loadFileFromInputStream
 import com.google.api.client.http.FileContent
 import com.google.api.services.drive.model.File
 import kotlinx.coroutines.Dispatchers
@@ -42,8 +45,10 @@ class FileManagementUseCaseImpl(
 
     private suspend fun getRootFolderId(): String {
         return rootFolderId ?: run {
-            val query =
-                "mimeType = '${MimeTypeConstants.driveFolder}' and name = '$DRIVE_APP_FOLDER_NAME'"
+            val query = DriveQueryBuilder()
+                .mimeTypeEquals(MimeTypeConstants.driveFolder)
+                .nameEquals(DRIVE_APP_FOLDER_NAME)
+                .build()
             driveFileRepository.listFiles(query).firstOrNull()?.id ?: run {
                 val fileMetadata = File().apply {
                     name = DRIVE_APP_FOLDER_NAME

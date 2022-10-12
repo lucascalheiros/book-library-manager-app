@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.lucascalheiros.booklibrarymanager.useCase.GoogleSignInUseCase
 import com.github.lucascalheiros.booklibrarymanager.useCase.SignInRequestState
 import com.github.lucascalheiros.booklibrarymanager.utils.constants.LogTags
-import com.github.lucascalheiros.booklibrarymanager.utils.infoString
+import com.github.lucascalheiros.booklibrarymanager.utils.driveUtils.infoString
 import com.github.lucascalheiros.booklibrarymanager.utils.logDebug
 import com.github.lucascalheiros.booklibrarymanager.utils.logError
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount

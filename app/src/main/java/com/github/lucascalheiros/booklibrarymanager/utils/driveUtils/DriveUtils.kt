@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.booklibrarymanager.utils
+package com.github.lucascalheiros.booklibrarymanager.utils.driveUtils
 
 import com.github.lucascalheiros.booklibrarymanager.model.DriveFileMetadata
 import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
