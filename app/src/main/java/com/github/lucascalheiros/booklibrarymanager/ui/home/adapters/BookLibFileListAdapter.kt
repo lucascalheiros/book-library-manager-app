@@ -11,8 +11,8 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.*
 import com.github.lucascalheiros.booklibrarymanager.R
 import com.github.lucascalheiros.booklibrarymanager.databinding.ItemFileListBinding
-import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
 import com.github.lucascalheiros.booklibrarymanager.ui.home.handlers.BookLibFileItemListener
+import com.github.lucascalheiros.commom.interfaces.BookLibFile
 
 
 class BookLibFileListAdapter :

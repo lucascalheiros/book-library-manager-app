@@ -6,8 +6,8 @@ import androidx.lifecycle.Observer
 import com.github.lucascalheiros.booklibrarymanager.data.MockBookLibFilesData.items1And2
 import com.github.lucascalheiros.booklibrarymanager.data.MockBookLibFilesData.items2And3
 import com.github.lucascalheiros.booklibrarymanager.rules.MainCoroutineRule
-import com.github.lucascalheiros.booklibrarymanager.useCase.FileListUseCase
-import com.github.lucascalheiros.booklibrarymanager.useCase.FileManagementUseCase
+import com.github.lucascalheiros.data_drive_file.useCase.FileListUseCase
+import com.github.lucascalheiros.data_drive_file.useCase.FileManagementUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.lucascalheiros.booklibrarymanager.ui.dialogs.editFileMetadata.handlers.EditFileMetadataDialogHandler
 import com.github.lucascalheiros.booklibrarymanager.ui.dialogs.editFileMetadata.model.EditFileMetadataDialogInfo
-import com.github.lucascalheiros.booklibrarymanager.useCase.FileManagementUseCase
+import com.github.lucascalheiros.data_drive_file.useCase.FileManagementUseCase
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 

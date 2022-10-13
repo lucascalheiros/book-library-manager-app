@@ -3,11 +3,11 @@ package com.github.lucascalheiros.booklibrarymanager.ui.home
 import android.net.Uri
 import androidx.lifecycle.*
 import androidx.lifecycle.Transformations.map
-import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
 import com.github.lucascalheiros.booklibrarymanager.ui.dialogs.editFileMetadata.model.EditFileMetadataDialogInfo
 import com.github.lucascalheiros.booklibrarymanager.ui.home.handlers.BookLibFileItemListener
-import com.github.lucascalheiros.booklibrarymanager.useCase.FileListUseCase
-import com.github.lucascalheiros.booklibrarymanager.useCase.FileManagementUseCase
+import com.github.lucascalheiros.commom.interfaces.BookLibFile
+import com.github.lucascalheiros.data_drive_file.useCase.FileListUseCase
+import com.github.lucascalheiros.data_drive_file.useCase.FileManagementUseCase
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import java.io.File

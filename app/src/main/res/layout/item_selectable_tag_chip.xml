@@ -6,7 +6,7 @@
 
         <variable
             name="item"
-            type="com.github.lucascalheiros.booklibrarymanager.model.interfaces.SelectableItem" />
+            type="com.github.lucascalheiros.booklibrarymanager.ui.home.adapters.interfaces.SelectableItem" />
 
     </data>
 

@@ -14,9 +14,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.github.lucascalheiros.booklibrarymanager.databinding.FragmentHomeBinding
 import com.github.lucascalheiros.booklibrarymanager.ui.dialogs.editFileMetadata.EditFileMetadataDialogFragment
-import com.github.lucascalheiros.booklibrarymanager.utils.constants.LogTags
-import com.github.lucascalheiros.booklibrarymanager.utils.constants.MimeTypeConstants
-import com.github.lucascalheiros.booklibrarymanager.utils.logError
+import com.github.lucascalheiros.commom.utils.constants.LogTags
+import com.github.lucascalheiros.commom.utils.constants.MimeTypeConstants
+import com.github.lucascalheiros.commom.utils.logError
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -28,13 +28,19 @@ class HomeFragment : Fragment() {
     private val filePickerResultRegister =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.data?.let { homeViewModel.uploadFile(it) } ?: logError(
-                    listOf(LogTags.FILE_PICKER, TAG),
+                result.data?.data?.let { homeViewModel.uploadFile(it) } ?: com.github.lucascalheiros.commom.utils.logError(
+                    listOf(
+                        com.github.lucascalheiros.commom.utils.constants.LogTags.FILE_PICKER,
+                        TAG
+                    ),
                     "::filePickerResultRegister No file received"
                 )
             } else {
-                logError(
-                    listOf(LogTags.FILE_PICKER, TAG),
+                com.github.lucascalheiros.commom.utils.logError(
+                    listOf(
+                        com.github.lucascalheiros.commom.utils.constants.LogTags.FILE_PICKER,
+                        TAG
+                    ),
                     "::filePickerResultRegister File selection failed, result code: ${result.resultCode}"
                 )
             }
@@ -107,7 +113,7 @@ class HomeFragment : Fragment() {
     private fun openFilePicker() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = MimeTypeConstants.pdf
+            type = com.github.lucascalheiros.commom.utils.constants.MimeTypeConstants.pdf
         }
         filePickerResultRegister.launch(intent)
     }
@@ -125,7 +131,7 @@ class HomeFragment : Fragment() {
             requireContext().applicationContext.packageName.toString() + ".provider",
             value.file
         )
-        val mime = MimeTypeConstants.pdf
+        val mime = com.github.lucascalheiros.commom.utils.constants.MimeTypeConstants.pdf
 
         val intent = Intent().apply {
             action = Intent.ACTION_VIEW

@@ -1,13 +1,12 @@
 package com.github.lucascalheiros.booklibrarymanager.ui.pdfReader
 
 import android.graphics.pdf.PdfRenderer
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.lucascalheiros.booklibrarymanager.ui.pdfReader.handlers.ReadingPageTrackerListener
-import com.github.lucascalheiros.booklibrarymanager.useCase.ReadPdfUseCase
+import com.github.lucascalheiros.data_drive_file.useCase.ReadPdfUseCase
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 

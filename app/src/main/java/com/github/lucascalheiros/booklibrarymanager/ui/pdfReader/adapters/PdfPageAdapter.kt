@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import com.github.lucascalheiros.booklibrarymanager.databinding.ItemPdfPageBinding
 import com.github.lucascalheiros.booklibrarymanager.ui.customView.ZoomRecyclerView
 import com.github.lucascalheiros.booklibrarymanager.ui.pdfReader.handlers.ReadingPageTrackerListener
-import com.github.lucascalheiros.booklibrarymanager.utils.toBitmap
+import com.github.lucascalheiros.commom.utils.toBitmap
 
 class PdfPageAdapter(pdfRenderer: PdfRenderer) :
     RecyclerView.Adapter<PdfPageAdapter.PdfPageViewHolder>() {

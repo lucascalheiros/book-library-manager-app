@@ -1,6 +1,6 @@
 package com.github.lucascalheiros.booklibrarymanager.data
 
-import com.github.lucascalheiros.booklibrarymanager.model.interfaces.BookLibFile
+import com.github.lucascalheiros.core.utils.model.interfaces.BookLibFile
 import com.github.lucascalheiros.booklibrarymanager.utils.getRandomLocalDateTime
 import com.github.lucascalheiros.booklibrarymanager.utils.getRandomString
 import java.time.LocalDateTime

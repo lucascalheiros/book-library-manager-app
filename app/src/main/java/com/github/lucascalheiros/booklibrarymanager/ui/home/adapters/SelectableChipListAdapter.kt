@@ -12,8 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.lucascalheiros.booklibrarymanager.databinding.ItemSelectableTagChipBinding
-import com.github.lucascalheiros.booklibrarymanager.model.SelectableItemImpl
-import com.github.lucascalheiros.booklibrarymanager.model.interfaces.SelectableItem
+import com.github.lucascalheiros.booklibrarymanager.ui.home.adapters.interfaces.SelectableItem
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent

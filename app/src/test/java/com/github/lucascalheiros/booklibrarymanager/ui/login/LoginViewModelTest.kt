@@ -3,8 +3,8 @@ package com.github.lucascalheiros.booklibrarymanager.ui.login
 import android.content.Intent
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.github.lucascalheiros.booklibrarymanager.rules.MainCoroutineRule
-import com.github.lucascalheiros.booklibrarymanager.useCase.GoogleSignInUseCase
-import com.github.lucascalheiros.booklibrarymanager.useCase.SignInRequestState
+import com.github.lucascalheiros.data_authentication.useCase.GoogleSignInUseCase
+import com.github.lucascalheiros.data_authentication.useCase.SignInRequestState
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -46,7 +46,6 @@ class LoginViewModelTest : KoinTest {
 
     @Test
     fun whenUserIsSignedLoginRequestShouldSucceed() = runTest {
-
         val account = mock(GoogleSignInAccount::class.java)
         `when`(googleSignInUseCase.signIn()).thenReturn(SignInRequestState.Signed(account))
         loginViewModel.onLoginClick()
