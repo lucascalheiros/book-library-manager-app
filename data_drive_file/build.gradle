@@ -1,11 +1,11 @@
 plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
+    id "com.android.library"
+    id "org.jetbrains.kotlin.android"
+    id "kotlin-kapt"
 }
 
 android {
-    namespace 'com.github.lucascalheiros.data_drive_file'
+    namespace "com.github.lucascalheiros.data_drive_file"
     compileSdk 32
 
     defaultConfig {
@@ -19,7 +19,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
     compileOptions {
@@ -27,7 +27,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
     }
 }
 
@@ -35,10 +35,10 @@ dependencies {
     implementation(project(":commom"))
 
     // Google services
-    implementation "com.google.android.gms:play-services-auth:20.2.0"
-    implementation 'com.google.apis:google-api-services-drive:v3-rev20211107-1.32.1'
-    implementation 'com.google.http-client:google-http-client-gson:1.39.2'
-    implementation 'com.google.api-client:google-api-client-android:1.26.0'
+    implementation "com.google.android.gms:play-services-auth:$play_services_auth_version"
+    implementation "com.google.apis:google-api-services-drive:$google_api_services_drive_version"
+    implementation "com.google.http-client:google-http-client-gson:$google_http_client_gson_version"
+    implementation "com.google.api-client:google-api-client-android:$google_api_client_android_version"
 
     // Koin
     implementation "io.insert-koin:koin-android:$koin_version"
@@ -50,12 +50,12 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     // Core
-    implementation "androidx.core:core-ktx:1.7.0"
-    implementation "androidx.appcompat:appcompat:1.3.0"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation "androidx.core:core-ktx:$androidx_core_version"
+    implementation "androidx.appcompat:appcompat:$androidx_appcompt_version"
+    implementation "androidx.legacy:legacy-support-v4:$androidx_legacy_support_v4_version"
+    implementation "com.google.android.material:material:$material_version"
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "androidx.test.ext:junit:$androidx_ext_junit"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidx_espresso_core"
 }
