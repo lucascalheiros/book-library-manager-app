@@ -5,12 +5,11 @@ import com.github.lucascalheiros.commom.utils.constants.LogTags
 import com.github.lucascalheiros.commom.utils.logError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Single
 import java.io.File
 import java.io.FileOutputStream
 
 @Suppress("BlockingMethodInNonBlockingContext")
-@Single
+
 class FileCacheUseCaseImpl(
     private val context: Context
 ) : FileCacheUseCase {

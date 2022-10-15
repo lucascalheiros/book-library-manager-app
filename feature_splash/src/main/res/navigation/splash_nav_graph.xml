@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.github.lucascalheiros.feature_splash.SplashFragment"
+        android:name="com.github.lucascalheiros.feature_splash.presentation.splash.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" />
 </navigation>

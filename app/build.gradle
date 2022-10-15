@@ -1,10 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.devtools.ksp'
-    id 'androidx.navigation.safeargs.kotlin'
-    id 'kotlin-kapt'
-    id 'kotlin-parcelize'
 }
 
 if (file('signingConfigs.gradle').exists()) {
@@ -46,11 +42,6 @@ android {
         viewBinding true
         dataBinding true
     }
-    applicationVariants.all { variant ->
-        variant.sourceSets.java.each {
-            it.srcDirs += "build/generated/ksp/${variant.name}/kotlin"
-        }
-    }
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
@@ -67,10 +58,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature_splash"))
     implementation(project(":data_drive_file"))
     implementation(project(":data_authentication"))
-    implementation(project(":commom"))
+    implementation(project(":feature_splash"))
+    implementation(project(":feature_pdfReader"))
+    implementation(project(":feature_home"))
+    implementation(project(":feature_login"))
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -82,25 +75,17 @@ dependencies {
 
     // Views
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipe_refresh_layout_version"
-    implementation "com.google.android.flexbox:flexbox:$flexbox_version"
     implementation "com.google.android.material:material:1.5.0-alpha04"
 
     // Google services
     implementation "com.google.android.gms:play-services-auth:20.2.0"
-//    implementation 'com.google.apis:google-api-services-drive:v3-rev20211107-1.32.1'
-//    implementation 'com.google.http-client:google-http-client-gson:1.39.2'
-//    implementation 'com.google.api-client:google-api-client-android:1.26.0'
 
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     // Koin
-    implementation "io.insert-koin:koin-core:$koin_version"
     implementation "io.insert-koin:koin-android:$koin_version"
-    implementation "io.insert-koin:koin-annotations:$koin_annotations_version"
-    ksp "io.insert-koin:koin-ksp-compiler:$koin_annotations_version"
 
     testImplementation "androidx.room:room-testing:$room_version"
     testImplementation "io.insert-koin:koin-test:$koin_version"

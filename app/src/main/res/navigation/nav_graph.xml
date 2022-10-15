@@ -1,50 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/splash_nav_graph">
 
     <include app:graph="@navigation/splash_nav_graph" />
+    <include app:graph="@navigation/pdf_reader_nav_graph" />
+    <include app:graph="@navigation/login_nav_graph" />
+    <include app:graph="@navigation/home_nav_graph" />
 
-    <fragment
-        android:id="@+id/PdfReaderFragment"
-        android:name="com.github.lucascalheiros.booklibrarymanager.ui.pdfReader.PdfReaderFragment"
-        android:label="@string/pdf_reader_fragment"
-        tools:layout="@layout/fragment_pdf_reader" >
-        <argument
-            android:name="fileId"
-            app:argType="string" />
-        <argument
-            android:name="initialPage"
-            app:argType="integer" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/LoginFragment"
-        android:name="com.github.lucascalheiros.booklibrarymanager.ui.login.LoginFragment"
-        android:label="@string/pdf_reader_fragment"
-        tools:layout="@layout/fragment_login">
-
-        <deepLink
-            app:uri="android-app://com.github.lucascalheiros.booklibrarymanager/LoginFragment" />
-
-        <action
-            android:id="@+id/action_LoginFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.github.lucascalheiros.booklibrarymanager.ui.home.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
-
-        <deepLink
-            app:uri="android-app://com.github.lucascalheiros.booklibrarymanager/homeFragment" />
-
-        <action
-            android:id="@+id/action_homeFragment_to_PdfReaderFragment"
-            app:destination="@id/PdfReaderFragment" />
-    </fragment>
 </navigation>

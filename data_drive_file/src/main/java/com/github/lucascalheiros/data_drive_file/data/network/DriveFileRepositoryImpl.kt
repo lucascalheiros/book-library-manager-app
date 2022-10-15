@@ -12,13 +12,12 @@ import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Single
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.util.*
 
 
-@Single
+
 @Suppress("BlockingMethodInNonBlockingContext")
 class DriveFileRepositoryImpl(
     private val context: Context

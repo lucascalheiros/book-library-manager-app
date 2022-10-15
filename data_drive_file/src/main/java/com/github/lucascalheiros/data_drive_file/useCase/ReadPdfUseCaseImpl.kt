@@ -5,9 +5,8 @@ import android.os.ParcelFileDescriptor
 import com.github.lucascalheiros.commom.interfaces.BookLibFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Single
 
-@Single
+
 class ReadPdfUseCaseImpl(
     private val fileListUseCase: FileListUseCase,
     private val fileManagementUseCase: FileManagementUseCase

@@ -4,10 +4,9 @@ import com.github.lucascalheiros.commom.interfaces.BookLibFile
 import com.github.lucascalheiros.commom.utils.constants.MimeTypeConstants
 import com.github.lucascalheiros.data_drive_file.utils.DriveQueryBuilder
 import com.github.lucascalheiros.data_drive_file.utils.toBookLibFile
-import org.koin.core.annotation.Single
 import java.io.File
 
-@Single
+
 class FileListUseCaseImpl(
     private val driveFileRepository: com.github.lucascalheiros.data_drive_file.data.network.DriveFileRepository,
     private val fileCacheUseCase: FileCacheUseCase

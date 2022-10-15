@@ -16,10 +16,9 @@ import com.google.api.client.http.FileContent
 import com.google.api.services.drive.model.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.koin.core.annotation.Single
 import java.util.*
 
-@Single
+
 class FileManagementUseCaseImpl(
     private val context: Context,
     private val driveFileRepository: com.github.lucascalheiros.data_drive_file.data.network.DriveFileRepository
