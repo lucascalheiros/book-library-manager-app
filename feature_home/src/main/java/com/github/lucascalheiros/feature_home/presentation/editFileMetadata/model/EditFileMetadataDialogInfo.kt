@@ -1,7 +1,7 @@
 package com.github.lucascalheiros.feature_home.presentation.editFileMetadata.model
 
 import android.os.Parcelable
-import com.github.lucascalheiros.commom.interfaces.BookLibFile
+import com.github.lucascalheiros.common.interfaces.BookLibFile
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 

@@ -11,7 +11,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.*
 
 import com.github.lucascalheiros.feature_home.presentation.home.handlers.BookLibFileItemListener
-import com.github.lucascalheiros.commom.interfaces.BookLibFile
+import com.github.lucascalheiros.common.interfaces.BookLibFile
 import com.github.lucascalheiros.feature_home.R
 import com.github.lucascalheiros.feature_home.databinding.ItemFileListBinding
 

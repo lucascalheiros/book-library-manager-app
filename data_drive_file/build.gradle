@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":commom"))
+    implementation(project(":common"))
 
     // Google services
     implementation "com.google.android.gms:play-services-auth:$play_services_auth_version"

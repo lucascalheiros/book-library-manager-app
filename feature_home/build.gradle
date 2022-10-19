@@ -36,9 +36,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":commom"))
+    implementation(project(":common"))
     implementation(project(":data_drive_file"))
-
+    testImplementation(project(":common_test"))
+    androidTestImplementation(project(":common_test"))
+    
     implementation "com.google.android.flexbox:flexbox:$flexbox_version"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipe_refresh_layout_version"
 
@@ -58,6 +60,14 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidx_appcompt_version"
     implementation "androidx.legacy:legacy-support-v4:$androidx_legacy_support_v4_version"
     implementation "com.google.android.material:material:$material_version"
+
+    testImplementation "androidx.room:room-testing:$room_version"
+    testImplementation "io.insert-koin:koin-test:$koin_version"
+    testImplementation "io.insert-koin:koin-test-junit4:$koin_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "org.mockito:mockito-inline:$mockito_version"
+    testImplementation "androidx.arch.core:core-testing:$androidx_core_testing_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$androidx_ext_junit"

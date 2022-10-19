@@ -1,8 +1,8 @@
 package com.github.lucascalheiros.data_drive_file.useCase
 
 import android.content.Context
-import com.github.lucascalheiros.commom.utils.constants.LogTags
-import com.github.lucascalheiros.commom.utils.logError
+import com.github.lucascalheiros.common.utils.constants.LogTags
+import com.github.lucascalheiros.common.utils.logError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File

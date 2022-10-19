@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.github.lucascalheiros.commom.R
+import com.github.lucascalheiros.common.R
 import com.github.lucascalheiros.feature_login.databinding.FragmentLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException

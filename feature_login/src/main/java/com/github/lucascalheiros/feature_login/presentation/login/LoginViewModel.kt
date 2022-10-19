@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.lucascalheiros.commom.utils.constants.LogTags
-import com.github.lucascalheiros.commom.utils.logDebug
-import com.github.lucascalheiros.commom.utils.logError
+import com.github.lucascalheiros.common.utils.constants.LogTags
+import com.github.lucascalheiros.common.utils.logDebug
+import com.github.lucascalheiros.common.utils.logError
 import com.github.lucascalheiros.data_authentication.useCase.GoogleSignInUseCase
 import com.github.lucascalheiros.data_authentication.useCase.SignInRequestState
 import com.github.lucascalheiros.data_authentication.utils.infoString

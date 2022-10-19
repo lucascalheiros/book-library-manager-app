@@ -17,7 +17,7 @@
         android:background="@color/design_default_color_secondary"
         tools:context="com.github.lucascalheiros.feature_login.presentation.login.LoginFragment">
 
-        <com.github.lucascalheiros.commom.presentation.customView.MirrorPolygonDrawerView
+        <com.github.lucascalheiros.common.presentation.customView.MirrorPolygonDrawerView
             android:id="@+id/polygonDrawerView"
             android:layout_width="0dp"
             android:layout_height="match_parent"

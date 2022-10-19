@@ -15,10 +15,10 @@ dependencyResolutionManagement {
 rootProject.name = "BookLibraryManager"
 include ':app'
 include ':data_drive_file'
-include ':commom'
 include ':data_authentication'
 include ':feature_splash'
 include ':feature_home'
 include ':feature_login'
 include ':feature_pdfReader'
+include ':common'
 include ':common_test'

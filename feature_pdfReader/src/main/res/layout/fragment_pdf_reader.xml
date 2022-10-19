@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.pdfReader.PdfReaderFragment">
 
-        <com.github.lucascalheiros.commom.presentation.customView.ZoomRecyclerView
+        <com.github.lucascalheiros.common.presentation.customView.ZoomRecyclerView
             android:id="@+id/pageList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

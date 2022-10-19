@@ -1,6 +1,6 @@
 package com.github.lucascalheiros.data_drive_file.useCase
 
-import com.github.lucascalheiros.commom.interfaces.BookLibFile
+import com.github.lucascalheiros.common.interfaces.BookLibFile
 import java.io.File
 
 interface FileListUseCase {

@@ -2,14 +2,14 @@ package com.github.lucascalheiros.data_drive_file.useCase
 
 import android.content.Context
 import android.net.Uri
-import com.github.lucascalheiros.commom.interfaces.BookLibFile
-import com.github.lucascalheiros.commom.utils.constants.AppPropertiesKeys.READ_PROGRESS
-import com.github.lucascalheiros.commom.utils.constants.AppPropertiesKeys.TAGS
-import com.github.lucascalheiros.commom.utils.constants.AppPropertiesKeys.TOTAL_PAGES
-import com.github.lucascalheiros.commom.utils.constants.DRIVE_APP_FOLDER_NAME
-import com.github.lucascalheiros.commom.utils.constants.MimeTypeConstants
-import com.github.lucascalheiros.commom.utils.getFileName
-import com.github.lucascalheiros.commom.utils.loadFileFromInputStream
+import com.github.lucascalheiros.common.interfaces.BookLibFile
+import com.github.lucascalheiros.common.utils.constants.AppPropertiesKeys.READ_PROGRESS
+import com.github.lucascalheiros.common.utils.constants.AppPropertiesKeys.TAGS
+import com.github.lucascalheiros.common.utils.constants.AppPropertiesKeys.TOTAL_PAGES
+import com.github.lucascalheiros.common.utils.constants.DRIVE_APP_FOLDER_NAME
+import com.github.lucascalheiros.common.utils.constants.MimeTypeConstants
+import com.github.lucascalheiros.common.utils.getFileName
+import com.github.lucascalheiros.common.utils.loadFileFromInputStream
 import com.github.lucascalheiros.data_drive_file.utils.DriveQueryBuilder
 import com.github.lucascalheiros.data_drive_file.utils.toBookLibFile
 import com.google.api.client.http.FileContent

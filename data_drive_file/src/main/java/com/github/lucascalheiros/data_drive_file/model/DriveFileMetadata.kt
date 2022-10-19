@@ -2,10 +2,10 @@ package com.github.lucascalheiros.data_drive_file.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.github.lucascalheiros.commom.interfaces.BookLibFile
-import com.github.lucascalheiros.commom.utils.constants.AppPropertiesKeys.READ_PROGRESS
-import com.github.lucascalheiros.commom.utils.constants.AppPropertiesKeys.TAGS
-import com.github.lucascalheiros.commom.utils.constants.AppPropertiesKeys.TOTAL_PAGES
+import com.github.lucascalheiros.common.interfaces.BookLibFile
+import com.github.lucascalheiros.common.utils.constants.AppPropertiesKeys.READ_PROGRESS
+import com.github.lucascalheiros.common.utils.constants.AppPropertiesKeys.TAGS
+import com.github.lucascalheiros.common.utils.constants.AppPropertiesKeys.TOTAL_PAGES
 import java.time.LocalDateTime
 
 @Entity

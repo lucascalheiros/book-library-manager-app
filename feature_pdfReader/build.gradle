@@ -35,7 +35,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":commom"))
+    implementation(project(":common"))
     implementation(project(":data_drive_file"))
 
     // Lifecycle

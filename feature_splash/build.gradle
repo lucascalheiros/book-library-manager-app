@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":commom"))
+    implementation(project(":common"))
     implementation(project(":data_authentication"))
 
     // Navigation

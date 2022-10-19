@@ -3,7 +3,7 @@ package com.github.lucascalheiros.feature_home.presentation.home
 import android.net.Uri
 import androidx.lifecycle.*
 import androidx.lifecycle.Transformations.map
-import com.github.lucascalheiros.commom.interfaces.BookLibFile
+import com.github.lucascalheiros.common.interfaces.BookLibFile
 import com.github.lucascalheiros.data_drive_file.useCase.FileListUseCase
 import com.github.lucascalheiros.data_drive_file.useCase.FileManagementUseCase
 import com.github.lucascalheiros.feature_home.presentation.editFileMetadata.model.EditFileMetadataDialogInfo

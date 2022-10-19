@@ -7,13 +7,13 @@
 
         <variable
             name="model"
-            type="com.github.lucascalheiros.commom.interfaces.BookLibFile" />
+            type="com.github.lucascalheiros.common.interfaces.BookLibFile" />
 
         <variable
             name="listener"
             type="com.github.lucascalheiros.feature_home.presentation.home.handlers.BookLibFileItemListener" />
 
-        <import type="com.github.lucascalheiros.commom.utils.StringUtils" />
+        <import type="com.github.lucascalheiros.common.utils.StringUtils" />
     </data>
 
 

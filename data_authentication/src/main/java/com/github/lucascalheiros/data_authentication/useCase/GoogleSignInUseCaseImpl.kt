@@ -2,8 +2,8 @@ package com.github.lucascalheiros.data_authentication.useCase
 
 
 import android.content.Context
-import com.github.lucascalheiros.commom.utils.constants.LogTags
-import com.github.lucascalheiros.commom.utils.logDebug
+import com.github.lucascalheiros.common.utils.constants.LogTags
+import com.github.lucascalheiros.common.utils.logDebug
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
