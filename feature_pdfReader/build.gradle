@@ -6,11 +6,11 @@ plugins {
 
 android {
     namespace "com.github.lucascalheiros.feature_pdfreader"
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         minSdk 28
-        targetSdk 32
+        targetSdk 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -38,24 +38,14 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":data_drive_file"))
 
-    // Lifecycle
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-
-    // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation libs.bundles.navigation
+    implementation libs.bundles.lifecycle
 
     // Koin
-    implementation "io.insert-koin:koin-android:$koin_version"
-    
-    // Core
-    implementation "androidx.core:core-ktx:$androidx_core_version"
-    implementation "androidx.appcompat:appcompat:$androidx_appcompt_version"
-    implementation "androidx.legacy:legacy-support-v4:$androidx_legacy_support_v4_version"
-    implementation "com.google.android.material:material:$material_version"
+    implementation libs.koin.android
 
-    testImplementation "junit:junit:$junit_version"
-    androidTestImplementation "androidx.test.ext:junit:$androidx_ext_junit"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$androidx_espresso_core"
+    // Core
+    implementation libs.androidx.core
+    implementation libs.androidx.appCompat
+    implementation libs.androidx.legacySupportV4
 }

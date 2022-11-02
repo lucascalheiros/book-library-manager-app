@@ -7,11 +7,11 @@ plugins {
 
 android {
     namespace "com.github.lucascalheiros.feature_home"
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         minSdk 28
-        targetSdk 32
+        targetSdk 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -41,35 +41,19 @@ dependencies {
     testImplementation(project(":common_test"))
     androidTestImplementation(project(":common_test"))
     
-    implementation "com.google.android.flexbox:flexbox:$flexbox_version"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipe_refresh_layout_version"
+    implementation libs.view.flexbox
+    implementation libs.view.material
+    implementation libs.view.swipeRefreshLayout
 
-    // Lifecycle
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-
-    // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-
-    // Koin
-    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation libs.bundles.navigation
+    implementation libs.bundles.lifecycle
+    implementation libs.koin.android
 
     // Core
-    implementation "androidx.core:core-ktx:$androidx_core_version"
-    implementation "androidx.appcompat:appcompat:$androidx_appcompt_version"
-    implementation "androidx.legacy:legacy-support-v4:$androidx_legacy_support_v4_version"
-    implementation "com.google.android.material:material:$material_version"
+    implementation libs.androidx.core
+    implementation libs.androidx.appCompat
+    implementation libs.androidx.legacySupportV4
 
-    testImplementation "androidx.room:room-testing:$room_version"
-    testImplementation "io.insert-koin:koin-test:$koin_version"
-    testImplementation "io.insert-koin:koin-test-junit4:$koin_version"
-    testImplementation "org.mockito:mockito-core:$mockito_version"
-    testImplementation "org.mockito:mockito-inline:$mockito_version"
-    testImplementation "androidx.arch.core:core-testing:$androidx_core_testing_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
-
-    testImplementation "junit:junit:$junit_version"
-    androidTestImplementation "androidx.test.ext:junit:$androidx_ext_junit"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$androidx_espresso_core"
+    testImplementation libs.bundles.unitTest
+    androidTestImplementation libs.bundles.androidTest
 }
