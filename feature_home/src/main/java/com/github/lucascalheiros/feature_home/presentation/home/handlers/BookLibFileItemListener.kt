@@ -1,6 +1,6 @@
 package com.github.lucascalheiros.feature_home.presentation.home.handlers
 
-import com.github.lucascalheiros.common.interfaces.BookLibFile
+import com.github.lucascalheiros.common.model.interfaces.BookLibFile
 
 interface BookLibFileItemListener {
     fun download(item: BookLibFile)

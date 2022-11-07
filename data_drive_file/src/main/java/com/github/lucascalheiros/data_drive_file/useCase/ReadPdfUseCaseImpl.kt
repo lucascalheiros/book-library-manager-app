@@ -2,7 +2,7 @@ package com.github.lucascalheiros.data_drive_file.useCase
 
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
-import com.github.lucascalheiros.common.interfaces.BookLibFile
+import com.github.lucascalheiros.common.model.interfaces.BookLibFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

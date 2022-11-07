@@ -37,15 +37,8 @@ android {
 dependencies {
     implementation(project(":common"))
     implementation(project(":data_drive_file"))
-
+    implementation libs.bundles.androidCore
     implementation libs.bundles.navigation
     implementation libs.bundles.lifecycle
-
-    // Koin
     implementation libs.koin.android
-
-    // Core
-    implementation libs.androidx.core
-    implementation libs.androidx.appCompat
-    implementation libs.androidx.legacySupportV4
 }

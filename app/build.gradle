@@ -64,6 +64,7 @@ dependencies {
     implementation(project(":feature_pdfReader"))
     implementation(project(":feature_home"))
     implementation(project(":feature_login"))
+    implementation(project(":feature_account"))
 
     implementation libs.bundles.navigation
     implementation libs.bundles.lifecycle
@@ -83,6 +84,5 @@ dependencies {
     implementation libs.koin.android
 
     testImplementation libs.bundles.unitTest
-
     androidTestImplementation libs.bundles.androidTest
 }

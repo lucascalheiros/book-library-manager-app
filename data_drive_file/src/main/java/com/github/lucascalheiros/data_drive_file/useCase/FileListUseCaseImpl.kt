@@ -1,6 +1,6 @@
 package com.github.lucascalheiros.data_drive_file.useCase
 
-import com.github.lucascalheiros.common.interfaces.BookLibFile
+import com.github.lucascalheiros.common.model.interfaces.BookLibFile
 import com.github.lucascalheiros.common.utils.constants.MimeTypeConstants
 import com.github.lucascalheiros.data_drive_file.utils.DriveQueryBuilder
 import com.github.lucascalheiros.data_drive_file.utils.toBookLibFile

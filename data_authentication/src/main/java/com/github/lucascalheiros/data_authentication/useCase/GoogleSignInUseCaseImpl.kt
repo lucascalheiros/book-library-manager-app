@@ -2,10 +2,11 @@ package com.github.lucascalheiros.data_authentication.useCase
 
 
 import android.content.Context
+import com.github.lucascalheiros.common.model.interfaces.BookLibAccount
 import com.github.lucascalheiros.common.utils.constants.LogTags
 import com.github.lucascalheiros.common.utils.logDebug
+import com.github.lucascalheiros.data_authentication.utils.toBookLibAccount
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.Scope
@@ -24,8 +25,8 @@ class GoogleSignInUseCaseImpl constructor(
 
     private val googleSignInClient by lazy { GoogleSignIn.getClient(context, googleSignInOptions) }
 
-    override val signedInAccount: GoogleSignInAccount?
-        get() = GoogleSignIn.getLastSignedInAccount(context)
+    override val signedInAccount: BookLibAccount?
+        get() = GoogleSignIn.getLastSignedInAccount(context)?.toBookLibAccount()
 
     override val isUserSignedIn: Boolean
         get() = signedInAccount != null

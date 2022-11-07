@@ -1,7 +1,7 @@
 package com.github.lucascalheiros.data_drive_file.useCase
 
 import android.net.Uri
-import com.github.lucascalheiros.common.interfaces.BookLibFile
+import com.github.lucascalheiros.common.model.interfaces.BookLibFile
 
 interface FileManagementUseCase {
 

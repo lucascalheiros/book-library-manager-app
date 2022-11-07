@@ -37,21 +37,14 @@ android {
 dependencies {
     implementation(project(":common"))
     implementation(project(":data_authentication"))
-    testImplementation(project(":common_test"))
-    androidTestImplementation(project(":common_test"))
-
-    // Google services
     implementation libs.google.playServicesAuth
-
+    implementation libs.bundles.androidCore
     implementation libs.bundles.navigation
     implementation libs.bundles.lifecycle
     implementation libs.koin.android
 
-    // Core
-    implementation libs.androidx.core
-    implementation libs.androidx.appCompat
-    implementation libs.androidx.legacySupportV4
-
+    testImplementation(project(":common_test"))
     testImplementation libs.bundles.unitTest
+    androidTestImplementation(project(":common_test"))
     androidTestImplementation libs.bundles.androidTest
 }

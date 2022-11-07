@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.github.lucascalheiros.common.R
+import com.github.lucascalheiros.common.navigation.NavigationRoutes
 import com.github.lucascalheiros.feature_login.databinding.FragmentLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
@@ -75,7 +75,7 @@ class LoginFragment : Fragment() {
             )
             .build()
         NavDeepLinkRequest.Builder
-            .fromUri("android-app://com.github.lucascalheiros.booklibrarymanager/homeFragment".toUri())
+            .fromUri(NavigationRoutes.homeScreen)
             .build().let {
                 findNavController().navigate(it, navOptions)
             }

@@ -1,7 +1,7 @@
 package com.github.lucascalheiros.data_drive_file.useCase
 
 import android.graphics.pdf.PdfRenderer
-import com.github.lucascalheiros.common.interfaces.BookLibFile
+import com.github.lucascalheiros.common.model.interfaces.BookLibFile
 
 interface ReadPdfUseCase {
 

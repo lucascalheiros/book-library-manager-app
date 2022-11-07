@@ -1,6 +1,6 @@
 package com.github.lucascalheiros.common_test.data
 
-import com.github.lucascalheiros.common.interfaces.BookLibFile
+import com.github.lucascalheiros.common.model.interfaces.BookLibFile
 import com.github.lucascalheiros.common_test.utils.getRandomLocalDateTime
 import com.github.lucascalheiros.common_test.utils.getRandomString
 import java.time.LocalDateTime

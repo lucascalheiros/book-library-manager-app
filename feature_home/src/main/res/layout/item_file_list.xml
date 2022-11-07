@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.github.lucascalheiros.common.interfaces.BookLibFile" />
+            type="com.github.lucascalheiros.common.model.interfaces.BookLibFile" />
 
         <variable
             name="listener"

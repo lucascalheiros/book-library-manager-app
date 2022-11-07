@@ -10,6 +10,6 @@
         android:name="com.github.lucascalheiros.feature_login.presentation.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
-        <deepLink app:uri="android-app://com.github.lucascalheiros.booklibrarymanager/LoginFragment" />
+        <deepLink app:uri="android-app://com.github.lucascalheiros.booklibrarymanager/loginFragment" />
     </fragment>
 </navigation>

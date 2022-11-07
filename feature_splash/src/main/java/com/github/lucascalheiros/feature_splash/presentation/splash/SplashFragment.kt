@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.github.lucascalheiros.common.navigation.NavigationRoutes
 import com.github.lucascalheiros.data_authentication.useCase.GoogleSignInUseCase
 import com.github.lucascalheiros.feature_splash.R
 import kotlinx.coroutines.MainScope
@@ -34,13 +34,13 @@ class SplashFragment : Fragment() {
                 .build()
             if (googleSigInUseCase.isUserSignedIn) {
                 NavDeepLinkRequest.Builder
-                    .fromUri("android-app://com.github.lucascalheiros.booklibrarymanager/homeFragment".toUri())
+                    .fromUri(NavigationRoutes.homeScreen)
                     .build().let {
                         findNavController().navigate(it, navOptions)
                     }
             } else {
                 NavDeepLinkRequest.Builder
-                    .fromUri("android-app://com.github.lucascalheiros.booklibrarymanager/LoginFragment".toUri())
+                    .fromUri(NavigationRoutes.loginScreen)
                     .build().let {
                         findNavController().navigate(it, navOptions)
                     }

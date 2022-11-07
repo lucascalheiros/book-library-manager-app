@@ -2,7 +2,7 @@ package com.github.lucascalheiros.data_drive_file.useCase
 
 import android.content.Context
 import android.net.Uri
-import com.github.lucascalheiros.common.interfaces.BookLibFile
+import com.github.lucascalheiros.common.model.interfaces.BookLibFile
 import com.github.lucascalheiros.common.utils.constants.AppPropertiesKeys.READ_PROGRESS
 import com.github.lucascalheiros.common.utils.constants.AppPropertiesKeys.TAGS
 import com.github.lucascalheiros.common.utils.constants.AppPropertiesKeys.TOTAL_PAGES

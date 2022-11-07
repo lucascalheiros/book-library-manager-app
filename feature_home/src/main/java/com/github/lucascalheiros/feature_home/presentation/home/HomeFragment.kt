@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.github.lucascalheiros.common.navigation.NavigationRoutes
 import com.github.lucascalheiros.common.utils.constants.LogTags
 import com.github.lucascalheiros.common.utils.logError
 import com.github.lucascalheiros.feature_home.R
@@ -123,7 +124,7 @@ class HomeFragment : Fragment() {
 
     private fun handleReadFile(value: FileHandlerRequestState.ReadFile) {
         NavDeepLinkRequest.Builder
-            .fromUri("android-app://com.github.lucascalheiros.booklibrarymanager/PdfReaderFragment/${value.fileId}/${value.fileId}".toUri())
+            .fromUri(NavigationRoutes.pdfReader(value.fileId, value.page))
             .build().let {
                 findNavController().navigate(it)
             }

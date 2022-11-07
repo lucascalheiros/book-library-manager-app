@@ -77,6 +77,11 @@ junit = { module = "junit:junit", version.ref = "junit_version" }
 navigation = ["navigation-fragment", "navigation-ui"]
 lifecycle = ["lifecycle-livedata", "lifecycle-viewmodel"]
 room = ["room-runtime", "room-ktx"]
+androidCore = [
+    "androidx_core",
+    "androidx_appCompat",
+    "androidx_legacySupportV4",
+]
 unitTest = [
     "room-testing",
     "koin-test",

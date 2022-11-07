@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.common.interfaces
+package com.github.lucascalheiros.common.model.interfaces
 
 import java.time.LocalDateTime
 

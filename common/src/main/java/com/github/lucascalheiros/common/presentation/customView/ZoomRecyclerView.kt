@@ -52,19 +52,19 @@ class ZoomRecyclerView @JvmOverloads constructor(
     private val doubleTapDetector =
         GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
 
-            override fun onDoubleTap(e: MotionEvent?): Boolean {
-                doubleTapScaling(e?.x, e?.y)
+            override fun onDoubleTap(e: MotionEvent): Boolean {
+                doubleTapScaling(e.x, e.y)
                 return super.onDoubleTap(e)
             }
         })
 
-    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         scaleDetector.onTouchEvent(event)
         doubleTapDetector.onTouchEvent(event)
 
-        event?.setLocation(scrollX + event.x, (scrollY + event.y) / scale)
+        event.setLocation(scrollX + event.x, (scrollY + event.y) / scale)
 
-        when (event?.action) {
+        when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 mAnchorX = event.x
                 mAnchorY = event.y

@@ -35,16 +35,10 @@ android {
 }
 
 dependencies {
-
+    implementation libs.bundles.androidCore
+    implementation libs.view.material
     // Glide
     implementation libs.glide
     annotationProcessor libs.glide.compiler
     kapt libs.glide.compiler
-
-    // Core
-    implementation libs.androidx.core
-    implementation libs.androidx.appCompat
-    implementation libs.androidx.legacySupportV4
-    implementation libs.view.material
-
 }

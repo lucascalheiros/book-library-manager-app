@@ -1,6 +1,6 @@
 package com.github.lucascalheiros.data_drive_file.utils
 
-import com.github.lucascalheiros.common.interfaces.BookLibFile
+import com.github.lucascalheiros.common.model.interfaces.BookLibFile
 import com.github.lucascalheiros.data_drive_file.model.DriveFileMetadata
 import com.google.api.services.drive.model.File
 import java.time.Instant
