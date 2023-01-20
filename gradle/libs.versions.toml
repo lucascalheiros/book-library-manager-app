@@ -23,6 +23,7 @@ google_api_services_drive_version = "v3-rev20211107-1.32.1"
 google_http_client_gson_version = "1.39.2"
 google_api_client_android_version = "1.26.0"
 android_gradle_plugin = "7.2.1"
+fragment_testing_version = "1.5.5"
 
 [libraries]
 kotlin = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin_version" }
@@ -57,6 +58,7 @@ androidx_legacySupportV4 = { module = "androidx.legacy:legacy-support-v4", versi
 androidx-coreTesting = { module = "androidx.arch.core:core-testing", version.ref = "androidx_core_testing_version" }
 androidx-extJunit = { module = "androidx.test.ext:junit", version.ref = "androidx_ext_junit" }
 androidx-espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx_espresso_core" }
+androidx-fragmentTesting = { module = "androidx.fragment:fragment-testing", version.ref = "fragment_testing_version" }
 
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room_version" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room_version" }
@@ -69,8 +71,10 @@ koin-testJunit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "k
 
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito_version" }
 mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockito_version" }
+mockito-android = { module = "org.mockito:mockito-android", version.ref = "mockito_version" }
 
 junit = { module = "junit:junit", version.ref = "junit_version" }
+
 
 
 [bundles]
@@ -97,7 +101,7 @@ androidTest = [
     "koin-test",
     "koin-testJunit4",
     "mockito-core",
-    "mockito-inline",
+    "mockito-android",
     "androidx-coreTesting",
     "coroutines-test",
     "junit",

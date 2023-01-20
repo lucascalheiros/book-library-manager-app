@@ -13,5 +13,6 @@ object MockBookLibFilesData {
         file2,
         file3
     )
+    val all = listOf(file1, file2, file3)
 
 }

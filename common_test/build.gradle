@@ -35,4 +35,5 @@ dependencies {
     implementation libs.bundles.androidCore
     implementation libs.view.material
     implementation libs.bundles.androidTest
+    implementation libs.koin.android
 }

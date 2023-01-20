@@ -17,9 +17,11 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.github.lucascalheiros.common_test.runners.InstrumentationTestRunner"
     }
-
+    testOptions {
+        animationsDisabled = true
+    }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
@@ -65,24 +67,20 @@ dependencies {
     implementation(project(":feature_home"))
     implementation(project(":feature_login"))
     implementation(project(":feature_account"))
-
     implementation libs.bundles.navigation
     implementation libs.bundles.lifecycle
-
-    // Views
     implementation libs.view.constraintLayout
     implementation libs.view.material
-
-    // Google services
     implementation libs.google.playServicesAuth
-
-    // Coroutines
     implementation libs.coroutines.playServices
     implementation libs.coroutines.android
-
-    // Koin
     implementation libs.koin.android
 
     testImplementation libs.bundles.unitTest
+
     androidTestImplementation libs.bundles.androidTest
+    androidTestImplementation(project(":common"))
+    androidTestImplementation(project(":common_test"))
+
+    debugImplementation libs.androidx.fragmentTesting
 }
