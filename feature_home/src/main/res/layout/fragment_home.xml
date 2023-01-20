@@ -12,6 +12,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fragment_home_container"
         layoutConstraintChangesAnimation="@{true}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -99,6 +100,8 @@
             android:layout_marginBottom="16dp"
             android:clickable="true"
             android:contentDescription="@string/cd_upload"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_file_upload" />
@@ -113,6 +116,7 @@
             tools:visibility="gone" />
 
         <androidx.cardview.widget.CardView
+            tools:visibility="gone"
             android:layout_width="300dp"
             android:layout_height="match_parent"
             android:onClick="@{v -> null}"
@@ -121,6 +125,7 @@
             app:visibilityLeftSlideInOut="@{viewModel.showFilterOptions}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clFilterOptions"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
