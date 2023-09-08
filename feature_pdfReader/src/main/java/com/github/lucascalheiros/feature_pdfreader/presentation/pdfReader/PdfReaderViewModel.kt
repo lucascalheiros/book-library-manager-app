@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.lucascalheiros.data_drive_file.useCase.ReadPdfUseCase
+import com.github.lucascalheiros.data_drive_file.usecase.ReadPdfUseCase
 import com.github.lucascalheiros.feature_pdfreader.presentation.pdfReader.handlers.ReadingPageTrackerListener
 import kotlinx.coroutines.launch
 

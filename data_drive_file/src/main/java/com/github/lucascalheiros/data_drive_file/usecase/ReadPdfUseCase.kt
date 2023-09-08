@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.data_drive_file.useCase
+package com.github.lucascalheiros.data_drive_file.usecase
 
 import android.graphics.pdf.PdfRenderer
 import com.github.lucascalheiros.common.model.interfaces.BookLibFile

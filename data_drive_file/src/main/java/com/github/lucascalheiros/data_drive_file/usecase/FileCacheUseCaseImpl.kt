@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.data_drive_file.useCase
+package com.github.lucascalheiros.data_drive_file.usecase
 
 import android.content.Context
 import com.github.lucascalheiros.common.utils.constants.LogTags

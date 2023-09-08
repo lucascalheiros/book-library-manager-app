@@ -5,7 +5,7 @@ import androidx.room.Room
 import com.github.lucascalheiros.data_drive_file.data.network.DriveFileRepository
 import com.github.lucascalheiros.data_drive_file.data.network.DriveFileRepositoryImpl
 import com.github.lucascalheiros.data_drive_file.data.storage.database.AppDatabase
-import com.github.lucascalheiros.data_drive_file.useCase.*
+import com.github.lucascalheiros.data_drive_file.usecase.*
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
