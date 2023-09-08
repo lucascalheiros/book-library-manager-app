@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.github.lucascalheiros.common.navigation.NavigationRoutes
 import com.github.lucascalheiros.data_authentication.useCase.GoogleSignInUseCase
 import com.github.lucascalheiros.feature_splash.R
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -24,26 +24,13 @@ class SplashFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        MainScope().launch {
-            delay(500)
-             val navOptions = NavOptions.Builder()
-                .setPopUpTo(
-                    R.id.splashFragment,
-                    true
-                )
-                .build()
+        lifecycleScope.launch {
+            delay(SPLASH_VISUAL_DELAY)
+            val navOptions = getSplashNavOptions()
             if (googleSigInUseCase.isUserSignedIn) {
-                NavDeepLinkRequest.Builder
-                    .fromUri(NavigationRoutes.homeScreen)
-                    .build().let {
-                        findNavController().navigate(it, navOptions)
-                    }
+                navOptions.goToHomeScreen()
             } else {
-                NavDeepLinkRequest.Builder
-                    .fromUri(NavigationRoutes.loginScreen)
-                    .build().let {
-                        findNavController().navigate(it, navOptions)
-                    }
+                navOptions.goToSignInScreen()
             }
         }
     }
@@ -53,5 +40,34 @@ class SplashFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_splash, container, false)
+    }
+
+    private fun getSplashNavOptions(): NavOptions {
+        return NavOptions.Builder()
+            .setPopUpTo(
+                R.id.splashFragment,
+                true
+            )
+            .build()
+    }
+
+    private fun NavOptions.goToHomeScreen() {
+        NavDeepLinkRequest.Builder
+            .fromUri(NavigationRoutes.homeScreen)
+            .build().let {
+                findNavController().navigate(it, this)
+            }
+    }
+
+    private fun NavOptions.goToSignInScreen() {
+        NavDeepLinkRequest.Builder
+            .fromUri(NavigationRoutes.loginScreen)
+            .build().let {
+                findNavController().navigate(it, this)
+            }
+    }
+
+    companion object {
+        private const val SPLASH_VISUAL_DELAY = 500L
     }
 }
