@@ -10,7 +10,7 @@ import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.github.lucascalheiros.common.navigation.NavigationRoutes
-import com.github.lucascalheiros.data_authentication.useCase.GoogleSignInUseCase
+import com.github.lucascalheiros.data_authentication.domain.usecase.GoogleSignInUseCase
 import com.github.lucascalheiros.feature_splash.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

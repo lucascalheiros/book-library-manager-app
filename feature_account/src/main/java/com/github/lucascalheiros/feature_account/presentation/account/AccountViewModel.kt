@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.lucascalheiros.common.model.interfaces.BookLibAccount
 import com.github.lucascalheiros.common.utils.constants.LogTags
 import com.github.lucascalheiros.common.utils.logError
-import com.github.lucascalheiros.data_authentication.useCase.GoogleSignInUseCase
+import com.github.lucascalheiros.data_authentication.domain.usecase.GoogleSignInUseCase
 import com.github.lucascalheiros.data_drive_file.useCase.FileListUseCase
 import kotlinx.coroutines.launch
 

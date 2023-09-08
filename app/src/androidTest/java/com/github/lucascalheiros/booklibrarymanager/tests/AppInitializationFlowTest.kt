@@ -10,7 +10,7 @@ import com.github.lucascalheiros.common_test.data.MockBookLibAccountData
 import com.github.lucascalheiros.booklibrarymanager.presentation.MainActivity
 import com.github.lucascalheiros.common_test.rules.KoinTestRule
 import com.github.lucascalheiros.booklibrarymanager.utils.ProdAppModules
-import com.github.lucascalheiros.data_authentication.useCase.GoogleSignInUseCase
+import com.github.lucascalheiros.data_authentication.domain.usecase.GoogleSignInUseCase
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test

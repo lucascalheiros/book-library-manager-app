@@ -1,6 +1,7 @@
 package com.github.lucascalheiros.feature_login.presentation.login
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.github.lucascalheiros.common.R
 import com.github.lucascalheiros.common.navigation.NavigationRoutes
+import com.github.lucascalheiros.common.utils.constants.LogTags
+import com.github.lucascalheiros.common.utils.logError
+import com.github.lucascalheiros.data_authentication.domain.GoogleSignInConfiguration
 import com.github.lucascalheiros.feature_login.databinding.FragmentLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
@@ -33,20 +37,7 @@ class LoginFragment : Fragment() {
         binding.viewModel = loginViewModel
         binding.lifecycleOwner = this
 
-        loginViewModel.loginRequestState.observe(viewLifecycleOwner) {
-            when (it) {
-                is LoginRequestState.Success -> {
-                    handleLoginSuccess()
-                }
-                is LoginRequestState.AskUser -> {
-                    startForGoogleSignInResult.launch(it.signInIntent)
-                }
-                is LoginRequestState.Failure -> {
-                    handleLoginFailure()
-                }
-                else -> {}
-            }
-        }
+        loginViewModel.loginRequestState.observe(viewLifecycleOwner, this::handleLoginStateChange)
 
         return binding.root
     }
@@ -54,20 +45,55 @@ class LoginFragment : Fragment() {
     private val startForGoogleSignInResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                try {
-                    val account = GoogleSignIn.getSignedInAccountFromIntent(
-                        result.data
-                    ).getResult(ApiException::class.java)
-                    loginViewModel.onLoginSuccess(account)
-                } catch (exception: ApiException) {
-                    loginViewModel.onLoginFailure(exception)
-                }
+                onSuccessfulSignInResult(result)
             } else {
-                loginViewModel.onLoginFailure(Exception("GoogleSignIn intent request returned: ${result.resultCode}"))
+                onFailedSignInResult(result)
             }
         }
 
-    private fun handleLoginSuccess() {
+    private fun onSuccessfulSignInResult(result: ActivityResult) {
+        try {
+            GoogleSignIn.getSignedInAccountFromIntent(
+                result.data
+            ).getResult(ApiException::class.java)
+            loginViewModel.onLoginSuccess()
+        } catch (exception: ApiException) {
+            logError(
+                listOf(LogTags.LOGIN, TAG),
+                "GoogleSignIn intent request returned: ${result.resultCode}",
+            )
+            loginViewModel.onLoginFailure()
+        }
+    }
+
+    private fun onFailedSignInResult(result: ActivityResult) {
+        logError(
+            listOf(LogTags.LOGIN, TAG),
+            "GoogleSignIn intent request returned: ${result.resultCode}",
+        )
+        loginViewModel.onLoginFailure()
+    }
+
+    private fun askUserGoogleLoginCredentials() {
+        startForGoogleSignInResult.launch(getGoogleSignInIntent())
+    }
+
+    private fun handleLoginStateChange(state: LoginRequestState) {
+        when (state) {
+            is LoginRequestState.Success -> {
+                onLoginSuccess()
+            }
+            is LoginRequestState.AskUser -> {
+                askUserGoogleLoginCredentials()
+            }
+            is LoginRequestState.Failure -> {
+                onLoginFailure()
+            }
+            else -> {}
+        }
+    }
+
+    private fun onLoginSuccess() {
         val navOptions = NavOptions.Builder()
             .setPopUpTo(
                 com.github.lucascalheiros.feature_login.R.id.loginFragment,
@@ -76,12 +102,12 @@ class LoginFragment : Fragment() {
             .build()
         NavDeepLinkRequest.Builder
             .fromUri(NavigationRoutes.homeScreen)
-            .build().let {
-                findNavController().navigate(it, navOptions)
+            .build().run {
+                findNavController().navigate(this, navOptions)
             }
     }
 
-    private fun handleLoginFailure() {
+    private fun onLoginFailure() {
         Toast.makeText(
             requireContext(),
             R.string.unable_to_sign_in_with_google_generic,
@@ -89,4 +115,11 @@ class LoginFragment : Fragment() {
         ).show()
     }
 
+    private fun getGoogleSignInIntent(): Intent {
+        return GoogleSignIn.getClient(requireContext(), GoogleSignInConfiguration.googleSignInOptions).signInIntent
+    }
+
+    companion object {
+        private val TAG = LoginFragment::class.java.simpleName
+    }
 }

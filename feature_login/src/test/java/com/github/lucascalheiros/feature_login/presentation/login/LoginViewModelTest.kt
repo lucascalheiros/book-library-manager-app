@@ -1,15 +1,14 @@
 package com.github.lucascalheiros.feature_login.presentation.login
 
-import android.content.Intent
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.github.lucascalheiros.common.model.interfaces.BookLibAccount
 import com.github.lucascalheiros.common_test.rules.MainCoroutineRule
-import com.github.lucascalheiros.data_authentication.useCase.GoogleSignInUseCase
-import com.github.lucascalheiros.data_authentication.useCase.SignInRequestState
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.github.lucascalheiros.data_authentication.domain.gateway.GoogleSignInGateway
+import com.github.lucascalheiros.data_authentication.domain.usecase.GoogleSignInUseCase
+import com.github.lucascalheiros.data_authentication.domain.usecase.impl.GoogleSignInUseCaseImpl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -18,9 +17,10 @@ import org.koin.test.KoinTest
 import org.koin.test.mock.MockProviderRule
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
+import kotlin.test.assertEquals
 
 
 @ExperimentalCoroutinesApi
@@ -39,50 +39,45 @@ class LoginViewModelTest : KoinTest {
     }
 
     @Mock
-    lateinit var googleSignInUseCase: GoogleSignInUseCase
+    lateinit var googleSignInGateway: GoogleSignInGateway
 
     @InjectMocks
-    lateinit var loginViewModel: LoginViewModel
+    lateinit var googleSignInUseCase: GoogleSignInUseCaseImpl
 
-    @Test
-    fun whenUserIsSignedLoginRequestShouldSucceed() = runTest {
-        val account = mock(GoogleSignInAccount::class.java)
-        `when`(googleSignInUseCase.signIn()).thenReturn(SignInRequestState.Signed(account))
-        loginViewModel.onLoginClick()
-        advanceUntilIdle()
-        assert(loginViewModel.loginRequestState.value is LoginRequestState.Success)
+    val loginViewModel: LoginViewModel by lazy {
+        LoginViewModel(googleSignInUseCase)
     }
 
     @Test
-    fun whenUserIsSignedLoginRequestShouldReturnSignedAccount() = runTest {
-        val account = mock(GoogleSignInAccount::class.java)
-        `when`(googleSignInUseCase.signIn()).thenReturn(SignInRequestState.Signed(account))
+    fun whenUserIsSignedLoginRequestShouldSucceed() = runTest {
+        val account = mock(BookLibAccount::class.java)
+        `when`(googleSignInGateway.trySignIn()).thenReturn(account)
         loginViewModel.onLoginClick()
         advanceUntilIdle()
         assertEquals(
-            (loginViewModel.loginRequestState.value as LoginRequestState.Success).account,
-            account
+            LoginRequestState.Success,
+            loginViewModel.loginRequestState.value
         )
     }
 
     @Test
     fun whenUserIsNotSignedLoginRequestShouldAskForUserToLogin() = runTest {
-        val intent = mock(Intent::class.java)
-        `when`(googleSignInUseCase.signIn()).thenReturn(SignInRequestState.Unsigned(intent))
-        loginViewModel.onLoginClick()
-        advanceUntilIdle()
-        assert(loginViewModel.loginRequestState.value is LoginRequestState.AskUser)
-    }
-
-    @Test
-    fun whenUserIsNotSignedLoginRequestShouldAskForUserToLoginWithIntent() = runTest {
-        val intent = mock(Intent::class.java)
-        `when`(googleSignInUseCase.signIn()).thenReturn(SignInRequestState.Unsigned(intent))
+        `when`(googleSignInGateway.trySignIn()).thenThrow(Exception())
         loginViewModel.onLoginClick()
         advanceUntilIdle()
         assertEquals(
-            (loginViewModel.loginRequestState.value as LoginRequestState.AskUser).signInIntent,
-            intent
+            LoginRequestState.AskUser,
+            loginViewModel.loginRequestState.value
+        )
+    }
+
+    @Test
+    fun whenLoginFailedModelStateShouldBeFailure() = runTest {
+        loginViewModel.onLoginFailure()
+        advanceUntilIdle()
+        assertEquals(
+            LoginRequestState.Failure,
+            loginViewModel.loginRequestState.value
         )
     }
 
