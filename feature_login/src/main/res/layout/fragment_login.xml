@@ -10,7 +10,6 @@
             type="com.github.lucascalheiros.feature_login.presentation.login.LoginViewModel" />
     </data>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fragment_login_container"
         android:layout_width="match_parent"
@@ -80,15 +79,23 @@
             app:layout_constraintVertical_weight="1">
 
             <Button
-                android:id="@+id/loginBtn"
+                android:id="@+id/googleSignInBtn"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{v -> viewModel.onLoginClick()}"
+                android:onClick="@{v -> viewModel.onGoogleSignInClick()}"
                 android:text="@string/sign_in_with_google"
                 app:icon="@drawable/google_logo"
                 app:iconTint="@android:color/transparent"
                 app:iconTintMode="add" />
+
+            <Button
+                android:id="@+id/enterAsGuestBtn"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> viewModel.onGoogleSignInClick()}"
+                android:text="@string/enter_as_guest" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

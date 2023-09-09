@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.lucascalheiros.common.utils.constants.LogTags
-import com.github.lucascalheiros.common.utils.logError
 import com.github.lucascalheiros.data_authentication.domain.usecase.GoogleSignInUseCase
 import com.github.lucascalheiros.data_authentication.domain.usecase.SignInRequestState
 import kotlinx.coroutines.launch
@@ -17,7 +15,21 @@ class LoginViewModel(
     private val mLoginRequestState = MutableLiveData<LoginRequestState>()
     val loginRequestState: LiveData<LoginRequestState> = mLoginRequestState
 
-    fun onLoginClick() {
+    fun onGoogleSignInClick() {
+        viewModelScope.launch {
+            if (mLoginRequestState.value !is LoginRequestState.Loading) {
+                mLoginRequestState.value = LoginRequestState.Loading
+                googleSignInUseCase.signIn().let {
+                    when (it) {
+                        is SignInRequestState.Signed -> onLoginSuccess()
+                        is SignInRequestState.Unsigned -> requestUserLogin()
+                    }
+                }
+            }
+        }
+    }
+
+    fun onEnterAsGuestClick() {
         viewModelScope.launch {
             if (mLoginRequestState.value !is LoginRequestState.Loading) {
                 mLoginRequestState.value = LoginRequestState.Loading

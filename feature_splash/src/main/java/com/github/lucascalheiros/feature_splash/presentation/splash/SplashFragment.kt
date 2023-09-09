@@ -10,7 +10,7 @@ import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.github.lucascalheiros.common.navigation.NavigationRoutes
-import com.github.lucascalheiros.data_authentication.domain.usecase.GoogleSignInUseCase
+import com.github.lucascalheiros.data_authentication.domain.usecase.SignedAccountUseCase
 import com.github.lucascalheiros.feature_splash.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ import org.koin.android.ext.android.inject
 
 class SplashFragment : Fragment() {
 
-    private val googleSigInUseCase: GoogleSignInUseCase by inject()
+    private val signedAccountUseCase: SignedAccountUseCase by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,7 @@ class SplashFragment : Fragment() {
         lifecycleScope.launch {
             delay(SPLASH_VISUAL_DELAY)
             val navOptions = getSplashNavOptions()
-            if (googleSigInUseCase.isUserSignedIn) {
+            if (signedAccountUseCase.isUserSignedIn) {
                 navOptions.goToHomeScreen()
             } else {
                 navOptions.goToSignInScreen()

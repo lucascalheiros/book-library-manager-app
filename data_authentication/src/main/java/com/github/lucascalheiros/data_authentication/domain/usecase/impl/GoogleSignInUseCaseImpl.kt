@@ -1,6 +1,5 @@
 package com.github.lucascalheiros.data_authentication.domain.usecase.impl
 
-import com.github.lucascalheiros.common.model.interfaces.BookLibAccount
 import com.github.lucascalheiros.common.utils.constants.LogTags
 import com.github.lucascalheiros.common.utils.logDebug
 import com.github.lucascalheiros.data_authentication.domain.gateway.GoogleSignInGateway
@@ -10,13 +9,6 @@ import com.github.lucascalheiros.data_authentication.domain.usecase.SignInReques
 class GoogleSignInUseCaseImpl constructor(
     private val googleSignInGateway: GoogleSignInGateway
 ) : GoogleSignInUseCase {
-
-
-    override val signedInAccount: BookLibAccount?
-        get() = googleSignInGateway.signedInAccount
-
-    override val isUserSignedIn: Boolean
-        get() = signedInAccount != null
 
     override suspend fun signIn(): SignInRequestState {
         return try {
@@ -34,10 +26,6 @@ class GoogleSignInUseCaseImpl constructor(
             )
             SignInRequestState.Unsigned
         }
-    }
-
-    override suspend fun signOut() {
-        googleSignInGateway.signOut()
     }
 
     companion object {

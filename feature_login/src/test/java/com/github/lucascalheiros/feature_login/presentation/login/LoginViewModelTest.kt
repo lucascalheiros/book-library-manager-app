@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.github.lucascalheiros.common.model.interfaces.BookLibAccount
 import com.github.lucascalheiros.common_test.rules.MainCoroutineRule
 import com.github.lucascalheiros.data_authentication.domain.gateway.GoogleSignInGateway
-import com.github.lucascalheiros.data_authentication.domain.usecase.GoogleSignInUseCase
 import com.github.lucascalheiros.data_authentication.domain.usecase.impl.GoogleSignInUseCaseImpl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -52,7 +51,7 @@ class LoginViewModelTest : KoinTest {
     fun whenUserIsSignedLoginRequestShouldSucceed() = runTest {
         val account = mock(BookLibAccount::class.java)
         `when`(googleSignInGateway.trySignIn()).thenReturn(account)
-        loginViewModel.onLoginClick()
+        loginViewModel.onGoogleSignInClick()
         advanceUntilIdle()
         assertEquals(
             LoginRequestState.Success,
@@ -63,7 +62,7 @@ class LoginViewModelTest : KoinTest {
     @Test
     fun whenUserIsNotSignedLoginRequestShouldAskForUserToLogin() = runTest {
         `when`(googleSignInGateway.trySignIn()).thenThrow(Exception())
-        loginViewModel.onLoginClick()
+        loginViewModel.onGoogleSignInClick()
         advanceUntilIdle()
         assertEquals(
             LoginRequestState.AskUser,

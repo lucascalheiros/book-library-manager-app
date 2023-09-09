@@ -7,13 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.github.lucascalheiros.common.model.interfaces.BookLibAccount
 import com.github.lucascalheiros.common.utils.constants.LogTags
 import com.github.lucascalheiros.common.utils.logError
-import com.github.lucascalheiros.data_authentication.domain.usecase.GoogleSignInUseCase
+import com.github.lucascalheiros.data_authentication.domain.usecase.SignOutUseCase
+import com.github.lucascalheiros.data_authentication.domain.usecase.SignedAccountUseCase
 import com.github.lucascalheiros.data_drive_file.domain.usecase.FileListUseCase
 import kotlinx.coroutines.launch
 
 class AccountViewModel(
     private val fileListUseCase: FileListUseCase,
-    private val googleSignInUseCase: GoogleSignInUseCase
+    signedAccountUseCase: SignedAccountUseCase,
+    private val signOutUseCase: SignOutUseCase
 ) : ViewModel() {
 
     private val mLogoutEvent = MutableLiveData<LogoutRequestState>(LogoutRequestState.Idle)
@@ -23,7 +25,7 @@ class AccountViewModel(
     val account: LiveData<BookLibAccount> = mAccount
 
     init {
-        val account = googleSignInUseCase.signedInAccount
+        val account = signedAccountUseCase.signedInAccount
         if (account == null) {
             mLogoutEvent.value = LogoutRequestState.Success
         } else {
@@ -42,7 +44,7 @@ class AccountViewModel(
                     return@launch
                 }
                 mLogoutEvent.value = LogoutRequestState.Loading
-                googleSignInUseCase.signOut()
+                signOutUseCase.signOut()
                 mLogoutEvent.value = LogoutRequestState.Success
             } catch (error: Exception) {
                 logError(

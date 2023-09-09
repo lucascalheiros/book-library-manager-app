@@ -2,6 +2,7 @@
     <string name="app_name">BookLibraryManager</string>
     <string name="booklib_manager">Booklib Manager</string>
     <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="enter_as_guest">Enter as Guest</string>
     <string name="unable_to_sign_in_with_google_generic">Unable to sign in</string>
     <string name="an_app_to_facilitate_your_read_tracking_and_book_tagging">An app to facilitate your read tracking, and book tagging</string>
     <string name="welcome_to_book_library_manager">Welcome to BookLib</string>
