@@ -1,7 +1,7 @@
 package com.github.lucascalheiros.data_authentication
 
-import com.github.lucascalheiros.data_authentication.data.gateway.GoogleSignInGatewayImpl
-import com.github.lucascalheiros.data_authentication.domain.gateway.GoogleSignInGateway
+import com.github.lucascalheiros.data_authentication.data.repository.GoogleSignInRepositoryImpl
+import com.github.lucascalheiros.data_authentication.domain.repository.GoogleSignInRepository
 import com.github.lucascalheiros.data_authentication.domain.usecase.GoogleSignInUseCase
 import com.github.lucascalheiros.data_authentication.domain.usecase.GuestSignInUseCase
 import com.github.lucascalheiros.data_authentication.domain.usecase.SignOutUseCase
@@ -16,7 +16,7 @@ import org.koin.dsl.module
 
 val authenticationModuleUseCase = module {
     singleOf(::GoogleSignInUseCaseImpl) { bind<GoogleSignInUseCase>() }
-    singleOf(::GoogleSignInGatewayImpl) { bind<GoogleSignInGateway>() }
+    singleOf(::GoogleSignInRepositoryImpl) { bind<GoogleSignInRepository>() }
     singleOf(::SignOutUseCaseImpl) { bind<SignOutUseCase>() }
     singleOf(::GuestSignInUseCaseImpl) { bind<GuestSignInUseCase>() }
     singleOf(::SignedAccountUseCaseImpl) { bind<SignedAccountUseCase>() }

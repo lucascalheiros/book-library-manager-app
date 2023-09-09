@@ -2,17 +2,17 @@ package com.github.lucascalheiros.data_authentication.domain.usecase.impl
 
 import com.github.lucascalheiros.common.utils.constants.LogTags
 import com.github.lucascalheiros.common.utils.logDebug
-import com.github.lucascalheiros.data_authentication.domain.gateway.GoogleSignInGateway
+import com.github.lucascalheiros.data_authentication.domain.repository.GoogleSignInRepository
 import com.github.lucascalheiros.data_authentication.domain.usecase.GoogleSignInUseCase
 import com.github.lucascalheiros.data_authentication.domain.usecase.SignInRequestState
 
 class GoogleSignInUseCaseImpl constructor(
-    private val googleSignInGateway: GoogleSignInGateway
+    private val googleSignInRepository: GoogleSignInRepository
 ) : GoogleSignInUseCase {
 
     override suspend fun signIn(): SignInRequestState {
         return try {
-            val account = googleSignInGateway.trySignIn()
+            val account = googleSignInRepository.trySignIn()
             logDebug(
                 TAG_LIST,
                 "GoogleSignInUseCaseImpl::signIn successful ${account.email}"
