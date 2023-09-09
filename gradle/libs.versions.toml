@@ -24,6 +24,7 @@ google_http_client_gson_version = "1.39.2"
 google_api_client_android_version = "1.26.0"
 android_gradle_plugin = "7.2.1"
 fragment_testing_version = "1.5.5"
+datastore_preferences_version = "1.0.0"
 
 [libraries]
 kotlin = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin_version" }
@@ -64,6 +65,8 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "room_vers
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room_version" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room_version" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room_version" }
+
+datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore_preferences_version" }
 
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin_version" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin_version" }

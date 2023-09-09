@@ -37,4 +37,5 @@ dependencies {
     implementation libs.koin.android
     implementation libs.bundles.androidCore
     implementation libs.view.material
+    implementation libs.datastore
 }
