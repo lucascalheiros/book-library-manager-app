@@ -1,14 +1,13 @@
-package com.github.lucascalheiros.data_drive_file.usecase
+package com.github.lucascalheiros.data_drive_file.domain.usecase.impl
 
 import android.content.Context
 import com.github.lucascalheiros.common.utils.constants.LogTags
 import com.github.lucascalheiros.common.utils.logError
+import com.github.lucascalheiros.data_drive_file.domain.usecase.FileCacheUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
-
-@Suppress("BlockingMethodInNonBlockingContext")
 
 class FileCacheUseCaseImpl(
     private val context: Context
@@ -40,6 +39,6 @@ class FileCacheUseCaseImpl(
     }
 
     companion object {
-        private val TAG = FileCacheUseCaseImpl::class.java.canonicalName
+        private val TAG = FileCacheUseCaseImpl::class.java.simpleName
     }
 }

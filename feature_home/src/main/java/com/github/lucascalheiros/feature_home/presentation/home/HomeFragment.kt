@@ -149,6 +149,6 @@ class HomeFragment : Fragment() {
     }
 
     companion object {
-        private val TAG = HomeFragment::class.java.canonicalName
+        private val TAG = HomeFragment::class.java.simpleName
     }
 }

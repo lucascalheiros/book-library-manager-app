@@ -1,14 +1,11 @@
-package com.github.lucascalheiros.data_drive_file.usecase
+package com.github.lucascalheiros.data_drive_file.domain.usecase
 
 import android.net.Uri
 import com.github.lucascalheiros.common.model.interfaces.BookLibFile
 
 interface FileManagementUseCase {
-
     suspend fun uploadFile(uri: Uri): String
-
     suspend fun deleteFile(id: String)
-
     suspend fun updateFileInfo(
         fileId: String,
         name: String? = null,
@@ -16,5 +13,4 @@ interface FileManagementUseCase {
         readProgress: Int? = null,
         totalPages: Int? = null
     ): BookLibFile
-
 }

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.lucascalheiros.data_drive_file.usecase.FileManagementUseCase
+import com.github.lucascalheiros.data_drive_file.domain.usecase.FileManagementUseCase
 import com.github.lucascalheiros.feature_home.presentation.editFileMetadata.handlers.EditFileMetadataDialogHandler
 import com.github.lucascalheiros.feature_home.presentation.editFileMetadata.model.EditFileMetadataDialogInfo
 import kotlinx.coroutines.launch

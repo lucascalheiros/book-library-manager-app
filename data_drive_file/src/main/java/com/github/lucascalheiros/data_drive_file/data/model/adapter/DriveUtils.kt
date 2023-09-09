@@ -1,7 +1,7 @@
-package com.github.lucascalheiros.data_drive_file.utils
+package com.github.lucascalheiros.data_drive_file.data.model.adapter
 
 import com.github.lucascalheiros.common.model.interfaces.BookLibFile
-import com.github.lucascalheiros.data_drive_file.model.DriveFileMetadata
+import com.github.lucascalheiros.data_drive_file.data.model.DriveFileMetadata
 import com.google.api.services.drive.model.File
 import java.time.Instant
 import java.time.ZoneId

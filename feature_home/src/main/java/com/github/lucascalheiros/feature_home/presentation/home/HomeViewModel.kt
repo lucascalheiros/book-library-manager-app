@@ -4,8 +4,8 @@ import android.net.Uri
 import androidx.lifecycle.*
 import androidx.lifecycle.Transformations.map
 import com.github.lucascalheiros.common.model.interfaces.BookLibFile
-import com.github.lucascalheiros.data_drive_file.usecase.FileListUseCase
-import com.github.lucascalheiros.data_drive_file.usecase.FileManagementUseCase
+import com.github.lucascalheiros.data_drive_file.domain.usecase.FileListUseCase
+import com.github.lucascalheiros.data_drive_file.domain.usecase.FileManagementUseCase
 import com.github.lucascalheiros.feature_home.presentation.editFileMetadata.model.EditFileMetadataDialogInfo
 import com.github.lucascalheiros.feature_home.presentation.home.handlers.BookLibFileItemListener
 import kotlinx.coroutines.launch

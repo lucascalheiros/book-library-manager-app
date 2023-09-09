@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.data_drive_file.model
+package com.github.lucascalheiros.data_drive_file.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -10,7 +10,7 @@ import androidx.test.filters.LargeTest
 import com.github.lucascalheiros.common_test.rules.KoinTestRule
 import com.github.lucascalheiros.booklibrarymanager.utils.ProdAppModules
 import com.github.lucascalheiros.common_test.data.MockBookLibFilesData
-import com.github.lucascalheiros.data_drive_file.usecase.FileListUseCase
+import com.github.lucascalheiros.data_drive_file.domain.usecase.FileListUseCase
 import com.github.lucascalheiros.feature_home.presentation.home.HomeFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking

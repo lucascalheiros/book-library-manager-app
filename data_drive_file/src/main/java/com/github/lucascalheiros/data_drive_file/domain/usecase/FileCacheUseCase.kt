@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.data_drive_file.usecase
+package com.github.lucascalheiros.data_drive_file.domain.usecase
 
 import java.io.File
 

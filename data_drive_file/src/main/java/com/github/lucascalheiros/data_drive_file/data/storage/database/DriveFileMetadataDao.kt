@@ -1,7 +1,7 @@
 package com.github.lucascalheiros.data_drive_file.data.storage.database
 
 import androidx.room.*
-import com.github.lucascalheiros.data_drive_file.model.DriveFileMetadata
+import com.github.lucascalheiros.data_drive_file.data.model.DriveFileMetadata
 
 @Dao
 interface DriveFileMetadataDao {
