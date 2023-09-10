@@ -26,6 +26,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             app:url="@{model.thumbnailLink}"
+            app:errorDrawable="@{@drawable/ic_broken_image}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
