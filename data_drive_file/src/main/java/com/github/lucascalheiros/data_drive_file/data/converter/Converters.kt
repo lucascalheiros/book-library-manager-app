@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.data_drive_file.data.storage.converter
+package com.github.lucascalheiros.data_drive_file.data.converter
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

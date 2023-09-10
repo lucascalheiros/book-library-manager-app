@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.data_drive_file.data.storage.database
+package com.github.lucascalheiros.data_drive_file.data.database
 
 import androidx.room.*
 import com.github.lucascalheiros.data_drive_file.data.model.DriveFileMetadata

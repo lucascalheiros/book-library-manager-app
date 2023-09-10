@@ -2,9 +2,9 @@ package com.github.lucascalheiros.data_drive_file
 
 import android.app.Application
 import androidx.room.Room
-import com.github.lucascalheiros.data_drive_file.domain.network.DriveFileRepository
-import com.github.lucascalheiros.data_drive_file.data.network.DriveFileRepositoryImpl
-import com.github.lucascalheiros.data_drive_file.data.storage.database.AppDatabase
+import com.github.lucascalheiros.data_drive_file.domain.repository.DriveFileRepository
+import com.github.lucascalheiros.data_drive_file.data.repository.DriveFileRepositoryImpl
+import com.github.lucascalheiros.data_drive_file.data.database.AppDatabase
 import com.github.lucascalheiros.data_drive_file.domain.usecase.FileCacheUseCase
 import com.github.lucascalheiros.data_drive_file.domain.usecase.impl.FileCacheUseCaseImpl
 import com.github.lucascalheiros.data_drive_file.domain.usecase.FileListUseCase
@@ -14,7 +14,6 @@ import com.github.lucascalheiros.data_drive_file.domain.usecase.impl.FileManagem
 import com.github.lucascalheiros.data_drive_file.domain.usecase.ReadPdfUseCase
 import com.github.lucascalheiros.data_drive_file.domain.usecase.impl.ReadPdfUseCaseImpl
 import org.koin.android.ext.koin.androidApplication
-import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module

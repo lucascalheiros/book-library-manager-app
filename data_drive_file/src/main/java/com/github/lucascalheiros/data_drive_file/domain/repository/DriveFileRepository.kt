@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.data_drive_file.domain.network
+package com.github.lucascalheiros.data_drive_file.domain.repository
 
 import android.net.Uri
 import com.github.lucascalheiros.common.model.interfaces.BookLibFile

@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.data_drive_file.data.network
+package com.github.lucascalheiros.data_drive_file.data.repository
 
 import android.content.Context
 import android.net.Uri
@@ -9,8 +9,8 @@ import com.github.lucascalheiros.common.utils.constants.MimeTypeConstants
 import com.github.lucascalheiros.common.utils.getFileName
 import com.github.lucascalheiros.common.utils.loadFileFromInputStream
 import com.github.lucascalheiros.data_drive_file.data.model.adapter.toBookLibFile
-import com.github.lucascalheiros.data_drive_file.domain.network.DriveFileRepository
-import com.github.lucascalheiros.data_drive_file.utils.DriveQueryBuilder
+import com.github.lucascalheiros.data_drive_file.domain.repository.DriveFileRepository
+import com.github.lucascalheiros.data_drive_file.data.utils.DriveQueryBuilder
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.extensions.android.http.AndroidHttp

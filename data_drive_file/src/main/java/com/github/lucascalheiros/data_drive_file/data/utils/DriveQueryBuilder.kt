@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.data_drive_file.utils
+package com.github.lucascalheiros.data_drive_file.data.utils
 
 
 class DriveQueryBuilder {

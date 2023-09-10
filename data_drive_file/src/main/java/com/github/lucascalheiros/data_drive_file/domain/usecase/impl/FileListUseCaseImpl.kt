@@ -1,7 +1,7 @@
 package com.github.lucascalheiros.data_drive_file.domain.usecase.impl
 
 import com.github.lucascalheiros.common.model.interfaces.BookLibFile
-import com.github.lucascalheiros.data_drive_file.domain.network.DriveFileRepository
+import com.github.lucascalheiros.data_drive_file.domain.repository.DriveFileRepository
 import com.github.lucascalheiros.data_drive_file.domain.usecase.FileCacheUseCase
 import com.github.lucascalheiros.data_drive_file.domain.usecase.FileListUseCase
 import java.io.File
