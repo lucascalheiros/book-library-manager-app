@@ -94,7 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:onClick="@{v -> viewModel.downloadData()}"
+                android:onClick="@{v -> viewModel.linkWithGoogle()}"
                 android:text="@string/link_account"
                 android:textAllCaps="false"
                 android:textColor="@color/black"

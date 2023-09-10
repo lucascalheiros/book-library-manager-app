@@ -36,8 +36,8 @@ android {
 dependencies {
     implementation(project(":common"))
     implementation(project(":data_authentication"))
-    implementation project(path: ':data_drive_file')
-
+    implementation(project(":data_drive_file"))
+    implementation libs.google.playServicesAuth
     implementation libs.view.material
     implementation libs.bundles.androidCore
     implementation libs.bundles.navigation
