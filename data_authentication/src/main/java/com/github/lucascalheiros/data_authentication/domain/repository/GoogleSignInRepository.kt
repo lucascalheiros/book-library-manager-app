@@ -1,9 +1,12 @@
 package com.github.lucascalheiros.data_authentication.domain.repository
 
 import com.github.lucascalheiros.common.model.interfaces.BookLibAccount
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlin.jvm.Throws
 
 interface GoogleSignInRepository {
+    val signedInAccountFlow: Flow<BookLibAccount?>
     val signedInAccount: BookLibAccount?
     @Throws(Exception::class)
     suspend fun trySignIn(): BookLibAccount

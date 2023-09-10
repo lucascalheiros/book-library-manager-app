@@ -6,22 +6,35 @@ import com.github.lucascalheiros.data_authentication.domain.GoogleSignInConfigur
 import com.github.lucascalheiros.data_authentication.domain.repository.GoogleSignInRepository
 import com.github.lucascalheiros.data_authentication.utils.toBookLibAccount
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.tasks.await
 
 class GoogleSignInRepositoryImpl constructor(
     private val context: Context
-): GoogleSignInRepository {
+) : GoogleSignInRepository {
 
     private val googleSignInClient by lazy { GoogleSignIn.getClient(context, googleSignInOptions) }
 
+    private val mSignedInAccountFlow = MutableSharedFlow<BookLibAccount?>(replay = 1)
+    override val signedInAccountFlow: Flow<BookLibAccount?> = mSignedInAccountFlow
+
     override val signedInAccount: BookLibAccount?
-        get() = GoogleSignIn.getLastSignedInAccount(context)?.toBookLibAccount()
+        get() {
+            return GoogleSignIn.getLastSignedInAccount(context)?.toBookLibAccount().also {
+                mSignedInAccountFlow.tryEmit(it)
+            }
+        }
 
     override suspend fun trySignIn(): BookLibAccount {
-        return googleSignInClient.silentSignIn().await()!!.toBookLibAccount()
+        return googleSignInClient.silentSignIn().await()!!.toBookLibAccount().also {
+            signedInAccount
+        }
     }
 
     override suspend fun signOut() {
         googleSignInClient.signOut().await()
+        signedInAccount
     }
 }

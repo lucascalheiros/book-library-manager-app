@@ -1,11 +1,14 @@
 package com.github.lucascalheiros.data_authentication.domain.usecase.impl
 
+import com.github.lucascalheiros.data_authentication.domain.repository.GuestSignInRepository
 import com.github.lucascalheiros.data_authentication.domain.usecase.GuestSignInUseCase
 
-class GuestSignInUseCaseImpl : GuestSignInUseCase {
+class GuestSignInUseCaseImpl(
+    private val guestSignInRepository: GuestSignInRepository
+) : GuestSignInUseCase {
 
-    override suspend fun signOut() {
-        TODO("Not yet implemented")
+    override suspend fun signIn() {
+        guestSignInRepository.updateIsGuestState(true)
     }
 
     companion object {

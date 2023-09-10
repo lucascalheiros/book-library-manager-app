@@ -3,6 +3,8 @@ package com.github.lucascalheiros.feature_account.presentation.account
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.github.lucascalheiros.common.model.interfaces.BookLibAccount
 import com.github.lucascalheiros.common.utils.constants.LogTags
@@ -22,14 +24,14 @@ class AccountViewModel(
     val logoutEvent: LiveData<LogoutRequestState> = mLogoutEvent
 
     private val mAccount = MutableLiveData<BookLibAccount>()
-    val account: LiveData<BookLibAccount> = mAccount
+    val photoUrl = mAccount.map { it.photoUrl }
+    val name = mAccount.map { it.name }
+    val email = mAccount.map { it.email }
+    val isGuest = signedAccountUseCase.isGuestUserFlow.asLiveData(viewModelScope.coroutineContext)
 
     init {
-        val account = signedAccountUseCase.signedInAccount
-        if (account == null) {
-            mLogoutEvent.value = LogoutRequestState.Success
-        } else {
-            mAccount.value = account
+        signedAccountUseCase.signedInAccount?.let {
+            mAccount.value = it
         }
     }
 

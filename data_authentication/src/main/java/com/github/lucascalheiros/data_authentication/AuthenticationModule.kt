@@ -1,7 +1,9 @@
 package com.github.lucascalheiros.data_authentication
 
 import com.github.lucascalheiros.data_authentication.data.repository.GoogleSignInRepositoryImpl
+import com.github.lucascalheiros.data_authentication.data.repository.GuestSignInRepositoryImpl
 import com.github.lucascalheiros.data_authentication.domain.repository.GoogleSignInRepository
+import com.github.lucascalheiros.data_authentication.domain.repository.GuestSignInRepository
 import com.github.lucascalheiros.data_authentication.domain.usecase.GoogleSignInUseCase
 import com.github.lucascalheiros.data_authentication.domain.usecase.GuestSignInUseCase
 import com.github.lucascalheiros.data_authentication.domain.usecase.SignOutUseCase
@@ -20,6 +22,7 @@ val authenticationModuleUseCase = module {
     singleOf(::SignOutUseCaseImpl) { bind<SignOutUseCase>() }
     singleOf(::GuestSignInUseCaseImpl) { bind<GuestSignInUseCase>() }
     singleOf(::SignedAccountUseCaseImpl) { bind<SignedAccountUseCase>() }
+    singleOf(::GuestSignInRepositoryImpl) { bind<GuestSignInRepository>() }
 }
 
 val authenticationModules = listOf(

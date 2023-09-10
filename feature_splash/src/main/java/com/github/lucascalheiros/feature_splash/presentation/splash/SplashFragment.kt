@@ -27,7 +27,7 @@ class SplashFragment : Fragment() {
         lifecycleScope.launch {
             delay(SPLASH_VISUAL_DELAY)
             val navOptions = getSplashNavOptions()
-            if (signedAccountUseCase.isUserSignedIn) {
+            if (signedAccountUseCase.isUserSignedIn()) {
                 navOptions.goToHomeScreen()
             } else {
                 navOptions.goToSignInScreen()
