@@ -15,48 +15,100 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imageView"
-            url="@{viewModel.account.photoUrl}"
+            android:id="@+id/ivProfile"
+            url="@{viewModel.photoUrl}"
+            errorDrawable="@{@drawable/ic_profile_image}"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_marginTop="100dp"
+            android:src="@drawable/ic_account_circle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
 
-
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llAccountInfo"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="72dp"
-            android:text="@{viewModel.account.name}"
-            android:textSize="22sp"
-            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            tools:text="Lorem Ipsum Dolor" />
+            app:layout_constraintTop_toBottomOf="@+id/ivProfile">
 
-        <TextView
-            android:id="@+id/tvEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.account.email}"
-            android:textSize="15sp"
-            android:textStyle="normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvName"
-            tools:text="Lorem Ipsum Dolor" />
+            <TextView
+                android:id="@+id/tvGuest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="52dp"
+                android:text="@string/guest_user"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:visibility="@{viewModel.isGuest()}" />
+
+            <TextView
+                android:id="@+id/tvGuestTip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:gravity="center"
+                android:text="@string/guest_tip"
+                android:textSize="15sp"
+                android:textStyle="normal"
+                android:visibility="@{viewModel.isGuest()}" />
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="72dp"
+                android:text="@{viewModel.name}"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:visibility="@{!viewModel.isGuest()}"
+                tools:text="Lorem Ipsum Dolor" />
+
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.email}"
+                android:textSize="15sp"
+                android:textStyle="normal"
+                android:visibility="@{!viewModel.isGuest()}"
+                tools:text="Lorem Ipsum Dolor" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvEmail">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llAccountInfo">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:onClick="@{v -> viewModel.downloadData()}"
+                android:text="@string/link_account"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:theme="@style/AppTheme"
+                android:visibility="@{viewModel.isGuest()}"
+                app:icon="@drawable/google_logo"
+                app:iconGravity="textStart"
+                app:iconTint="@color/black" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:listDivider"
+                android:visibility="@{viewModel.isGuest()}" />
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"

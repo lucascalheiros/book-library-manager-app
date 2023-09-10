@@ -94,7 +94,7 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{v -> viewModel.onGoogleSignInClick()}"
+                android:onClick="@{v -> viewModel.onEnterAsGuestClick()}"
                 android:text="@string/enter_as_guest" />
         </LinearLayout>
 
