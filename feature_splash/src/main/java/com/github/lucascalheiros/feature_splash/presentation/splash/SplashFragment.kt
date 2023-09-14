@@ -1,5 +1,8 @@
 package com.github.lucascalheiros.feature_splash.presentation.splash
 
+import android.animation.ValueAnimator
+import android.animation.ValueAnimator.INFINITE
+import android.animation.ValueAnimator.REVERSE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.github.lucascalheiros.common.navigation.NavigationRoutes
 import com.github.lucascalheiros.data_authentication.domain.usecase.SignedAccountUseCase
 import com.github.lucascalheiros.feature_splash.R
+import com.github.lucascalheiros.feature_splash.databinding.FragmentSplashBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -21,9 +25,17 @@ class SplashFragment : Fragment() {
 
     private val signedAccountUseCase: SignedAccountUseCase by inject()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val binding = FragmentSplashBinding.inflate(layoutInflater, container, false)
+        animateLoadingIndicator(binding.ivLogo)
+        navigateAfterDelay()
+        return binding.root
+    }
 
+    private fun navigateAfterDelay() {
         lifecycleScope.launch {
             delay(SPLASH_VISUAL_DELAY)
             val navOptions = getSplashNavOptions()
@@ -35,11 +47,16 @@ class SplashFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_splash, container, false)
+    private fun animateLoadingIndicator(view: View) {
+        val loadingAnimation = ValueAnimator.ofFloat(-LOADING_ANIMATION_ROTATION, LOADING_ANIMATION_ROTATION)
+        loadingAnimation.addUpdateListener { animation ->
+            view.rotation = animation.animatedValue as Float
+            view.requestLayout()
+        }
+        loadingAnimation.repeatCount = INFINITE
+        loadingAnimation.duration = LOADING_ANIMATION_TIME
+        loadingAnimation.repeatMode = REVERSE
+        loadingAnimation.start()
     }
 
     private fun getSplashNavOptions(): NavOptions {
@@ -69,5 +86,8 @@ class SplashFragment : Fragment() {
 
     companion object {
         private const val SPLASH_VISUAL_DELAY = 500L
+        private const val LOADING_ANIMATION_TIME = 200L
+        private const val LOADING_ANIMATION_ROTATION = 20f
+
     }
 }
