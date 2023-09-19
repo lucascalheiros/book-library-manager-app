@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.common_test.data
+package com.github.lucascalheiros.booklibrarymanager.data
 
 object MockBookLibFilesData {
     val file1 = MockBookLibFileImpl()

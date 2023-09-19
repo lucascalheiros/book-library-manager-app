@@ -3,10 +3,10 @@ package com.github.lucascalheiros.feature_home.presentation.home
 import android.net.Uri
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.github.lucascalheiros.common_test.data.MockBookLibFilesData.items1And2
-import com.github.lucascalheiros.common_test.data.MockBookLibFilesData.items2And3
+import com.github.lucascalheiros.booklibrarymanager.tests.MockBookLibFilesData.items1And2
+import com.github.lucascalheiros.booklibrarymanager.tests.MockBookLibFilesData.items2And3
 import com.github.lucascalheiros.common_test.rules.MainCoroutineRule
-import com.github.lucascalheiros.data_drive_file.domain.usecase.FileListUseCase
+import com.github.lucascalheiros.data_drive_file.domain.usecase.FetchFilesUseCase
 import com.github.lucascalheiros.data_drive_file.domain.usecase.FileManagementUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -40,7 +40,7 @@ class HomeViewModelTest : KoinTest {
     }
 
     @Mock
-    lateinit var fileListUseCase: FileListUseCase
+    lateinit var fetchFilesUseCase: FetchFilesUseCase
 
     @Mock
     lateinit var fileManagementUseCase: FileManagementUseCase
@@ -58,7 +58,7 @@ class HomeViewModelTest : KoinTest {
 
     @Test
     fun whenListFilesFailFilteredAndSortedFileItemsShouldNotChange() = runTest {
-        `when`(fileListUseCase.listFiles()).then {
+        `when`(fetchFilesUseCase.listFiles()).then {
             throw Exception()
         }
         homeViewModel.loadFiles()
@@ -68,7 +68,7 @@ class HomeViewModelTest : KoinTest {
 
     @Test
     fun whenFileListIsLoadedFilteredAndSortedFileItemsShouldUpdateList() = runTest {
-        `when`(fileListUseCase.listFiles()).then {
+        `when`(fetchFilesUseCase.listFiles()).then {
             items1And2
         }
         homeViewModel.loadFiles()
@@ -86,12 +86,12 @@ class HomeViewModelTest : KoinTest {
 
     @Test
     fun whenFileListIsLoadedFilteredAndSortedFileItemsShouldChange() = runTest {
-        `when`(fileListUseCase.listFiles()).then {
+        `when`(fetchFilesUseCase.listFiles()).then {
             items1And2
         }
         homeViewModel.loadFiles()
         advanceUntilIdle()
-        `when`(fileListUseCase.listFiles()).then {
+        `when`(fetchFilesUseCase.listFiles()).then {
             items2And3
         }
         homeViewModel.loadFiles()
@@ -109,7 +109,7 @@ class HomeViewModelTest : KoinTest {
             livedataStates.add(it)
         }
         homeViewModel.isLoadingFiles.observeForever(observer)
-        `when`(fileListUseCase.listFiles()).then {
+        `when`(fetchFilesUseCase.listFiles()).then {
             items1And2
         }
         homeViewModel.loadFiles()
@@ -127,7 +127,7 @@ class HomeViewModelTest : KoinTest {
             livedataStates.add(it)
         }
         homeViewModel.isLoadingFiles.observeForever(observer)
-        `when`(fileListUseCase.listFiles()).then {
+        `when`(fetchFilesUseCase.listFiles()).then {
             throw Exception()
         }
         homeViewModel.loadFiles()
@@ -140,7 +140,7 @@ class HomeViewModelTest : KoinTest {
 
     @Test
     fun whenFileListIsUpdatedTagsShouldContainsAllTagsFromFiles() = runTest {
-        `when`(fileListUseCase.listFiles()).then {
+        `when`(fetchFilesUseCase.listFiles()).then {
             items1And2
         }
         homeViewModel.loadFiles()
@@ -149,7 +149,7 @@ class HomeViewModelTest : KoinTest {
             items1And2.map { it.tags }.flatten().distinct().sortedBy { it.uppercase() },
             homeViewModel.tags.value
         )
-        `when`(fileListUseCase.listFiles()).then {
+        `when`(fetchFilesUseCase.listFiles()).then {
             items2And3
         }
         homeViewModel.loadFiles()
@@ -162,7 +162,7 @@ class HomeViewModelTest : KoinTest {
 
     @Test
     fun whenSelectedTagsChangeFilteredFilesShouldBeUpdated() = runTest {
-        `when`(fileListUseCase.listFiles()).then {
+        `when`(fetchFilesUseCase.listFiles()).then {
             items1And2
         }
         homeViewModel.loadFiles()
@@ -185,7 +185,7 @@ class HomeViewModelTest : KoinTest {
         val uri = mock(Uri::class.java)
         homeViewModel.uploadFile(uri)
         advanceUntilIdle()
-        verify(fileListUseCase, times(1)).listFiles()
+        verify(fetchFilesUseCase, times(1)).listFiles()
     }
 
     @Test
@@ -196,6 +196,6 @@ class HomeViewModelTest : KoinTest {
         }
         homeViewModel.uploadFile(uri)
         advanceUntilIdle()
-        verify(fileListUseCase, times(0)).listFiles()
+        verify(fetchFilesUseCase, times(0)).listFiles()
     }
 }
