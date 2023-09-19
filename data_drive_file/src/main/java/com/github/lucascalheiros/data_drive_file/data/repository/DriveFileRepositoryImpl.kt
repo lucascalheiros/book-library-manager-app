@@ -4,13 +4,14 @@ import android.content.Context
 import android.net.Uri
 import com.github.lucascalheiros.common.BuildConfig
 import com.github.lucascalheiros.common.model.interfaces.BookLibFile
-import com.github.lucascalheiros.common.utils.constants.AppPropertiesKeys
+import com.github.lucascalheiros.data_drive_file.data.constants.AppPropertiesKeys
 import com.github.lucascalheiros.common.utils.constants.MimeTypeConstants
 import com.github.lucascalheiros.common.utils.getFileName
 import com.github.lucascalheiros.common.utils.loadFileFromInputStream
+import com.github.lucascalheiros.data_drive_file.data.model.LocalFileMetadata.Companion.tagsToString
 import com.github.lucascalheiros.data_drive_file.data.model.adapter.toBookLibFile
-import com.github.lucascalheiros.data_drive_file.domain.repository.DriveFileRepository
 import com.github.lucascalheiros.data_drive_file.data.utils.DriveQueryBuilder
+import com.github.lucascalheiros.data_drive_file.domain.repository.DriveFileRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -24,9 +25,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.FileOutputStream
 import java.io.OutputStream
+import java.time.ZoneId
 import java.util.Collections
 
-class DriveFileRepositoryImpl(
+internal class DriveFileRepositoryImpl(
     private val context: Context
 ) : DriveFileRepository {
 
@@ -34,7 +36,7 @@ class DriveFileRepositoryImpl(
         val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(
             context, Collections.singleton(DriveScopes.DRIVE_FILE)
         )
-        credential.selectedAccount = lastSignedInAccount?.account
+        credential.selectedAccount = lastSignedInAccount?.account!! // TODO create specific exception
         return Drive.Builder(
             AndroidHttp.newCompatibleTransport(),
             GsonFactory(),
@@ -92,28 +94,22 @@ class DriveFileRepositoryImpl(
             .execute()
     }
 
-    override suspend fun updateFileInfo(
-        fileId: String,
-        name: String?,
-        tags: List<String>?,
-        readProgress: Int?,
-        totalPages: Int?
-    ): BookLibFile {
-        val file: File = getFile(fileId)
-
+    override suspend fun syncFileInfo(bookLibFile: BookLibFile) {
+        val cloudId = bookLibFile.cloudId!!
+        val file: File = getFile(cloudId)
         val newFile = File()
         newFile.appProperties = file.appProperties
         newFile.name = file.name
-
         newFile.apply {
             appProperties = appProperties ?: mutableMapOf()
-            tags?.let { appProperties[AppPropertiesKeys.TAGS] = it.joinToString(",") }
-            readProgress?.let { appProperties[AppPropertiesKeys.READ_PROGRESS] = "$it" }
-            totalPages?.let { appProperties[AppPropertiesKeys.TOTAL_PAGES] = "$it" }
-            name?.let { this.name = it }
+            appProperties[AppPropertiesKeys.TAGS] = bookLibFile.tags.tagsToString()
+            appProperties[AppPropertiesKeys.READ_PROGRESS] = bookLibFile.readProgress.toString()
+            appProperties[AppPropertiesKeys.TOTAL_PAGES] = bookLibFile.totalPages.toString()
+            appProperties[AppPropertiesKeys.UPDATE_TIME] = bookLibFile.modifiedTime
+                .atZone(ZoneId.systemDefault()).toInstant().toEpochMilli().toString()
+            name = bookLibFile.name
         }
-
-        return updateFileInfo(fileId, newFile).toBookLibFile()
+        updateFileInfo(cloudId, newFile)
     }
 
     override suspend fun downloadMedia(fileId: String): java.io.File = withContext(Dispatchers.IO) {
@@ -135,7 +131,7 @@ class DriveFileRepositoryImpl(
             .execute().files
     }
 
-    override suspend fun listPdfFiles(): List<BookLibFile> {
+    override suspend fun listFiles(): List<BookLibFile> {
         return listFiles(
             DriveQueryBuilder().mimeTypeEquals(MimeTypeConstants.pdf).build()
         ).map { it.toBookLibFile() }
@@ -169,4 +165,7 @@ class DriveFileRepositoryImpl(
         return createFile(metadata, mediaContent)
     }
 
+    override fun isDriveAvailable(): Boolean {
+        return lastSignedInAccount != null
+    }
 }
