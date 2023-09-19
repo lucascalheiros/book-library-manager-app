@@ -40,10 +40,10 @@ class FileSynchronizationWorker(
                     }
                 }
             }
-            logDebug("FileSynchronizationWorker", "workexecuted")
+            logDebug(TAG, "::doWork")
             Result.success()
         } catch (error: Throwable) {
-            logError("FileSynchronizationWorker", "failed", error)
+            logError(TAG, "::doWork failed", error)
             Result.failure()
         } finally {
             NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_ID)
@@ -77,6 +77,8 @@ class FileSynchronizationWorker(
     companion object {
         private const val NOTIFICATION_ID = 1000
         private const val NOTIFICATION_CHANNEL = 1000.toString()
+        private const val WORK_NAME = "FileSynchronizationWorker"
+        private val TAG = FileSynchronizationWorker::class.java.simpleName
 
         fun startWorker(context: Context) {
             val constraints = Constraints.Builder()
@@ -88,7 +90,7 @@ class FileSynchronizationWorker(
             WorkManager
                 .getInstance(context)
                 .enqueueUniqueWork(
-                    "FileSynchronizationWorker",
+                    WORK_NAME,
                     ExistingWorkPolicy.REPLACE,
                     worker
                 )
