@@ -6,21 +6,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.github.lucascalheiros.common.model.interfaces.BookLibAccount
 import com.github.lucascalheiros.common.utils.constants.LogTags
 import com.github.lucascalheiros.common.utils.logDebug
 import com.github.lucascalheiros.common.utils.logError
 import com.github.lucascalheiros.data_authentication.domain.usecase.GoogleSignInUseCase
 import com.github.lucascalheiros.data_authentication.domain.usecase.SignOutUseCase
 import com.github.lucascalheiros.data_authentication.domain.usecase.SignedAccountUseCase
-import com.github.lucascalheiros.data_drive_file.domain.usecase.FileListUseCase
+import com.github.lucascalheiros.data_drive_file.domain.usecase.FetchFilesUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 class AccountViewModel(
-    private val fileListUseCase: FileListUseCase,
+    private val fetchFilesUseCase: FetchFilesUseCase,
     signedAccountUseCase: SignedAccountUseCase,
     private val googleSignInUseCase: GoogleSignInUseCase,
     private val signOutUseCase: SignOutUseCase
