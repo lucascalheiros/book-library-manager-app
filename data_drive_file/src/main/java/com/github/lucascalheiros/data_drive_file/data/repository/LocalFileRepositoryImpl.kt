@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.ParcelFileDescriptor
-import com.github.lucascalheiros.common.model.interfaces.BookLibFile
+import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
 import com.github.lucascalheiros.common.utils.constants.LogTags
 import com.github.lucascalheiros.common.utils.getFileName
 import com.github.lucascalheiros.common.utils.loadFileFromInputStream

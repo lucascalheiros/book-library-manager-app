@@ -1,6 +1,6 @@
 package com.github.lucascalheiros.data_drive_file.data.model.adapter
 
-import com.github.lucascalheiros.common.model.interfaces.BookLibFile
+import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
 import com.github.lucascalheiros.data_drive_file.data.constants.AppPropertiesKeys
 import com.github.lucascalheiros.data_drive_file.data.model.LocalFileMetadata
 import com.google.api.services.drive.model.File

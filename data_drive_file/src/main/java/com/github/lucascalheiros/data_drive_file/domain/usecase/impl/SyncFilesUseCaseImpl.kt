@@ -1,8 +1,7 @@
 package com.github.lucascalheiros.data_drive_file.domain.usecase.impl
 
 import androidx.core.net.toUri
-import com.github.lucascalheiros.common.model.interfaces.BookLibFile
-import com.github.lucascalheiros.common.utils.loadParcelFileDescriptorFromAsset
+import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
 import com.github.lucascalheiros.common.utils.logDebug
 import com.github.lucascalheiros.data_drive_file.domain.repository.DriveFileRepository
 import com.github.lucascalheiros.data_drive_file.domain.repository.LocalFileRepository

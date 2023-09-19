@@ -1,7 +1,7 @@
 package com.github.lucascalheiros.data_drive_file.domain.usecase
 
 import android.graphics.pdf.PdfRenderer
-import com.github.lucascalheiros.common.model.interfaces.BookLibFile
+import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
 
 interface ReadPdfUseCase {
     suspend fun pdfRendererFromFileId(fileId: String): PdfRenderer

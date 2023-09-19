@@ -2,7 +2,7 @@ package com.github.lucascalheiros.data_drive_file.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.github.lucascalheiros.common.model.interfaces.BookLibFile
+import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
 import java.time.LocalDateTime
 import java.util.UUID
 

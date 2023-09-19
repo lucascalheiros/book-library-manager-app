@@ -1,7 +1,7 @@
 package com.github.lucascalheiros.data_drive_file.domain.usecase
 
 import android.net.Uri
-import com.github.lucascalheiros.common.model.interfaces.BookLibFile
+import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
 
 interface FileManagementUseCase {
     suspend fun uploadFile(uri: Uri): String

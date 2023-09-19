@@ -3,7 +3,7 @@ package com.github.lucascalheiros.data_drive_file.data.repository
 import android.content.Context
 import android.net.Uri
 import com.github.lucascalheiros.common.BuildConfig
-import com.github.lucascalheiros.common.model.interfaces.BookLibFile
+import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
 import com.github.lucascalheiros.data_drive_file.data.constants.AppPropertiesKeys
 import com.github.lucascalheiros.common.utils.constants.MimeTypeConstants
 import com.github.lucascalheiros.common.utils.getFileName

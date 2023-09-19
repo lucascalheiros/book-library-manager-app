@@ -1,7 +1,7 @@
 package com.github.lucascalheiros.data_drive_file.domain.repository
 
 import android.net.Uri
-import com.github.lucascalheiros.common.model.interfaces.BookLibFile
+import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 
