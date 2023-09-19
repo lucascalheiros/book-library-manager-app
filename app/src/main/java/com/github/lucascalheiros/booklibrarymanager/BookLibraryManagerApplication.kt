@@ -7,8 +7,10 @@ import com.github.lucascalheiros.feature_account.accountModule
 import com.github.lucascalheiros.feature_home.presentation.homeModule
 import com.github.lucascalheiros.feature_login.loginModule
 import com.github.lucascalheiros.feature_pdfreader.pdfReaderModule
+import com.github.service_synchronization.synchronizationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.workmanager.koin.workManagerFactory
 import org.koin.core.context.GlobalContext.startKoin
 
 class BookLibraryManagerApplication : Application() {
@@ -19,9 +21,10 @@ class BookLibraryManagerApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@BookLibraryManagerApplication)
+            workManagerFactory()
             modules(driveFileModules)
             modules(authenticationModules)
-            modules(homeModule, pdfReaderModule, loginModule, accountModule)
+            modules(homeModule, pdfReaderModule, loginModule, accountModule, synchronizationModule)
         }
     }
 

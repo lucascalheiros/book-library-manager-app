@@ -38,6 +38,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
         jvmTarget = "1.8"
     }
     buildFeatures {
@@ -67,6 +68,7 @@ dependencies {
     implementation(project(":feature_home"))
     implementation(project(":feature_login"))
     implementation(project(":feature_account"))
+    implementation(project(":service_synchronization"))
     implementation libs.bundles.navigation
     implementation libs.bundles.lifecycle
     implementation libs.view.constraintLayout
@@ -75,6 +77,8 @@ dependencies {
     implementation libs.coroutines.playServices
     implementation libs.coroutines.android
     implementation libs.koin.android
+    implementation libs.koin.workmanager
+    implementation libs.workmanager.runtime
 
     testImplementation libs.bundles.unitTest
 
