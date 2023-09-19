@@ -25,6 +25,7 @@ google_api_client_android_version = "1.26.0"
 android_gradle_plugin = "7.2.1"
 fragment_testing_version = "1.5.5"
 datastore_preferences_version = "1.0.0"
+work_manager_version = "2.7.1"
 
 [libraries]
 kotlin = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin_version" }
@@ -69,6 +70,7 @@ room-testing = { module = "androidx.room:room-testing", version.ref = "room_vers
 datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore_preferences_version" }
 
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin_version" }
+koin-workmanager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin_version" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin_version" }
 koin-testJunit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin_version" }
 
@@ -78,7 +80,8 @@ mockito-android = { module = "org.mockito:mockito-android", version.ref = "mocki
 
 junit = { module = "junit:junit", version.ref = "junit_version" }
 
-
+workmanager-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work_manager_version" }
+workmanager-test = { module = "androidx.work:work-testing", version.ref = "work_manager_version" }
 
 [bundles]
 navigation = ["navigation-fragment", "navigation-ui"]
