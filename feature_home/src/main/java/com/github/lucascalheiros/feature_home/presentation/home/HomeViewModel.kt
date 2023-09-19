@@ -3,8 +3,10 @@ package com.github.lucascalheiros.feature_home.presentation.home
 import android.net.Uri
 import androidx.lifecycle.*
 import androidx.lifecycle.Transformations.map
-import com.github.lucascalheiros.common.model.interfaces.BookLibFile
-import com.github.lucascalheiros.data_drive_file.domain.usecase.FileListUseCase
+import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
+import com.github.lucascalheiros.common.utils.addSources
+import com.github.lucascalheiros.common.utils.logError
+import com.github.lucascalheiros.data_drive_file.domain.usecase.FetchFilesUseCase
 import com.github.lucascalheiros.data_drive_file.domain.usecase.FileManagementUseCase
 import com.github.lucascalheiros.feature_home.presentation.editFileMetadata.model.EditFileMetadataDialogInfo
 import com.github.lucascalheiros.feature_home.presentation.home.handlers.BookLibFileItemListener
@@ -13,7 +15,7 @@ import java.io.File
 
 
 class HomeViewModel(
-    private val fileListUseCase: FileListUseCase,
+    private val fetchFilesUseCase: FetchFilesUseCase,
     private val fileManagementUseCase: FileManagementUseCase
 ) : ViewModel() {
 
@@ -38,7 +40,8 @@ class HomeViewModel(
 
     private val mLoadFilesRequestState = MutableLiveData<LoadFilesRequestState>()
 
-    private val mFileItems = MediatorLiveData<List<BookLibFile>>()
+    private val mFileItems = fetchFilesUseCase.listFilesFlow()
+        .asLiveData(viewModelScope.coroutineContext)
 
     private val mFilteredAndSortedFileItems = MediatorLiveData<List<BookLibFile>>()
 
@@ -71,18 +74,7 @@ class HomeViewModel(
         mOpenEditFileMetadataDialog
 
     init {
-        mFileItems.addSource(mLoadFilesRequestState) {
-            if (it is LoadFilesRequestState.Success) {
-                mFileItems.value = it.files
-            }
-        }
-        mFilteredAndSortedFileItems.addSource(mFileItems) {
-            mediatorFilterFilesObserver()
-        }
-        mFilteredAndSortedFileItems.addSource(selectedTags) {
-            mediatorFilterFilesObserver()
-        }
-        mFilteredAndSortedFileItems.addSource(searchText) {
+        mFilteredAndSortedFileItems.addSources(mFileItems, selectedTags, searchText) {
             mediatorFilterFilesObserver()
         }
     }
@@ -100,7 +92,7 @@ class HomeViewModel(
 
     fun readFile(file: BookLibFile) {
         viewModelScope.launch {
-            file.id?.let {
+            file.localId.let {
                 if (mFileHandlerRequestState.value is FileHandlerRequestState.Loading) {
                     return@launch
                 }
@@ -119,7 +111,7 @@ class HomeViewModel(
                 }
                 mFileHandlerRequestState.value = FileHandlerRequestState.Loading(file)
                 mFileHandlerRequestState.value =
-                    FileHandlerRequestState.DownloadFile(fileListUseCase.downloadMedia(file.id!!))
+                    FileHandlerRequestState.DownloadFile(fetchFilesUseCase.downloadMedia(file.localId))
             } catch (e: Exception) {
                 // TODO add feedback
                 mFileHandlerRequestState.value = FileHandlerRequestState.Failure(e)
@@ -137,10 +129,10 @@ class HomeViewModel(
     fun deleteFile(file: BookLibFile) {
         viewModelScope.launch {
             try {
-                fileManagementUseCase.deleteFile(file.id!!)
+                fileManagementUseCase.deleteFile(file.localId)
                 loadFiles()
             } catch (e: Exception) {
-                // TODO add feedback
+                logError(TAG, "::deleteFile", e)
             }
         }
     }
@@ -151,7 +143,7 @@ class HomeViewModel(
                 fileManagementUseCase.uploadFile(uri)
                 loadFiles()
             } catch (e: Exception) {
-                // TODO add feedback
+                logError(TAG, "::uploadFile", e)
             }
         }
     }
@@ -163,8 +155,8 @@ class HomeViewModel(
                     return@launch
                 }
                 mLoadFilesRequestState.value = LoadFilesRequestState.Loading
-                mLoadFilesRequestState.value =
-                    LoadFilesRequestState.Success(fileListUseCase.listFiles())
+                fetchFilesUseCase.fetchFiles()
+                mLoadFilesRequestState.value = LoadFilesRequestState.Success
             } catch (e: Exception) {
                 mLoadFilesRequestState.value = LoadFilesRequestState.Failure(e)
             }
@@ -196,10 +188,13 @@ class HomeViewModel(
         return shouldInterceptToHideFilter
     }
 
+    companion object {
+        private val TAG = HomeViewModel::class.java.simpleName
+    }
 }
 
 sealed class LoadFilesRequestState {
-    data class Success(val files: List<BookLibFile>) : LoadFilesRequestState()
+    object Success : LoadFilesRequestState()
     data class Failure(val error: Exception) : LoadFilesRequestState()
     object Loading : LoadFilesRequestState()
     object Idle : LoadFilesRequestState()

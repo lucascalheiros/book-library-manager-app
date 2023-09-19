@@ -11,7 +11,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.*
 
 import com.github.lucascalheiros.feature_home.presentation.home.handlers.BookLibFileItemListener
-import com.github.lucascalheiros.common.model.interfaces.BookLibFile
+import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
 import com.github.lucascalheiros.feature_home.R
 import com.github.lucascalheiros.feature_home.databinding.ItemFileListBinding
 
@@ -21,7 +21,7 @@ class BookLibFileListAdapter :
 
     object Diff : DiffUtil.ItemCallback<BookLibFile>() {
         override fun areItemsTheSame(oldItem: BookLibFile, newItem: BookLibFile): Boolean {
-            return oldItem === newItem
+            return oldItem.localId == newItem.localId || (oldItem.cloudId != null && oldItem.cloudId == newItem.cloudId )
         }
 
         override fun areContentsTheSame(oldItem: BookLibFile, newItem: BookLibFile): Boolean {
@@ -30,12 +30,6 @@ class BookLibFileListAdapter :
     }
 
     var listener: BookLibFileItemListener? = null
-        set(value) {
-            if (value != field) {
-                field = value
-                notifyDataSetChanged()
-            }
-        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileListItemViewHolder {
         val binding = ItemFileListBinding.inflate(LayoutInflater.from(parent.context))
@@ -43,12 +37,12 @@ class BookLibFileListAdapter :
     }
 
     override fun onBindViewHolder(holder: FileListItemViewHolder, position: Int) {
-        holder.bind(getItem(position), listener)
+        holder.bind(getItem(position))
     }
 
-    class FileListItemViewHolder(private val binding: ItemFileListBinding) :
+    inner class FileListItemViewHolder(private val binding: ItemFileListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: BookLibFile, listener: BookLibFileItemListener?) {
+        fun bind(item: BookLibFile) {
             binding.model = item
             binding.listener = listener ?: object : BookLibFileItemListener {
                 override fun read(item: BookLibFile) = Unit
@@ -99,26 +93,31 @@ class BookLibFileListAdapter :
         )
         fun RecyclerView.bindFileListAdapter(
             items: List<BookLibFile>?,
-            listener: BookLibFileItemListener?
+            bookLibFileItemListener: BookLibFileItemListener?
         ) {
-            adapter.let { rvAdapter ->
-                if (rvAdapter !is BookLibFileListAdapter) {
-                    layoutManager.let { layoutManager ->
-                        if (layoutManager is LinearLayoutManager) {
-                            val dividerItemDecoration = DividerItemDecoration(
-                                context,
-                                layoutManager.orientation
-                            )
-                            addItemDecoration(dividerItemDecoration)
-                        }
-                    }
-                    BookLibFileListAdapter().also {
-                        adapter = it
-                    }
-                } else rvAdapter
-            }.let {
-                it.listener = listener
-                it.submitList(items)
+            val bookLibAdapter = adapter
+            if (bookLibAdapter !is BookLibFileListAdapter) {
+                addDividerItemDecoration()
+                BookLibFileListAdapter().also {
+                    adapter = it
+                }
+            } else {
+                bookLibAdapter
+            }.run {
+                listener = bookLibFileItemListener
+                submitList(items)
+            }
+        }
+
+        private fun RecyclerView.addDividerItemDecoration() {
+            layoutManager.let {
+                if (it is LinearLayoutManager) {
+                    val dividerItemDecoration = DividerItemDecoration(
+                        context,
+                        it.orientation
+                    )
+                    addItemDecoration(dividerItemDecoration)
+                }
             }
         }
     }

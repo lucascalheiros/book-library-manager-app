@@ -74,7 +74,7 @@ class EditFileMetadataDialogViewModel(
     fun setData(
         info: EditFileMetadataDialogInfo
     ) {
-        fileId = fileId ?: info.file.id
+        fileId = fileId ?: info.file.localId
         name.value = name.value ?: info.file.name
         tagOptions.value = tagOptions.value ?: info.tagOptions
         selectedTags.value = selectedTags.value ?: info.file.tags

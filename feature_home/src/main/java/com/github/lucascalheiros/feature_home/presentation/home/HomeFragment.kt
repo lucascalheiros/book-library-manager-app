@@ -1,7 +1,9 @@
 package com.github.lucascalheiros.feature_home.presentation.home
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,17 +12,15 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDeepLinkRequest
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.github.lucascalheiros.common.navigation.NavigationRoutes
 import com.github.lucascalheiros.common.utils.constants.LogTags
 import com.github.lucascalheiros.common.utils.logError
-import com.github.lucascalheiros.feature_home.R
 import com.github.lucascalheiros.feature_home.databinding.FragmentHomeBinding
 import com.github.lucascalheiros.feature_home.presentation.editFileMetadata.EditFileMetadataDialogFragment
+import com.github.service_synchronization.worker.FileSynchronizationWorker
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -72,6 +72,10 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            startForGoogleSignInResult.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+        FileSynchronizationWorker.startWorker(requireContext())
 
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -83,15 +87,21 @@ class HomeFragment : Fragment() {
         })
     }
 
+    private val startForGoogleSignInResult =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        }
+
     private fun observeViewModel() {
         homeViewModel.fileHandlerRequestState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is FileHandlerRequestState.ReadFile -> {
                     handleReadFile(state)
                 }
+
                 is FileHandlerRequestState.DownloadFile -> {
                     handleDownloadFile(state)
                 }
+
                 else -> {}
             }
         }
