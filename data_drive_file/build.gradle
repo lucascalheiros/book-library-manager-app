@@ -40,7 +40,6 @@ dependencies {
     implementation libs.view.material
     implementation libs.bundles.androidCore
     implementation libs.koin.android
-    // Room
     implementation libs.bundles.room
     annotationProcessor libs.room.compiler
     kapt libs.room.compiler
