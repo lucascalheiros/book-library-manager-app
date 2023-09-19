@@ -38,6 +38,7 @@ android {
 dependencies {
     implementation(project(":common"))
     implementation(project(":data_drive_file"))
+    implementation(project(":service_synchronization"))
     implementation libs.view.flexbox
     implementation libs.view.material
     implementation libs.view.swipeRefreshLayout
