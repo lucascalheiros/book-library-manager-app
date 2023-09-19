@@ -6,7 +6,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.lucascalheiros.common_test.data.MockBookLibAccountData
+import com.github.lucascalheiros.booklibrarymanager.data.MockBookLibAccountData
 import com.github.lucascalheiros.booklibrarymanager.presentation.MainActivity
 import com.github.lucascalheiros.common_test.rules.KoinTestRule
 import com.github.lucascalheiros.booklibrarymanager.utils.ProdAppModules

@@ -1,9 +1,10 @@
-package com.github.lucascalheiros.common_test.data
+package com.github.lucascalheiros.booklibrarymanager.data
 
-import com.github.lucascalheiros.common.model.interfaces.BookLibAccount
+import com.github.lucascalheiros.data_authentication.domain.model.BookLibAccount
 
 object MockBookLibAccountData {
-    val bookLibAccount1 = object : BookLibAccount {
+    val bookLibAccount1 = object :
+        BookLibAccount {
         override val id: String
             get() = "TEST_ID"
         override val name: String

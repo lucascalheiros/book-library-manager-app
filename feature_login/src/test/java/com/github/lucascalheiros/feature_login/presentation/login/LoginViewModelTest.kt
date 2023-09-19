@@ -1,7 +1,7 @@
 package com.github.lucascalheiros.feature_login.presentation.login
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.github.lucascalheiros.common.model.interfaces.BookLibAccount
+import com.github.lucascalheiros.data_authentication.domain.model.BookLibAccount
 import com.github.lucascalheiros.common_test.rules.MainCoroutineRule
 import com.github.lucascalheiros.data_authentication.domain.repository.GoogleSignInRepository
 import com.github.lucascalheiros.data_authentication.domain.usecase.impl.GoogleSignInUseCaseImpl
