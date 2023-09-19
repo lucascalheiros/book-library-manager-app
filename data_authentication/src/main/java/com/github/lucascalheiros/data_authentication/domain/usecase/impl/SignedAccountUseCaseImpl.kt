@@ -1,6 +1,6 @@
 package com.github.lucascalheiros.data_authentication.domain.usecase.impl
 
-import com.github.lucascalheiros.common.model.interfaces.BookLibAccount
+import com.github.lucascalheiros.data_authentication.domain.model.BookLibAccount
 import com.github.lucascalheiros.data_authentication.domain.repository.GoogleSignInRepository
 import com.github.lucascalheiros.data_authentication.domain.repository.GuestSignInRepository
 import com.github.lucascalheiros.data_authentication.domain.usecase.SignedAccountUseCase

@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.common.model.interfaces
+package com.github.lucascalheiros.data_authentication.domain.model
 
 interface BookLibAccount {
     val id: String?

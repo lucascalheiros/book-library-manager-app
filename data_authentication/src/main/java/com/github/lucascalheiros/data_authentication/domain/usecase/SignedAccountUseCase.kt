@@ -1,6 +1,6 @@
 package com.github.lucascalheiros.data_authentication.domain.usecase
 
-import com.github.lucascalheiros.common.model.interfaces.BookLibAccount
+import com.github.lucascalheiros.data_authentication.domain.model.BookLibAccount
 import kotlinx.coroutines.flow.Flow
 
 interface SignedAccountUseCase {

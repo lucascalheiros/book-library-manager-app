@@ -1,14 +1,13 @@
 package com.github.lucascalheiros.data_authentication.data.repository
 
 import android.content.Context
-import com.github.lucascalheiros.common.model.interfaces.BookLibAccount
+import com.github.lucascalheiros.data_authentication.domain.model.BookLibAccount
 import com.github.lucascalheiros.data_authentication.domain.GoogleSignInConfiguration.googleSignInOptions
 import com.github.lucascalheiros.data_authentication.domain.repository.GoogleSignInRepository
 import com.github.lucascalheiros.data_authentication.utils.toBookLibAccount
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.tasks.await
 
 class GoogleSignInRepositoryImpl constructor(
