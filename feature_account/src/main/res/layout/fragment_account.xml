@@ -17,7 +17,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivProfile"
             url="@{viewModel.photoUrl}"
-            errorDrawable="@{@drawable/ic_profile_image}"
+            errorDrawable="@{@drawable/ic_account_circle}"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_marginTop="100dp"
