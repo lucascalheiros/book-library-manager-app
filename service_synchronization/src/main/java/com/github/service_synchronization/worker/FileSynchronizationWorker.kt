@@ -67,9 +67,9 @@ class FileSynchronizationWorker(
     private fun createNotificationChannel() {
         val name = applicationContext.getString(R.string.notification_sync_channel_title)
         val descriptionText = applicationContext.getString(R.string.notification_sync_channel_descriptions)
-        val importance = NotificationManager.IMPORTANCE_LOW
-        val mChannel = NotificationChannel(NOTIFICATION_CHANNEL, name, importance)
-        mChannel.description = descriptionText
+        val mChannel = NotificationChannel(NOTIFICATION_CHANNEL, name, NotificationManager.IMPORTANCE_LOW).apply {
+            description = descriptionText
+        }
         val notificationManager = getSystemService(applicationContext, NotificationManager::class.java)
         notificationManager?.createNotificationChannel(mChannel)
     }
