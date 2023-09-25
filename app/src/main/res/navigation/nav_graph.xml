@@ -1,59 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/splash_nav_graph">
 
-    <fragment
-        android:id="@+id/PdfReaderFragment"
-        android:name="com.github.lucascalheiros.booklibrarymanager.ui.pdfReader.PdfReaderFragment"
-        android:label="@string/pdf_reader_fragment"
-        tools:layout="@layout/fragment_pdf_reader" >
-        <argument
-            android:name="fileId"
-            app:argType="string" />
-        <argument
-            android:name="initialPage"
-            app:argType="integer" />
-    </fragment>
+    <include app:graph="@navigation/splash_nav_graph" />
+    <include app:graph="@navigation/account_nav_graph" />
+    <include app:graph="@navigation/pdf_reader_nav_graph" />
+    <include app:graph="@navigation/login_nav_graph" />
+    <include app:graph="@navigation/home_nav_graph" />
 
-    <fragment
-        android:id="@+id/LoginFragment"
-        android:name="com.github.lucascalheiros.booklibrarymanager.ui.login.LoginFragment"
-        android:label="@string/pdf_reader_fragment"
-        tools:layout="@layout/fragment_login">
-        <action
-            android:id="@+id/action_LoginFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/splashFragment"
-        android:name="com.github.lucascalheiros.booklibrarymanager.ui.splash.SplashFragment"
-        android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" >
-        <action
-            android:id="@+id/action_splashFragment_to_LoginFragment"
-            app:destination="@id/LoginFragment"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out"
-            app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_splashFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out"
-            app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.github.lucascalheiros.booklibrarymanager.ui.home.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_homeFragment_to_PdfReaderFragment"
-            app:destination="@id/PdfReaderFragment" />
-    </fragment>
 </navigation>

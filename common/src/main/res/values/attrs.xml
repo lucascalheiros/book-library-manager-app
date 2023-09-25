@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MirrorPolygonDrawerView">
+        <attr name="points_x" format="reference" />
+        <attr name="points_y" format="reference" />
+        <attr name="color" format="color" />
+        <attr name="radius" format="integer" />
+    </declare-styleable>
+</resources>

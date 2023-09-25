@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Rounded_ShapeAppearanceOverlay.MaterialComponents.TextInputLayout.OutlinedBox"
+        parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="cornerSize">24dp</item>
+    </style>
+</resources>

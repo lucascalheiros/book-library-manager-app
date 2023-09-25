@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="guest_user">Guest User</string>
+    <string name="guest_tip">As a guest user the documents you save will be only available locally.\nYou will still be able to save the progress and create tags normally.If you want to sync the saved data press the Link with Google below.</string>
+    <string name="link_account">Link with Google</string>
+    <string name="download_data">Download data</string>
+    <string name="logout">Logout</string>
+</resources>
