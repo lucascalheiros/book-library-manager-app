@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.common.utils
+package com.github.lucascalheiros.data_drive_file.data.utils
 
 import android.content.Context
 import android.database.Cursor
@@ -10,12 +10,12 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
 
-fun loadParcelFileDescriptorFromAsset(context: Context, assetFileName: String): ParcelFileDescriptor {
+internal fun loadParcelFileDescriptorFromAsset(context: Context, assetFileName: String): ParcelFileDescriptor {
     val f: File = loadFileFromAsset(context, assetFileName)
     return ParcelFileDescriptor.open(f, ParcelFileDescriptor.MODE_READ_ONLY)
 }
 
-fun loadFileFromAsset(context: Context, assetName: String): File {
+internal fun loadFileFromAsset(context: Context, assetName: String): File {
     val outFile = File(context.cacheDir, assetName)
 
     val buffer = context.assets.open(assetName).readBytes()
@@ -26,7 +26,7 @@ fun loadFileFromAsset(context: Context, assetName: String): File {
     return outFile
 }
 
-fun loadFileFromInputStream(context: Context, inputStream: InputStream, fileName: String): File {
+internal fun loadFileFromInputStream(context: Context, inputStream: InputStream, fileName: String): File {
     val outFile = File(context.cacheDir, fileName)
 
     val buffer = inputStream.readBytes()
@@ -37,7 +37,7 @@ fun loadFileFromInputStream(context: Context, inputStream: InputStream, fileName
     return outFile
 }
 
-fun getFileName(context: Context, uri: Uri): String? {
+internal fun getFileName(context: Context, uri: Uri): String? {
     val contentResolver = context.contentResolver
 
     val cursor: Cursor? = contentResolver.query(

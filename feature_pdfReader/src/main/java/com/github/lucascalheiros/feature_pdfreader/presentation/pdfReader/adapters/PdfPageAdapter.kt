@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import com.github.lucascalheiros.common.presentation.customView.ZoomRecyclerView
 
 import com.github.lucascalheiros.feature_pdfreader.presentation.pdfReader.handlers.ReadingPageTrackerListener
-import com.github.lucascalheiros.common.utils.toBitmap
+import com.github.lucascalheiros.data_drive_file.domain.utils.toBitmap
 import com.github.lucascalheiros.feature_pdfreader.databinding.ItemPdfPageBinding
 
 class PdfPageAdapter(pdfRenderer: PdfRenderer) :

@@ -9,7 +9,6 @@ interface LocalFileRepository {
     suspend fun listFiles(onlyValid: Boolean = true): List<BookLibFile>
     fun listFilesFlow(onlyValid: Boolean = true): Flow<List<BookLibFile>>
     suspend fun getByLocalId(id: String): BookLibFile?
-    suspend fun getByCloudId(id: String): BookLibFile?
     suspend fun insert(file: BookLibFile)
     suspend fun uploadFile(uri: Uri): String
     suspend fun updateFileInfo(

@@ -7,10 +7,10 @@ import android.net.Uri
 import android.os.ParcelFileDescriptor
 import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
 import com.github.lucascalheiros.common.utils.constants.LogTags
-import com.github.lucascalheiros.common.utils.getFileName
-import com.github.lucascalheiros.common.utils.loadFileFromInputStream
+import com.github.lucascalheiros.data_drive_file.data.utils.getFileName
+import com.github.lucascalheiros.data_drive_file.data.utils.loadFileFromInputStream
 import com.github.lucascalheiros.common.utils.logError
-import com.github.lucascalheiros.common.utils.toBitmap
+import com.github.lucascalheiros.data_drive_file.domain.utils.toBitmap
 import com.github.lucascalheiros.data_drive_file.data.database.filesMetadataDatabase
 import com.github.lucascalheiros.data_drive_file.data.model.LocalFileMetadata
 import com.github.lucascalheiros.data_drive_file.data.model.LocalFileMetadata.Companion.tagsToString
@@ -76,10 +76,6 @@ internal class LocalFileRepositoryImpl(
 
     override suspend fun getByLocalId(id: String): BookLibFile? {
         return filesDao.findByLocalId(id)
-    }
-
-    override suspend fun getByCloudId(id: String): BookLibFile? {
-        return filesDao.findByCloudId(id)
     }
 
     override suspend fun insert(file: BookLibFile) {

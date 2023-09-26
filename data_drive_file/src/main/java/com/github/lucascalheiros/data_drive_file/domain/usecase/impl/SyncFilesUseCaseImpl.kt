@@ -1,8 +1,7 @@
 package com.github.lucascalheiros.data_drive_file.domain.usecase.impl
 
-import androidx.core.net.toUri
-import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
 import com.github.lucascalheiros.common.utils.logDebug
+import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
 import com.github.lucascalheiros.data_drive_file.domain.repository.DriveFileRepository
 import com.github.lucascalheiros.data_drive_file.domain.repository.LocalFileRepository
 import com.github.lucascalheiros.data_drive_file.domain.usecase.FileSyncUseCase
@@ -18,22 +17,29 @@ class SyncFilesUseCaseImpl(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun CoroutineScope.syncFiles() = produce {
+        if (!driveFileRepository.isDriveAvailable()) {
+            close()
+            return@produce
+        }
         val listFiles = localFileRepository.listFiles(onlyValid = false).filter { it.hasPendingUpdate }
-        logDebug(TAG, "::syncFiles\n" +listFiles.joinToString("\n"))
+        logDebug(TAG, "::syncFiles\n" + listFiles.joinToString("\n"))
         val total = listFiles.count()
         listFiles.forEachIndexed { index, bookLibFile ->
+            logDebug(TAG, "::syncFiles index: $index, bookLibFile $bookLibFile")
             send(SynchronizationProgressState(index + 1, total))
             if (deleteIfNecessary(bookLibFile)) {
                 return@forEachIndexed
             }
-            val cloudId = uploadFileIfNecessary(bookLibFile)
-            updateDriveFileInfo(cloudId)
+            uploadFileIfNecessary(bookLibFile)
+            updateDriveFileInfoIfNecessary(bookLibFile)
         }
+        logDebug(TAG, "::syncFiles before close")
         close()
     }
 
     private suspend fun deleteIfNecessary(bookLibFile: BookLibFile): Boolean {
-        logDebug(TAG, "::deleteIfNecessary $bookLibFile" )
+        val updatedBookLibFile = localFileRepository.getByLocalId(bookLibFile.localId) ?: return true
+        logDebug(TAG, "::deleteIfNecessary updatedBookLibFile $updatedBookLibFile")
         if (bookLibFile.deleted) {
             bookLibFile.cloudId?.let { driveFileRepository.deleteFile(it) }
             localFileRepository.hardDelete(bookLibFile.localId)
@@ -42,25 +48,29 @@ class SyncFilesUseCaseImpl(
         return false
     }
 
-    private suspend fun uploadFileIfNecessary(bookLibFile: BookLibFile): String {
-        logDebug(TAG, "::uploadFileIfNecessary $bookLibFile" )
-        val cloudId = bookLibFile.cloudId
+    private suspend fun uploadFileIfNecessary(bookLibFile: BookLibFile) {
+        val updatedBookLibFile = localFileRepository.getByLocalId(bookLibFile.localId) ?: return
+        logDebug(TAG, "::uploadFileIfNecessary updatedBookLibFile $updatedBookLibFile")
+        val cloudId = updatedBookLibFile.cloudId
         if (cloudId != null) {
-            return cloudId
+            return
         }
-        logDebug(TAG, "::uploadFileIfNecessary uploading" )
+        logDebug(TAG, "::uploadFileIfNecessary uploading")
         val localFile = localFileRepository.downloadMedia(bookLibFile.localId)!!
-        return driveFileRepository.uploadFile(localFile.toUri()).also { idFromCloud ->
+        driveFileRepository.uploadFile(localFile, bookLibFile).also { idFromCloud ->
             localFileRepository.updateCloudId(bookLibFile.localId, idFromCloud)
+            localFileRepository.updatePendingUpdate(bookLibFile.localId, false)
         }
     }
 
-    private suspend fun updateDriveFileInfo(cloudId: String) {
-        logDebug(TAG, "::updateDriveFileInfo cloudId: $cloudId" )
-        val bookLibFile = localFileRepository.getByCloudId(cloudId)!!
-        logDebug(TAG, "::updateDriveFileInfo bookLibFile: $bookLibFile" )
-        driveFileRepository.syncFileInfo(bookLibFile)
-        localFileRepository.updatePendingUpdate(bookLibFile.localId, false)
+    private suspend fun updateDriveFileInfoIfNecessary(bookLibFile: BookLibFile) {
+        val updatedBookLibFile = localFileRepository.getByLocalId(bookLibFile.localId) ?: return
+        logDebug(TAG, "::updateDriveFileInfo updatedBookLibFile: $updatedBookLibFile")
+        if (!updatedBookLibFile.hasPendingUpdate) {
+            return
+        }
+        driveFileRepository.syncFileInfo(updatedBookLibFile)
+        localFileRepository.updatePendingUpdate(updatedBookLibFile.localId, false)
     }
 
     companion object {

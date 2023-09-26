@@ -1,4 +1,4 @@
-package com.github.lucascalheiros.common.utils
+package com.github.lucascalheiros.data_drive_file.domain.utils
 
 import android.content.res.Resources
 import android.graphics.Bitmap

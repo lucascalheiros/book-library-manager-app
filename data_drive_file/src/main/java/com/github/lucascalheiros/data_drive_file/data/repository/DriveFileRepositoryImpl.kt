@@ -1,16 +1,14 @@
 package com.github.lucascalheiros.data_drive_file.data.repository
 
 import android.content.Context
-import android.net.Uri
 import com.github.lucascalheiros.common.BuildConfig
-import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
+import com.github.lucascalheiros.data_drive_file.domain.utils.MimeTypeConstants
+import com.github.lucascalheiros.common.utils.logDebug
 import com.github.lucascalheiros.data_drive_file.data.constants.AppPropertiesKeys
-import com.github.lucascalheiros.common.utils.constants.MimeTypeConstants
-import com.github.lucascalheiros.common.utils.getFileName
-import com.github.lucascalheiros.common.utils.loadFileFromInputStream
 import com.github.lucascalheiros.data_drive_file.data.model.LocalFileMetadata.Companion.tagsToString
 import com.github.lucascalheiros.data_drive_file.data.model.adapter.toBookLibFile
 import com.github.lucascalheiros.data_drive_file.data.utils.DriveQueryBuilder
+import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
 import com.github.lucascalheiros.data_drive_file.domain.repository.DriveFileRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -155,11 +153,9 @@ internal class DriveFileRepositoryImpl(
         }
     }
 
-    override suspend fun uploadFile(uri: Uri): String {
-        val contentResolver = context.contentResolver
-        val input = withContext(Dispatchers.IO) { contentResolver.openInputStream(uri) }!!
-        val name = getFileName(context, uri)!!
-        val file = loadFileFromInputStream(context, input, name)
+    override suspend fun uploadFile(file: java.io.File, bookLibFile: BookLibFile): String {
+        logDebug(TAG, "::uploadFile $file")
+        val name = bookLibFile.name
         val metadata = File().setName(name).setParents(Collections.singletonList(getRootFolderId()))
         val mediaContent = FileContent(MimeTypeConstants.pdf, file)
         return createFile(metadata, mediaContent)
@@ -167,5 +163,9 @@ internal class DriveFileRepositoryImpl(
 
     override fun isDriveAvailable(): Boolean {
         return lastSignedInAccount != null
+    }
+
+    companion object {
+        private val TAG = DriveFileRepository::class.java.simpleName
     }
 }

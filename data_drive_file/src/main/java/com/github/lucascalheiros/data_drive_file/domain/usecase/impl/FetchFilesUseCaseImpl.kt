@@ -30,6 +30,9 @@ class FetchFilesUseCaseImpl(
     }
 
     override suspend fun fetchFiles() {
+        if (!driveFileRepository.isDriveAvailable()) {
+            return
+        }
         val driveFilesMap = driveFileRepository.listFiles().groupBy { it.cloudId }
         val localFilesMap = localFileRepository.listFiles(onlyValid = false).groupBy { it.cloudId }
         val keysSet = (driveFilesMap.keys + localFilesMap.keys).toSet()
