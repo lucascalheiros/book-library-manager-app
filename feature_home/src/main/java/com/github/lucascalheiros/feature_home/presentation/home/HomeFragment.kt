@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.github.lucascalheiros.common.navigation.NavigationRoutes
 import com.github.lucascalheiros.common.utils.constants.LogTags
 import com.github.lucascalheiros.common.utils.logError
+import com.github.lucascalheiros.data_drive_file.domain.utils.MimeTypeConstants
 import com.github.lucascalheiros.feature_home.databinding.FragmentHomeBinding
 import com.github.lucascalheiros.feature_home.presentation.editFileMetadata.EditFileMetadataDialogFragment
 import com.github.service_synchronization.worker.FileSynchronizationWorker
@@ -127,7 +128,7 @@ class HomeFragment : Fragment() {
     private fun openFilePicker() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = com.github.lucascalheiros.common.utils.constants.MimeTypeConstants.pdf
+            type = MimeTypeConstants.pdf
         }
         filePickerResultRegister.launch(intent)
     }
@@ -147,7 +148,7 @@ class HomeFragment : Fragment() {
             requireContext().applicationContext.packageName.toString() + ".provider",
             value.file
         )
-        val mime = com.github.lucascalheiros.common.utils.constants.MimeTypeConstants.pdf
+        val mime = MimeTypeConstants.pdf
 
         val intent = Intent().apply {
             action = Intent.ACTION_VIEW
