@@ -1,31 +1,32 @@
 [versions]
-lifecycle_version = "2.4.1"
-nav_version = "2.5.0"
-coroutines_version = "1.6.4"
-koin_version = "3.2.0"
-kotlin_version = "1.6.21"
-room_version = "2.4.3"
-mockito_version = "3.12.4"
+lifecycle_version = "2.6.2"
+nav_version = "2.6.0"
+coroutines_version = "1.7.3"
+koin_version = "3.5.0"
+kotlin_version = "1.8.21"
+room_version = "2.5.2"
+mockito_version = "5.3.1"
 constraint_layout_version = "2.1.4"
 swipe_refresh_layout_version = "1.1.0"
 flexbox_version = "3.0.0"
 glide_version = "4.14.1"
-androidx_core_version = "1.7.0"
-androidx_appcompt_version = "1.3.0"
-androidx_core_testing_version = "2.1.0"
+androidx_core_version = "1.10.1"
+androidx_appcompt_version = "1.6.1"
+androidx_core_testing_version = "2.2.0"
 androidx_legacy_support_v4_version = "1.0.0"
 junit_version = "4.13.2"
-androidx_ext_junit = "1.1.3"
-androidx_espresso_core = "3.4.0"
-material_version = "1.6.1"
-play_services_auth_version = "20.2.0"
+androidx_ext_junit = "1.1.5"
+androidx_espresso_core = "3.5.1"
+material_version = "1.9.0"
+play_services_auth_version = "20.7.0"
 google_api_services_drive_version = "v3-rev20211107-1.32.1"
 google_http_client_gson_version = "1.39.2"
 google_api_client_android_version = "1.26.0"
-android_gradle_plugin = "8.0.2"
-fragment_testing_version = "1.5.5"
+android_gradle_plugin = "8.1.2"
+fragment_testing_version = "1.6.1"
 datastore_preferences_version = "1.0.0"
-work_manager_version = "2.7.1"
+work_manager_version = "2.8.1"
+ksp_version = "1.8.21-1.0.11"
 
 [libraries]
 kotlin = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin_version" }
@@ -48,7 +49,7 @@ google-httpClientGson = { module = "com.google.http-client:google-http-client-gs
 google-apiClientAndroid = { module = "com.google.api-client:google-api-client-android", version.ref = "google_api_client_android_version" }
 
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide_version" }
-glide_compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide_version" }
+glide_ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glide_version" }
 
 coroutines-playServices = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines_version" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines_version" }
@@ -120,4 +121,5 @@ android-application = { id = "com.android.application", version.ref = "android_g
 android-library = { id = "com.android.library", version.ref = "android_gradle_plugin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin_version" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin_version" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp_version" }
 
