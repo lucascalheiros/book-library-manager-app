@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id "com.android.application"
     id "org.jetbrains.kotlin.android"
@@ -9,12 +11,12 @@ if (file("signingConfigs.gradle").exists()) {
 }
 
 android {
-    compileSdk 33
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.github.lucascalheiros.booklibrarymanager"
         minSdk 28
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -26,8 +28,9 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
-            testCoverageEnabled true
             debuggable true
+            enableUnitTestCoverage true
+            enableAndroidTestCoverage true
         }
         release {
             minifyEnabled false
