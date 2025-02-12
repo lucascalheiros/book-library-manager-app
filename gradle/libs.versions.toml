@@ -1,36 +1,34 @@
 [versions]
-lifecycle_version = "2.6.2"
-nav_version = "2.6.0"
-coroutines_version = "1.7.3"
-koin_version = "3.5.0"
-kotlin_version = "1.8.21"
-room_version = "2.5.2"
-mockito_version = "5.3.1"
-constraint_layout_version = "2.1.4"
+lifecycle_version = "2.8.7"
+nav_version = "2.8.6"
+coroutines_version = "1.10.1"
+koin_version = "3.5.6"
+kotlin_version = "2.1.10"
+room_version = "2.6.1"
+mockito_version = "5.12.0"
+constraint_layout_version = "2.2.0"
 swipe_refresh_layout_version = "1.1.0"
 flexbox_version = "3.0.0"
-glide_version = "4.14.1"
-androidx_core_version = "1.10.1"
-androidx_appcompt_version = "1.6.1"
+glide_version = "4.16.0"
+androidx_core_version = "1.15.0"
+androidx_appcompt_version = "1.7.0"
 androidx_core_testing_version = "2.2.0"
 androidx_legacy_support_v4_version = "1.0.0"
 junit_version = "4.13.2"
-androidx_ext_junit = "1.1.5"
-androidx_espresso_core = "3.5.1"
-material_version = "1.9.0"
-play_services_auth_version = "20.7.0"
+androidx_ext_junit = "1.2.1"
+androidx_espresso_core = "3.6.1"
+material_version = "1.12.0"
+play_services_auth_version = "21.3.0"
 google_api_services_drive_version = "v3-rev20211107-1.32.1"
 google_http_client_gson_version = "1.39.2"
 google_api_client_android_version = "1.26.0"
-android_gradle_plugin = "8.1.2"
-fragment_testing_version = "1.6.1"
-datastore_preferences_version = "1.0.0"
-work_manager_version = "2.8.1"
-ksp_version = "1.8.21-1.0.11"
+android_gradle_plugin = "8.7.3"
+fragment_testing_version = "1.8.5"
+datastore_preferences_version = "1.1.2"
+work_manager_version = "2.10.0"
+ksp_version = "2.1.10-1.0.29"
 
 [libraries]
-kotlin = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin_version" }
-
 navigation-safeArgs = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "nav_version" }
 navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "nav_version" }
 navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "nav_version" }
@@ -76,7 +74,6 @@ koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin_version" 
 koin-testJunit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin_version" }
 
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito_version" }
-mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockito_version" }
 mockito-android = { module = "org.mockito:mockito-android", version.ref = "mockito_version" }
 
 junit = { module = "junit:junit", version.ref = "junit_version" }
@@ -98,7 +95,6 @@ unitTest = [
     "koin-test",
     "koin-testJunit4",
     "mockito-core",
-    "mockito-inline",
     "androidx-coreTesting",
     "coroutines-test",
     "junit"

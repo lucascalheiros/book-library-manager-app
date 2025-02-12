@@ -8,11 +8,11 @@ plugins {
 
 android {
     namespace "com.github.lucascalheiros.feature_pdfreader"
-    compileSdk 33
+    compileSdk 35
 
     defaultConfig {
         minSdk 28
-        targetSdk 33
+        targetSdk 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
