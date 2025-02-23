@@ -98,18 +98,22 @@ internal class LocalFileRepositoryImpl(
         )
     }
 
-    override suspend fun uploadFile(uri: Uri): String {
+    override suspend fun uploadFile(uri: Uri): String = withContext(Dispatchers.IO)  {
         val fileId = UUID.randomUUID().toString()
-        val contentResolver = context.contentResolver
-        val input = withContext(Dispatchers.IO) { contentResolver.openInputStream(uri) }!!
-        val name = getFileName(context, uri)!!
-        val file = loadFileFromInputStream(context, input, name)
-        val thumbnail = saveThumbnailOfPdfFile(fileId, file)
-        val fileMetadata =
-            LocalFileMetadata(localId = fileId, name = name, thumbnailLink = thumbnail.absolutePath)
-        writeFile(fileId, file)
-        filesDao.insertAll(fileMetadata)
-        return fileId
+        context.contentResolver.openInputStream(uri)!!.use { input ->
+            val name = getFileName(context, uri)!!
+            val file = loadFileFromInputStream(context, input, name)
+            val thumbnail = saveThumbnailOfPdfFile(fileId, file)
+            val fileMetadata =
+                LocalFileMetadata(
+                    localId = fileId,
+                    name = name,
+                    thumbnailLink = thumbnail.absolutePath
+                )
+            writeFile(fileId, file)
+            filesDao.insertAll(fileMetadata)
+        }
+        return@withContext fileId
     }
 
     private suspend fun saveThumbnailOfPdfFile(fileId: String, file: File): File {

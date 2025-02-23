@@ -20,6 +20,7 @@ import com.github.lucascalheiros.common.utils.logError
 import com.github.lucascalheiros.data_authentication.domain.GoogleSignInConfiguration
 import com.github.lucascalheiros.feature_account.R
 import com.github.lucascalheiros.feature_account.databinding.FragmentAccountBinding
+import com.github.service_synchronization.worker.FileDownloadWorker
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import kotlinx.coroutines.launch
@@ -39,10 +40,15 @@ class AccountFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        accountViewModel.updateAccountInfo()
         return FragmentAccountBinding.inflate(inflater, container, false).also {
             binding = it
             it.lifecycleOwner = viewLifecycleOwner
             it.viewModel = accountViewModel
+
+            it.downloadDataBtn.setOnClickListener {
+                FileDownloadWorker.startWorker(it.context)
+            }
         }.root
     }
 

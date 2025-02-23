@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,8 +20,12 @@ import com.github.lucascalheiros.common.navigation.NavigationRoutes
 import com.github.lucascalheiros.common.utils.constants.LogTags
 import com.github.lucascalheiros.common.utils.logError
 import com.github.lucascalheiros.data_drive_file.domain.utils.MimeTypeConstants
+import com.github.lucascalheiros.feature_home.R
 import com.github.lucascalheiros.feature_home.databinding.FragmentHomeBinding
 import com.github.lucascalheiros.feature_home.presentation.editFileMetadata.EditFileMetadataDialogFragment
+import com.github.service_synchronization.notifications.DownloadNotificationIdGenerator
+import com.github.service_synchronization.notifications.dismissCurrentDownloadNotification
+import com.github.service_synchronization.notifications.showDownloadNotification
 import com.github.service_synchronization.worker.FileSynchronizationWorker
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -103,7 +108,19 @@ class HomeFragment : Fragment() {
                     handleDownloadFile(state)
                 }
 
+                is FileHandlerRequestState.Loading -> {
+                    context?.showDownloadNotification(DownloadNotificationIdGenerator.iterateNext(),null, false)
+                }
+
+                is FileHandlerRequestState.Failure -> {
+                    context?.dismissCurrentDownloadNotification()
+                    Toast.makeText(context, getString(R.string.file_download_failed), Toast.LENGTH_SHORT).show()
+                }
+
                 else -> {}
+            }
+            if (state != FileHandlerRequestState.Idle && state !is FileHandlerRequestState.Loading) {
+                homeViewModel.handleFileHandlerRequestState()
             }
         }
         homeViewModel.openEditFileMetadataDialog.observe(viewLifecycleOwner) { info ->
@@ -139,7 +156,6 @@ class HomeFragment : Fragment() {
             .build().let {
                 findNavController().navigate(it)
             }
-        homeViewModel.handleFileHandlerRequestState()
     }
 
     private fun handleDownloadFile(value: FileHandlerRequestState.DownloadFile) {
@@ -156,7 +172,7 @@ class HomeFragment : Fragment() {
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
 
-        context?.startActivity(intent)
+        context?.showDownloadNotification(DownloadNotificationIdGenerator.currentId(), intent, true)
     }
 
     companion object {

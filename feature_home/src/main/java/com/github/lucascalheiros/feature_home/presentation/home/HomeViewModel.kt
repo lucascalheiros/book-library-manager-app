@@ -113,7 +113,7 @@ class HomeViewModel(
                 mFileHandlerRequestState.value =
                     FileHandlerRequestState.DownloadFile(fetchFilesUseCase.downloadMedia(file.localId))
             } catch (e: Exception) {
-                // TODO add feedback
+                logError(TAG, "downloadFile", e)
                 mFileHandlerRequestState.value = FileHandlerRequestState.Failure(e)
             }
         }

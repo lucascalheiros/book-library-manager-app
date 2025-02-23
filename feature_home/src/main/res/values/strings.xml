@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="download_notifications">Download Notifications</string>
+    <string name="notifications_for_download_progress">Notifications for download progress</string>
+    <string name="download_complete">Download complete</string>
+    <string name="downloading_content">Downloading content</string>
+    <string name="file_download_failed">File download failed</string>
+</resources>

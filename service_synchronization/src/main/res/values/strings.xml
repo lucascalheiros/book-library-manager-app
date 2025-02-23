@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="notification_sync_title">Synchronization in progress %d of %d files synchronized</string>
-    <string name="notification_sync_title_not_started">Synchronization in progress %d of %d files synchronized</string>
+    <string name="notification_sync_title_not_started">Preparing to sync</string>
+    <string name="notification_download_title_not_started">Preparing to download</string>
+    <string name="notification_download_title">Download in progress %d of %d files downloaded</string>
     <string name="notification_sync_channel_title">Synchronization indicator notification</string>
     <string name="notification_sync_channel_descriptions">Indicates the progress of synchronization currently ongoing</string>
+    <string name="download_complete">Download complete</string>
+    <string name="downloading_content">Downloading content</string>
+    <string name="download_notifications">Download Notifications</string>
+    <string name="notifications_for_download_progress">Notifications for download progress</string>
 </resources>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "784132184653",
+    "project_id": "book-lib-manager",
+    "storage_bucket": "book-lib-manager.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784132184653:android:6d449349471358a250da04",
+        "android_client_info": {
+          "package_name": "com.github.lucascalheiros.booklibrarymanager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG-wFqIAB5xOY5JPaJHLO8JkCVDeEOOd0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

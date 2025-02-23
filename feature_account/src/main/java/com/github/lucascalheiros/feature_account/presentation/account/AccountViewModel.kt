@@ -12,15 +12,13 @@ import com.github.lucascalheiros.common.utils.logError
 import com.github.lucascalheiros.data_authentication.domain.usecase.GoogleSignInUseCase
 import com.github.lucascalheiros.data_authentication.domain.usecase.SignOutUseCase
 import com.github.lucascalheiros.data_authentication.domain.usecase.SignedAccountUseCase
-import com.github.lucascalheiros.data_drive_file.domain.usecase.FetchFilesUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 class AccountViewModel(
-    private val fetchFilesUseCase: FetchFilesUseCase,
-    signedAccountUseCase: SignedAccountUseCase,
+    private val signedAccountUseCase: SignedAccountUseCase,
     private val googleSignInUseCase: GoogleSignInUseCase,
     private val signOutUseCase: SignOutUseCase
 ) : ViewModel() {
@@ -38,8 +36,8 @@ class AccountViewModel(
     val email = mAccount.map { it.email }
     val isGuest = signedAccountUseCase.isGuestUserFlow.asLiveData(viewModelScope.coroutineContext)
 
-    fun downloadData() {
-        // TODO service to proceed with the download
+    fun updateAccountInfo() {
+        signedAccountUseCase.signedInAccount
     }
 
     fun linkWithGoogle() {
@@ -76,6 +74,7 @@ class AccountViewModel(
         viewModelScope.launch {
             try {
                 googleSignInUseCase.signIn()
+                signedAccountUseCase.signedInAccount
                 logDebug(GOOGLE_SIGN_IN_TAGS, "::onLinkWithGoogleSuccess")
             } catch (e: Exception) {
                 logError(GOOGLE_SIGN_IN_TAGS, "::onLinkWithGoogleSuccess", e)
