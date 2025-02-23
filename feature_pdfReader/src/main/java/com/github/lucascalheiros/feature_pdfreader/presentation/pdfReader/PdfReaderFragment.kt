@@ -12,8 +12,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class PdfReaderFragment : Fragment() {
 
     private lateinit var binding: FragmentPdfReaderBinding
-    private val pdfReaderViewModel: PdfReaderViewModel by viewModel()
 
+    private val viewModel: PdfReaderViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,12 +22,11 @@ class PdfReaderFragment : Fragment() {
 
         binding = FragmentPdfReaderBinding.inflate(inflater, container, false)
 
-        binding.viewModel = pdfReaderViewModel
+        binding.viewModel = viewModel
 
         binding.lifecycleOwner = viewLifecycleOwner
 
-
-        pdfReaderViewModel.initializeRenderer(
+        viewModel.initializeRenderer(
             arguments?.getString("fileId").orEmpty(), arguments?.getString("initialPage")
                 ?.toIntOrNull()
                 ?: 0
@@ -39,7 +38,7 @@ class PdfReaderFragment : Fragment() {
     override fun onDestroy() {
         val isChangingConfigurations = activity?.isChangingConfigurations == true
         if (!isChangingConfigurations) {
-            pdfReaderViewModel.closeRenderer()
+            viewModel.closeRenderer()
         }
         super.onDestroy()
     }

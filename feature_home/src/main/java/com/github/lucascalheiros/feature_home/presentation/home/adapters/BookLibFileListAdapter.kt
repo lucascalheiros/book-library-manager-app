@@ -8,28 +8,28 @@ import androidx.annotation.MenuRes
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.*
-
-import com.github.lucascalheiros.feature_home.presentation.home.handlers.BookLibFileItemListener
-import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.github.lucascalheiros.feature_home.R
 import com.github.lucascalheiros.feature_home.databinding.ItemFileListBinding
+import com.github.lucascalheiros.feature_home.presentation.home.model.BookLibUiModel
 
 
 class BookLibFileListAdapter :
-    ListAdapter<BookLibFile, BookLibFileListAdapter.FileListItemViewHolder>(Diff) {
+    ListAdapter<BookLibUiModel, BookLibFileListAdapter.FileListItemViewHolder>(Diff) {
 
-    object Diff : DiffUtil.ItemCallback<BookLibFile>() {
-        override fun areItemsTheSame(oldItem: BookLibFile, newItem: BookLibFile): Boolean {
+    object Diff : DiffUtil.ItemCallback<BookLibUiModel>() {
+        override fun areItemsTheSame(oldItem: BookLibUiModel, newItem: BookLibUiModel): Boolean {
             return oldItem.localId == newItem.localId || (oldItem.cloudId != null && oldItem.cloudId == newItem.cloudId )
         }
 
-        override fun areContentsTheSame(oldItem: BookLibFile, newItem: BookLibFile): Boolean {
+        override fun areContentsTheSame(oldItem: BookLibUiModel, newItem: BookLibUiModel): Boolean {
             return oldItem == newItem
         }
     }
-
-    var listener: BookLibFileItemListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileListItemViewHolder {
         val binding = ItemFileListBinding.inflate(LayoutInflater.from(parent.context))
@@ -42,32 +42,25 @@ class BookLibFileListAdapter :
 
     inner class FileListItemViewHolder(private val binding: ItemFileListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: BookLibFile) {
+        fun bind(item: BookLibUiModel) {
             binding.model = item
-            binding.listener = listener ?: object : BookLibFileItemListener {
-                override fun read(item: BookLibFile) = Unit
-                override fun download(item: BookLibFile) = Unit
-                override fun edit(item: BookLibFile) = Unit
-                override fun delete(item: BookLibFile) = Unit
-            }
             binding.options.setOnClickListener {
-                showMenu(it, R.menu.file_options, item, listener)
+                showMenu(it, R.menu.file_options, item)
             }
         }
 
         private fun showMenu(
             v: View,
             @MenuRes menuRes: Int,
-            file: BookLibFile,
-            listener: BookLibFileItemListener?
+            file: BookLibUiModel,
         ) {
             val popup = PopupMenu(v.context, v)
             popup.menuInflater.inflate(menuRes, popup.menu)
             popup.setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.menuEdit -> listener?.edit(file)
-                    R.id.menuDownload -> listener?.download(file)
-                    R.id.menuDelete -> listener?.delete(file)
+                    R.id.menuEdit -> file.onEdit()
+                    R.id.menuDownload -> file.onDownload()
+                    R.id.menuDelete -> file.onDelete()
                     else -> {}
                 }
                 true
@@ -88,12 +81,11 @@ class BookLibFileListAdapter :
     companion object {
         @JvmStatic
         @BindingAdapter(
-            value = ["fileListAdapterItems", "fileListAdapterListener"],
+            value = ["fileListAdapterItems"],
             requireAll = false
         )
         fun RecyclerView.bindFileListAdapter(
-            items: List<BookLibFile>?,
-            bookLibFileItemListener: BookLibFileItemListener?
+            items: List<BookLibUiModel>?
         ) {
             val bookLibAdapter = adapter
             if (bookLibAdapter !is BookLibFileListAdapter) {
@@ -104,7 +96,6 @@ class BookLibFileListAdapter :
             } else {
                 bookLibAdapter
             }.run {
-                listener = bookLibFileItemListener
                 submitList(items)
             }
         }

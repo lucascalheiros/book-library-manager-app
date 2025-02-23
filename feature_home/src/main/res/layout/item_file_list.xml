@@ -7,11 +7,7 @@
 
         <variable
             name="model"
-            type="com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile" />
-
-        <variable
-            name="listener"
-            type="com.github.lucascalheiros.feature_home.presentation.home.handlers.BookLibFileItemListener" />
+            type="com.github.lucascalheiros.feature_home.presentation.home.model.BookLibUiModel" />
 
         <import type="com.github.lucascalheiros.common.utils.StringUtils" />
     </data>
@@ -99,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/cd_read"
-                    android:onClick="@{v -> listener.read(model)}"
+                    android:onClick="@{v -> model.onRead.invoke()}"
                     app:srcCompat="@drawable/ic_read_book" />
 
                 <ImageButton

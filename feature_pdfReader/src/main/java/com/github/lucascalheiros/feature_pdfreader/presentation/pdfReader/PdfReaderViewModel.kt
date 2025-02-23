@@ -12,10 +12,18 @@ import kotlinx.coroutines.launch
 class PdfReaderViewModel(
     private val readPdfUseCase: ReadPdfUseCase
 ) : ViewModel() {
-    val mPageTracker = MutableLiveData<ReadingPageTrackerListener>()
+    val pageTracker = object : ReadingPageTrackerListener {
+        override fun onPageReadChange(page: Int) {
+            initialPdfPagePosition.value = -1
+            viewModelScope.launch {
+                readPdfUseCase.registerReadProgress(fileId, page, _renderer.value?.pageCount ?: 1)
+            }
+        }
+    }
 
-    private val mRenderer = MutableLiveData<PdfRenderer?>()
-    val renderer: LiveData<PdfRenderer?> = mRenderer
+    private val _renderer = MutableLiveData<PdfRenderer?>()
+
+    val renderer: LiveData<PdfRenderer?> = _renderer
 
     val initialPdfPagePosition = MutableLiveData<Int>()
 
@@ -24,8 +32,8 @@ class PdfReaderViewModel(
     fun initializeRenderer(fileId: String, initialPage: Int) {
         this.fileId = fileId
         viewModelScope.launch {
-            if (mRenderer.value == null) {
-                mRenderer.value = readPdfUseCase.pdfRendererFromFileId(fileId)
+            if (_renderer.value == null) {
+                _renderer.value = readPdfUseCase.pdfRendererFromFileId(fileId)
             }
             if (initialPdfPagePosition.value != -1) {
                 initialPdfPagePosition.value = initialPage - 1
@@ -34,18 +42,7 @@ class PdfReaderViewModel(
     }
 
     fun closeRenderer() {
-        mRenderer.value?.close()
-        mRenderer.value = null
-    }
-
-    init {
-        mPageTracker.value = object : ReadingPageTrackerListener {
-            override fun onPageReadChange(page: Int) {
-                initialPdfPagePosition.value = -1
-                viewModelScope.launch {
-                    readPdfUseCase.registerReadProgress(fileId, page, mRenderer.value?.pageCount ?: 1)
-                }
-            }
-        }
+        _renderer.value?.close()
+        _renderer.value = null
     }
 }

@@ -1,14 +1,21 @@
 package com.github.lucascalheiros.feature_home.presentation.home
 
 import android.net.Uri
-import androidx.lifecycle.*
-import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.github.lucascalheiros.common.utils.addSources
 import com.github.lucascalheiros.common.utils.logError
+import com.github.lucascalheiros.data_drive_file.domain.model.BookLibFile
 import com.github.lucascalheiros.data_drive_file.domain.usecase.FetchFilesUseCase
 import com.github.lucascalheiros.data_drive_file.domain.usecase.FileManagementUseCase
 import com.github.lucascalheiros.feature_home.presentation.editFileMetadata.model.EditFileMetadataDialogInfo
-import com.github.lucascalheiros.feature_home.presentation.home.handlers.BookLibFileItemListener
+import com.github.lucascalheiros.feature_home.presentation.home.model.BookLibUiModel
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -17,25 +24,6 @@ class HomeViewModel(
     private val fetchFilesUseCase: FetchFilesUseCase,
     private val fileManagementUseCase: FileManagementUseCase
 ) : ViewModel() {
-
-    private val mFileItemListener = object :
-        BookLibFileItemListener {
-        override fun download(item: BookLibFile) {
-            downloadFile(item)
-        }
-
-        override fun read(item: BookLibFile) {
-            readFile(item)
-        }
-
-        override fun edit(item: BookLibFile) {
-            editFile(item)
-        }
-
-        override fun delete(item: BookLibFile) {
-            deleteFile(item)
-        }
-    }
 
     private val mLoadFilesRequestState = MutableLiveData<LoadFilesRequestState>()
 
@@ -63,9 +51,22 @@ class HomeViewModel(
         files.flatMap { it.tags }.distinct().sortedBy { it.uppercase() }
     }
 
-    val fileItemListener: LiveData<BookLibFileItemListener> = MutableLiveData(mFileItemListener)
-
-    val filteredAndSortedFileItems: LiveData<List<BookLibFile>> = mFilteredAndSortedFileItems
+    val filteredAndSortedFileItems: LiveData<List<BookLibUiModel>> = mFilteredAndSortedFileItems.map {
+        it.map {
+            BookLibUiModel(
+                localId = it.localId,
+                cloudId = it.cloudId,
+                thumbnailLink = it.thumbnailLink,
+                name = it.name,
+                tags = it.tags,
+                readPercent = it.readPercent,
+                onDownload = { downloadFile(it) },
+                onRead = { readFile(it) },
+                onEdit = { editFile(it) },
+                onDelete = { deleteFile(it) }
+            )
+        }
+    }
 
     val fileHandlerRequestState: LiveData<FileHandlerRequestState> = mFileHandlerRequestState
 
